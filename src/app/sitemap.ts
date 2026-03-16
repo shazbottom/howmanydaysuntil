@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { events } from "../data/events";
 
-const SITE_URL = "https://howmanydaysuntil.is";
+const SITE_URL = "https://daysuntil.is";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const eventPages: MetadataRoute.Sitemap = events.map((event) => ({

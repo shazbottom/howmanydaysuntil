@@ -13,15 +13,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://howmanydaysuntil.is"),
-  title: {
-    default: "How Many Days Until? Countdown to Events and Dates",
-    template: "%s | howmanydaysuntil.is",
-  },
+  metadataBase: new URL("https://daysuntil.is"),
+  title: "DaysUntil  Countdown to Any Date",
   description:
-    "Find out how many days until holidays, years, and important dates with simple live countdowns.",
+    "Calculate how many days until any date. Fast, simple countdown for birthdays, holidays, events, and deadlines.",
   alternates: {
-    canonical: "/",
+    canonical: "https://daysuntil.is",
+  },
+  openGraph: {
+    title: "DaysUntil  Countdown to Any Date",
+    description: "Calculate how many days until any date.",
+    url: "https://daysuntil.is",
+    siteName: "DaysUntil",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DaysUntil  Countdown to Any Date",
+    description: "Calculate how many days until any date.",
+  },
+  icons: {
+    icon: [{ url: "/favicon.ico" }],
+    shortcut: [{ url: "/favicon.ico" }],
   },
 };
 
