@@ -65,6 +65,16 @@ function formatTargetDateLabel(date: Date): string {
   }).format(date);
 }
 
+function formatWeeksSummary(weeks: number, days: number): string {
+  const weekLabel = `${weeks} ${weeks === 1 ? "week" : "weeks"}`;
+
+  if (days === 0) {
+    return weekLabel;
+  }
+
+  return `${weekLabel}, ${days} ${days === 1 ? "day" : "days"}`;
+}
+
 // Component responsible for showing the computed countdown in a compact display card.
 export function CountdownDisplay({
   label,
@@ -130,6 +140,10 @@ export function CountdownDisplay({
   ];
   const targetDateLabel = formatTargetDateLabel(liveCountdown.targetDate);
   const targetYear = liveCountdown.targetDate.getFullYear();
+  const weeksSummary = formatWeeksSummary(
+    liveCountdown.weeksRemaining.weeks,
+    liveCountdown.weeksRemaining.days,
+  );
 
   return (
     <section
@@ -165,6 +179,9 @@ export function CountdownDisplay({
             {liveCountdown.daysRemaining === 1 ? "day" : "days"} remaining
           </p>
         </div>
+        <p className="mt-6 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 sm:text-[1rem]">
+          {weeksSummary}
+        </p>
         <div className="mt-7 flex justify-center">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:grid-cols-3 sm:gap-10">
             {timeBlocks.map((timeBlock) => (
