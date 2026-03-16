@@ -15,23 +15,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://daysuntil.is"),
-  title: "DaysUntil Countdown to Any Date",
+  title: "DaysUntil  Countdown to Any Date",
   description:
-    "Calculate how many days until any date. Fast, simple countdown for birthdays, holidays, events, and deadlines.",
+    "Calculate how many days until any date. Free online countdown timer for birthdays, holidays, events, and deadlines.",
   alternates: {
     canonical: "https://daysuntil.is",
   },
   openGraph: {
-    title: "DaysUntil Countdown to Any Date",
-    description: "Calculate how many days until any date.",
+    title: "DaysUntil  Countdown to Any Date",
+    description:
+      "Calculate how many days until any date. Free online countdown timer for birthdays, holidays, events, and deadlines.",
     url: "https://daysuntil.is",
     siteName: "DaysUntil",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DaysUntil Countdown to Any Date",
-    description: "Calculate how many days until any date.",
+    title: "DaysUntil  Countdown to Any Date",
+    description:
+      "Calculate how many days until any date. Free online countdown timer for birthdays, holidays, events, and deadlines.",
   },
   icons: {
     icon: [{ url: "/favicon.ico" }],
