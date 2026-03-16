@@ -86,7 +86,7 @@ export default async function EventPage({ params }: EventPageProps) {
           <p className="mt-5 max-w-2xl text-sm text-black/55 sm:text-base">
             {event.description} Check the live countdown below for the next {event.name.toLowerCase()}.
           </p>
-          <div className="mt-12 w-full max-w-[30.4rem] sm:max-w-[32.4rem]">
+          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay label={event.name} countdown={countdown} />
           </div>
         </section>

@@ -29,6 +29,7 @@ function getLiveTimeParts(countdown: CountdownResult): LiveTimeParts {
 
 function formatTargetDateLabel(date: Date): string {
   return new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
     day: "numeric",
     month: "short",
   }).format(date);
@@ -84,7 +85,7 @@ export function CountdownDisplay({
             </div>
           </div>
         </div>
-        <div className="px-8 py-[4.6rem]">
+        <div className="px-8 py-[4.83rem]">
           <p className="text-sm text-black/50">Enter an event or date to start a countdown.</p>
         </div>
       </section>
@@ -121,7 +122,7 @@ export function CountdownDisplay({
           </div>
         </div>
       </div>
-      <div className="px-6 py-[2.7rem] sm:px-8 sm:py-[3.15rem]">
+      <div className="px-6 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
           <p className="text-xs uppercase tracking-[0.24em] text-black/42">{label}</p>
         <div className="mt-7 border-b border-black/[0.05] pb-8">
           <p

@@ -95,7 +95,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
             Track the live countdown to {fullDate} with total days, weeks and days,
             hours, and minutes remaining.
           </p>
-          <div className="mt-12 w-full max-w-[30.4rem] sm:max-w-[32.4rem]">
+          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay label={longDate} countdown={countdown} />
           </div>
         </section>

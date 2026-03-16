@@ -11,6 +11,7 @@ import { EventInput } from "../components/EventInput";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
 import { resolveEventDate } from "../lib/eventCountdown";
+import { getNextEasterDate } from "../lib/easterDate";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
 import { parseInput, type ParseResult } from "../lib/parseInput";
 
@@ -27,6 +28,7 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
   { slug: "new-year", label: "New Year" },
   { slug: "valentines-day", label: "Valentine's Day" },
   { slug: "thanksgiving", label: "Thanksgiving" },
+  { slug: "easter", label: "Easter" },
 ];
 
 const POPULAR_COUNTDOWN_LINKS = events.slice(0, 6).map((event) => ({
@@ -162,6 +164,7 @@ function buildStateFromQuery(input: string, now: Date = new Date()): {
 function buildStateFromTargetDate(
   label: string,
   targetDate: Date,
+  selectedSlug: string | null = null,
   now: Date = new Date(),
 ): { state: ResolvedCountdownState | null; error: string | null } {
   const normalizedTargetDate = startOfLocalDay(targetDate);
@@ -178,7 +181,7 @@ function buildStateFromTargetDate(
       label,
       inputValue: label,
       countdown: getCountdown(normalizedTargetDate, now),
-      selectedSlug: null,
+      selectedSlug,
     },
     error: null,
   };
@@ -206,6 +209,19 @@ export default function Home() {
     setQuery(label);
     setResolvedState(result.state);
     setError(result.error);
+  }
+
+  function submitQuickChip(event: EventChip) {
+    if (event.slug === "easter") {
+      const result = buildStateFromTargetDate(event.label, getNextEasterDate(), event.slug);
+
+      setQuery(event.label);
+      setResolvedState(result.state);
+      setError(result.error);
+      return;
+    }
+
+    submitQuery(event.label);
   }
 
   return (
@@ -247,7 +263,7 @@ export default function Home() {
             <EventChipList
               events={QUICK_EVENT_CHIPS}
               selectedSlug={resolvedState?.selectedSlug ?? null}
-              onSelect={(event) => submitQuery(event.label)}
+              onSelect={submitQuickChip}
             />
           </div>
           {error ? (
@@ -257,7 +273,7 @@ export default function Home() {
               Supports common events, years, weekdays, and exact dates.
             </p>
           )}
-          <div className="mt-12 w-full max-w-[30.4rem] sm:max-w-[32.4rem]">
+          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay
               label={resolvedState?.label ?? "Countdown"}
               countdown={resolvedState?.countdown ?? null}
