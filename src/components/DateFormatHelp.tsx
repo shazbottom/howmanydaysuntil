@@ -4,9 +4,15 @@ import { useEffect, useRef, useState } from "react";
 
 export interface DateFormatHelpProps {
   onDatePick: (value: string) => void;
+  onClear: () => void;
+  hasValue: boolean;
 }
 
-export function DateFormatHelp({ onDatePick }: DateFormatHelpProps) {
+export function DateFormatHelp({
+  onDatePick,
+  onClear,
+  hasValue,
+}: DateFormatHelpProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dateInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -30,36 +36,57 @@ export function DateFormatHelp({ onDatePick }: DateFormatHelpProps) {
 
   return (
     <>
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-black/42">
-        <span>Try: 25 Dec 2026, 2026-12-25, or 25/12/26</span>
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="underline decoration-black/20 underline-offset-4 transition hover:text-black hover:decoration-black/40"
-        >
-          Accepted date formats
-        </button>
-        <span>or</span>
-        <button
-          type="button"
-          onClick={() => {
-            const input = dateInputRef.current;
+      <div className="mt-4 flex flex-col items-center gap-y-1.5 text-center text-xs text-black/38">
+        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <span>Try:</span>
+          <span>25 Dec 2026</span>
+          <span aria-hidden="true">&middot;</span>
+          <span>2026-12-25</span>
+          <span aria-hidden="true">&middot;</span>
+          <span>25/12/26</span>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+          >
+            Accepted formats
+          </button>
+          <span aria-hidden="true">&middot;</span>
+          <button
+            type="button"
+            onClick={() => {
+              const input = dateInputRef.current;
 
-            if (!input) {
-              return;
-            }
+              if (!input) {
+                return;
+              }
 
-            if (typeof input.showPicker === "function") {
-              input.showPicker();
-              return;
-            }
+              if (typeof input.showPicker === "function") {
+                input.showPicker();
+                return;
+              }
 
-            input.click();
-          }}
-          className="underline decoration-black/20 underline-offset-4 transition hover:text-black hover:decoration-black/40"
-        >
-          Pick a date
-        </button>
+              input.click();
+            }}
+            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+          >
+            Pick a date
+          </button>
+          {hasValue ? (
+            <>
+              <span aria-hidden="true">&middot;</span>
+              <button
+                type="button"
+                onClick={onClear}
+                className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+              >
+                Clear
+              </button>
+            </>
+          ) : null}
+        </div>
         <input
           ref={dateInputRef}
           type="date"

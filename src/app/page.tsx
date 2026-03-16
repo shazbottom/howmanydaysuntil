@@ -10,6 +10,7 @@ import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
+import { formatShortDate } from "../lib/dateFormat";
 import { resolveEventDate } from "../lib/eventCountdown";
 import { getNextEasterDate } from "../lib/easterDate";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
@@ -90,8 +91,8 @@ function resolveParseResultToState(
 
     return {
       state: {
-        label: rawInput.trim() || "Selected date",
-        inputValue: rawInput,
+        label: formatShortDate(targetDate, "en-GB"),
+        inputValue: formatShortDate(targetDate, "en-GB"),
         countdown: getCountdown(targetDate, now),
         selectedSlug: null,
       },
@@ -224,6 +225,12 @@ export default function Home() {
     submitQuery(event.label);
   }
 
+  function clearQuery() {
+    setQuery("");
+    setResolvedState(null);
+    setError(null);
+  }
+
   return (
     <main className="min-h-screen bg-white px-6 py-10 text-black">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
@@ -244,6 +251,8 @@ export default function Home() {
             />
           </div>
           <DateFormatHelp
+            hasValue={query.trim().length > 0}
+            onClear={clearQuery}
             onDatePick={(nextDate) => {
               setQuery(nextDate);
               submitQuery(nextDate);

@@ -7,6 +7,32 @@ export interface EventInputProps {
   placeholder?: string;
 }
 
+function getValueSizeClasses(value: string): {
+  input: string;
+  punctuation: string;
+} {
+  const length = value.trim().length;
+
+  if (length >= 20) {
+    return {
+      input: "text-[clamp(1.45rem,6.8vw,3.5rem)]",
+      punctuation: "text-[clamp(1.4rem,6.1vw,3.4rem)]",
+    };
+  }
+
+  if (length >= 12) {
+    return {
+      input: "text-[clamp(1.6rem,7.4vw,3.95rem)]",
+      punctuation: "text-[clamp(1.55rem,6.8vw,3.85rem)]",
+    };
+  }
+
+  return {
+    input: "text-[clamp(1.75rem,8.1vw,4.4rem)]",
+    punctuation: "text-[clamp(1.7rem,7.4vw,4.3rem)]",
+  };
+}
+
 // Controlled input used to submit an event, year, or exact date query.
 export function EventInput({
   value,
@@ -14,6 +40,8 @@ export function EventInput({
   onSubmit,
   placeholder = "Christmas",
 }: EventInputProps) {
+  const valueSizeClasses = getValueSizeClasses(value || placeholder);
+
   return (
     <form
       className="w-full"
@@ -38,10 +66,10 @@ export function EventInput({
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
-                className="block w-full border-b border-[#18c28f]/35 bg-transparent px-2 pb-2 text-center text-[clamp(1.95rem,9vw,4.9rem)] font-semibold italic leading-[1.02] tracking-[-0.07em] text-[#18c28f] outline-none transition placeholder:text-[#18c28f]/28 focus:border-[#18c28f]"
+                className={`block w-full border-b border-[#18c28f]/35 bg-transparent px-2 pb-2 text-center font-semibold italic leading-[1.02] tracking-[-0.07em] text-[#18c28f] outline-none transition placeholder:text-[#18c28f]/28 focus:border-[#18c28f] ${valueSizeClasses.input}`}
               />
             </div>
-            <span className="shrink-0 text-[clamp(1.9rem,8.2vw,4.8rem)] leading-none text-[#18c28f]">
+            <span className={`shrink-0 leading-none text-[#18c28f] ${valueSizeClasses.punctuation}`}>
               ?
             </span>
           </div>

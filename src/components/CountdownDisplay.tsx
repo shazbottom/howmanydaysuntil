@@ -27,10 +27,23 @@ function formatCompactTotalUnit(value: number): string {
     return formatTotalUnit(value);
   }
 
-  return new Intl.NumberFormat("en-GB", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
+  const compactUnits = [
+    { value: 1_000_000_000, suffix: "B" },
+    { value: 1_000_000, suffix: "M" },
+    { value: 1_000, suffix: "K" },
+  ];
+
+  for (const unit of compactUnits) {
+    if (value >= unit.value) {
+      const compactValue = value / unit.value;
+      const roundedValue =
+        compactValue >= 100 ? compactValue.toFixed(0) : compactValue.toFixed(1);
+
+      return `${roundedValue.replace(/\.0$/, "")}${unit.suffix}`;
+    }
+  }
+
+  return formatTotalUnit(value);
 }
 
 function getLiveTimeParts(countdown: CountdownResult): LiveTimeParts {
