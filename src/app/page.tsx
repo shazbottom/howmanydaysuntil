@@ -32,10 +32,13 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
   { slug: "easter", label: "Easter" },
 ];
 
-const POPULAR_COUNTDOWN_LINKS = events.slice(0, 6).map((event) => ({
-  href: `/days-until/${event.slug}`,
-  label: `Days until ${event.name}`,
-}));
+const POPULAR_COUNTDOWN_LINKS = [
+  { href: "/days-until-christmas", label: "Days until Christmas" },
+  { href: "/days-until-halloween", label: "Days until Halloween" },
+  { href: "/days-until-new-year", label: "Days until New Year" },
+  { href: "/days-until-valentines-day", label: "Days until Valentine's Day" },
+  { href: "/days-until-thanksgiving", label: "Days until Thanksgiving" },
+];
 
 const MILESTONE_BUTTONS = [
   { label: "Next Month", getTargetDate: getNextMonthDate },
@@ -295,9 +298,9 @@ export default function Home() {
           </div>
         </section>
         <CountdownLinkList
-          title="Popular countdown pages"
-          description="Jump straight to the most searched countdown pages for holidays and recurring annual dates."
+          title="Popular countdowns"
           links={POPULAR_COUNTDOWN_LINKS}
+          centered
         />
       </div>
     </main>
