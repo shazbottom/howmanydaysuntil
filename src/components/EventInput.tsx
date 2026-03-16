@@ -1,3 +1,5 @@
+"use client";
+
 export interface EventInputProps {
   value: string;
   onValueChange: (value: string) => void;

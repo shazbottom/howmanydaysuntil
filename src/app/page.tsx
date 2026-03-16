@@ -243,7 +243,12 @@ export default function Home() {
               onSubmit={() => submitQuery(query)}
             />
           </div>
-          <DateFormatHelp />
+          <DateFormatHelp
+            onDatePick={(nextDate) => {
+              setQuery(nextDate);
+              submitQuery(nextDate);
+            }}
+          />
           <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-3">
             {MILESTONE_BUTTONS.map((milestone) => (
               <button

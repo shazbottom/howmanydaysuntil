@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export function DateFormatHelp() {
+export interface DateFormatHelpProps {
+  onDatePick: (value: string) => void;
+}
+
+export function DateFormatHelp({ onDatePick }: DateFormatHelpProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -34,6 +39,41 @@ export function DateFormatHelp() {
         >
           Accepted date formats
         </button>
+        <span>or</span>
+        <button
+          type="button"
+          onClick={() => {
+            const input = dateInputRef.current;
+
+            if (!input) {
+              return;
+            }
+
+            if (typeof input.showPicker === "function") {
+              input.showPicker();
+              return;
+            }
+
+            input.click();
+          }}
+          className="underline decoration-black/20 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+        >
+          Pick a date
+        </button>
+        <input
+          ref={dateInputRef}
+          type="date"
+          className="sr-only"
+          onChange={(event) => {
+            const nextValue = event.target.value;
+
+            if (!nextValue) {
+              return;
+            }
+
+            onDatePick(nextValue);
+          }}
+        />
       </div>
       {isOpen ? (
         <div
