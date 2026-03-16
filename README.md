@@ -45,3 +45,11 @@ Custom countdowns are created at `/create` and published at `/c/[slug]`.
 - Newly created custom countdown slugs are also saved in browser `localStorage` under `daysuntil_my_countdowns` so the homepage can show a lightweight `Your countdowns` section for the most recent items.
 
 This file-backed storage is the lightest v1 persistence approach for a single-instance deployment. If you later add accounts, private countdowns, or multi-instance hosting, the next step is to replace the JSON file with a shared database table while keeping the same `slug`-based page routes.
+
+## Google Search Console
+
+To submit DaysUntil to Google Search Console:
+
+1. Verify ownership of the `daysuntil.is` domain in Google Search Console.
+2. Submit the sitemap at `https://daysuntil.is/sitemap.xml`.
+3. Request indexing for the homepage, the main `/days-until/[slug]` event pages, and the season pages.

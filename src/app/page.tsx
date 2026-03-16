@@ -34,11 +34,11 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
 ];
 
 const POPULAR_COUNTDOWN_LINKS = [
-  { href: "/days-until-christmas", label: "Days until Christmas" },
-  { href: "/days-until-halloween", label: "Days until Halloween" },
-  { href: "/days-until-new-year", label: "Days until New Year" },
-  { href: "/days-until-valentines-day", label: "Days until Valentine's Day" },
-  { href: "/days-until-thanksgiving", label: "Days until Thanksgiving" },
+  { href: "/days-until/christmas", label: "Days until Christmas" },
+  { href: "/days-until/halloween", label: "Days until Halloween" },
+  { href: "/days-until/new-year", label: "Days until New Year" },
+  { href: "/days-until/valentines-day", label: "Days until Valentine's Day" },
+  { href: "/days-until/thanksgiving", label: "Days until Thanksgiving" },
 ];
 
 const MILESTONE_BUTTONS = [

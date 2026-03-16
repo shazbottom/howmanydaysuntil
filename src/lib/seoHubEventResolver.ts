@@ -1,5 +1,9 @@
-import { findEventBySlug, type EventDefinition } from "../data/events";
-import { getCountdown, startOfLocalDay, type CountdownResult } from "./countdown";
+import type { CountdownResult } from "./countdown";
+import { getCountdown, startOfLocalDay } from "./countdown";
+import {
+  findSeoHubEventBySlug,
+  type SeoHubEventDefinition,
+} from "../data/seoHubEvents";
 
 function isSameLocalDay(left: Date, right: Date): boolean {
   return (
@@ -9,7 +13,7 @@ function isSameLocalDay(left: Date, right: Date): boolean {
   );
 }
 
-function getNextFixedDate(month: number, day: number, now: Date): Date {
+function getNextFixedAnnualDate(month: number, day: number, now: Date): Date {
   const currentYear = now.getFullYear();
   const candidate = new Date(currentYear, month - 1, day);
   const today = startOfLocalDay(now);
@@ -23,20 +27,6 @@ function getNextFixedDate(month: number, day: number, now: Date): Date {
   }
 
   return candidate;
-}
-
-function getNextWeekdayDate(weekday: number, now: Date): Date {
-  const currentWeekday = now.getDay();
-  const offset = (weekday - currentWeekday + 7) % 7;
-
-  if (offset === 0) {
-    return now;
-  }
-
-  const candidate = new Date(now);
-  candidate.setDate(now.getDate() + offset);
-
-  return startOfLocalDay(candidate);
 }
 
 function getNthWeekdayOfMonth(year: number, month: number, weekday: number, occurrence: number): Date {
@@ -82,7 +72,7 @@ function getNextAnnualNthWeekdayDate(
   return candidate;
 }
 
-function getNextAnnualRelativeToNthWeekdayDate(
+function getNextAnnualRelativeDate(
   month: number,
   weekday: number,
   occurrence: number,
@@ -114,6 +104,32 @@ function getNextAnnualRelativeToNthWeekdayDate(
   }
 
   return candidate;
+}
+
+function getNextWeekdayDate(weekdays: number[], now: Date, minimumDaysAhead = 0): Date {
+  const today = startOfLocalDay(now);
+  let bestCandidate: Date | null = null;
+
+  for (const weekday of weekdays) {
+    const offset = (weekday - now.getDay() + 7) % 7;
+    const adjustedOffset = offset < minimumDaysAhead ? offset + 7 : offset;
+    const candidate = new Date(today);
+    candidate.setDate(today.getDate() + adjustedOffset);
+
+    if (adjustedOffset === 0 && minimumDaysAhead === 0) {
+      return now;
+    }
+
+    if (!bestCandidate || candidate < bestCandidate) {
+      bestCandidate = candidate;
+    }
+  }
+
+  return bestCandidate ?? today;
+}
+
+function getFixedYearDate(year: number, month: number, day: number): Date {
+  return new Date(year, month - 1, day);
 }
 
 function getEasterSunday(year: number): Date {
@@ -152,14 +168,15 @@ function getNextEasterDate(now: Date): Date {
   return candidate;
 }
 
-export function resolveEventDate(event: EventDefinition, now: Date = new Date()): Date | null {
+export function resolveSeoHubEventDate(
+  event: SeoHubEventDefinition,
+  now: Date = new Date(),
+): Date | null {
   switch (event.recurrence.recurrenceType) {
     case "fixed-annual-date":
-      return getNextFixedDate(event.recurrence.month, event.recurrence.day, now);
-    case "year-start":
-      return getNextFixedDate(event.recurrence.month, event.recurrence.day, now);
-    case "weekday-recurring":
-      return getNextWeekdayDate(event.recurrence.weekdays[0], now);
+      return getNextFixedAnnualDate(event.recurrence.month, event.recurrence.day, now);
+    case "season-approximate":
+      return getNextFixedAnnualDate(event.recurrence.month, event.recurrence.day, now);
     case "annual-nth-weekday":
       return getNextAnnualNthWeekdayDate(
         event.recurrence.month,
@@ -168,13 +185,28 @@ export function resolveEventDate(event: EventDefinition, now: Date = new Date())
         now,
       );
     case "annual-relative-to-nth-weekday":
-      return getNextAnnualRelativeToNthWeekdayDate(
+      return getNextAnnualRelativeDate(
         event.recurrence.month,
         event.recurrence.weekday,
         event.recurrence.occurrence,
         event.recurrence.offsetDays,
         now,
       );
+    case "weekday-recurring":
+      return getNextWeekdayDate(
+        event.recurrence.weekdays,
+        now,
+        event.recurrence.minimumDaysAhead ?? 0,
+      );
+    case "fixed-year-date": {
+      const targetDate = getFixedYearDate(
+        event.recurrence.year,
+        event.recurrence.month,
+        event.recurrence.day,
+      );
+
+      return targetDate >= startOfLocalDay(now) ? targetDate : null;
+    }
     case "easter":
       return getNextEasterDate(now);
     default:
@@ -182,23 +214,23 @@ export function resolveEventDate(event: EventDefinition, now: Date = new Date())
   }
 }
 
-export interface ResolvedEventCountdown {
-  event: EventDefinition;
+export interface ResolvedSeoHubEventCountdown {
+  event: SeoHubEventDefinition;
   targetDate: Date;
   countdown: CountdownResult;
 }
 
-export function resolveEventCountdown(
+export function resolveSeoHubEventCountdown(
   slug: string,
   now: Date = new Date(),
-): ResolvedEventCountdown | null {
-  const event = findEventBySlug(slug);
+): ResolvedSeoHubEventCountdown | null {
+  const event = findSeoHubEventBySlug(slug);
 
   if (!event) {
     return null;
   }
 
-  const targetDate = resolveEventDate(event, now);
+  const targetDate = resolveSeoHubEventDate(event, now);
 
   if (!targetDate) {
     return null;
