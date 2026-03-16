@@ -13,10 +13,24 @@ interface LiveTimeParts {
   hours: string;
   minutes: string;
   seconds: string;
+  compactHours: string;
+  compactMinutes: string;
+  compactSeconds: string;
 }
 
 function formatTotalUnit(value: number): string {
   return value.toLocaleString("en-GB");
+}
+
+function formatCompactTotalUnit(value: number): string {
+  if (value < 10000) {
+    return formatTotalUnit(value);
+  }
+
+  return new Intl.NumberFormat("en-GB", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
 }
 
 function getLiveTimeParts(countdown: CountdownResult): LiveTimeParts {
@@ -24,6 +38,9 @@ function getLiveTimeParts(countdown: CountdownResult): LiveTimeParts {
     hours: formatTotalUnit(countdown.hoursRemaining),
     minutes: formatTotalUnit(countdown.minutesRemaining),
     seconds: formatTotalUnit(countdown.secondsRemaining),
+    compactHours: formatCompactTotalUnit(countdown.hoursRemaining),
+    compactMinutes: formatCompactTotalUnit(countdown.minutesRemaining),
+    compactSeconds: formatCompactTotalUnit(countdown.secondsRemaining),
   };
 }
 
@@ -93,10 +110,10 @@ export function CountdownDisplay({
   }
 
   const liveTime = getLiveTimeParts(liveCountdown);
-  const timeBlocks: Array<{ value: string; label: string }> = [
-    { value: liveTime.hours, label: "hrs" },
-    { value: liveTime.minutes, label: "min" },
-    { value: liveTime.seconds, label: "sec" },
+  const timeBlocks: Array<{ value: string; compactValue: string; label: string }> = [
+    { value: liveTime.hours, compactValue: liveTime.compactHours, label: "hrs" },
+    { value: liveTime.minutes, compactValue: liveTime.compactMinutes, label: "min" },
+    { value: liveTime.seconds, compactValue: liveTime.compactSeconds, label: "sec" },
   ];
   const targetDateLabel = formatTargetDateLabel(liveCountdown.targetDate);
   const targetYear = liveCountdown.targetDate.getFullYear();
@@ -122,12 +139,12 @@ export function CountdownDisplay({
           </div>
         </div>
       </div>
-      <div className="px-6 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
-          <p className="text-xs uppercase tracking-[0.24em] text-black/42">{label}</p>
+      <div className="px-5 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
+        <p className="text-xs uppercase tracking-[0.24em] text-black/42">{label}</p>
         <div className="mt-7 border-b border-black/[0.05] pb-8">
           <p
             suppressHydrationWarning
-            className="text-[5.5rem] font-semibold leading-none tracking-[-0.08em] text-black sm:text-[7.3rem]"
+            className="text-[clamp(4.35rem,22vw,5.5rem)] font-semibold leading-none tracking-[-0.08em] text-black sm:text-[7.3rem]"
           >
             {liveCountdown.daysRemaining}
           </p>
@@ -136,17 +153,18 @@ export function CountdownDisplay({
           </p>
         </div>
         <div className="mt-7 flex justify-center">
-          <div className="grid grid-cols-3 gap-6 sm:gap-10">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:grid-cols-3 sm:gap-10">
             {timeBlocks.map((timeBlock) => (
               <div
                 key={timeBlock.label}
-                className="min-w-[3.25rem] -translate-x-1 sm:min-w-[4rem] sm:-translate-x-2"
+                className="min-w-[5.2rem] basis-[5.2rem] text-center sm:min-w-[4rem] sm:basis-auto sm:-translate-x-2"
               >
                 <p
                   suppressHydrationWarning
-                  className="font-mono text-xl font-semibold tabular-nums tracking-[0.02em] text-black sm:text-2xl"
+                  className="font-mono text-lg font-semibold tabular-nums tracking-[0.01em] text-black min-[380px]:text-xl sm:text-2xl"
                 >
-                  {timeBlock.value}
+                  <span className="sm:hidden">{timeBlock.compactValue}</span>
+                  <span className="hidden sm:inline">{timeBlock.value}</span>
                 </p>
                 <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-black/22 sm:text-[10px]">
                   {timeBlock.label}
