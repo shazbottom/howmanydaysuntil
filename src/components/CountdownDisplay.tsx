@@ -193,8 +193,12 @@ export function CountdownDisplay({
                   suppressHydrationWarning
                   className="font-mono text-lg font-semibold tabular-nums tracking-[0.01em] text-black min-[380px]:text-xl sm:text-2xl"
                 >
-                  <span className="sm:hidden">{timeBlock.compactValue}</span>
-                  <span className="hidden sm:inline">{timeBlock.value}</span>
+                  <span suppressHydrationWarning className="sm:hidden">
+                    {timeBlock.compactValue}
+                  </span>
+                  <span suppressHydrationWarning className="hidden sm:inline">
+                    {timeBlock.value}
+                  </span>
                 </p>
                 <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-black/22 sm:text-[10px]">
                   {timeBlock.label}

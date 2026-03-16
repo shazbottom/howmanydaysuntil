@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Custom Countdowns
+
+Custom countdowns are created at `/create` and published at `/c/[slug]`.
+
+- Slugs use a readable title plus a short random suffix, for example `our-wedding-a8k3x`.
+- Records are stored in a local JSON file at `data/custom-countdowns.json`, which is created on demand.
+- Custom countdown pages are marked `noindex` by default and are intended for sharing rather than SEO.
+- Newly created custom countdown slugs are also saved in browser `localStorage` under `daysuntil_my_countdowns` so the homepage can show a lightweight `Your countdowns` section for the most recent items.
+
+This file-backed storage is the lightest v1 persistence approach for a single-instance deployment. If you later add accounts, private countdowns, or multi-instance hosting, the next step is to replace the JSON file with a shared database table while keeping the same `slug`-based page routes.

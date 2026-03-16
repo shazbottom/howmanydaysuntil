@@ -8,6 +8,7 @@ import { CountdownDisplay } from "../components/CountdownDisplay";
 import { DateFormatHelp } from "../components/DateFormatHelp";
 import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
+import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
 import { formatShortDate } from "../lib/dateFormat";
@@ -237,13 +238,14 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white px-6 py-10 text-black">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
-        <div className="w-full">
+        <div className="flex w-full items-center justify-between gap-4">
           <Link
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black"
           >
             <Brand variant="horizontal" height={55} className="h-[55px] w-auto" />
           </Link>
+          <MyCountdownsDropdown />
         </div>
         <section className="mt-20 flex w-full flex-1 flex-col items-center text-center">
           <div className="w-full max-w-[46rem]">
