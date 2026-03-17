@@ -17,27 +17,33 @@ export async function generateMetadata({
 }: CustomCountdownPageProps): Promise<Metadata> {
   const { slug } = await params;
   const pageData = await getCustomCountdownPageDataFromRedis(slug);
+  const title = pageData ? `${pageData.record.title} | DaysUntil` : `Custom Countdown | DaysUntil`;
+  const description = pageData
+    ? pageData.record.note ??
+      `A shareable countdown to ${formatCustomCountdownDate(pageData.targetDate, "en-GB")}.`
+    : `A shareable custom countdown.`;
+  const imageUrl = `/c/${slug}/opengraph-image`;
 
   return {
-    title: pageData ? `${pageData.record.title} | DaysUntil` : `Custom Countdown | DaysUntil`,
-    description: pageData
-      ? pageData.record.note ??
-        `A shareable countdown to ${formatCustomCountdownDate(pageData.targetDate, "en-GB")}.`
-      : `A shareable custom countdown.`,
+    title,
+    description,
     robots: {
       index: false,
       follow: false,
     },
-    openGraph: pageData
-      ? {
-          title: `${pageData.record.title} | DaysUntil`,
-          description:
-            pageData.record.note ??
-            `A shareable countdown to ${formatCustomCountdownDate(pageData.targetDate, "en-GB")}.`,
-          url: `/c/${slug}`,
-          type: "website",
-        }
-      : undefined,
+    openGraph: {
+      title,
+      description,
+      url: `/c/${slug}`,
+      type: "website",
+      images: [imageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
     alternates: {
       canonical: `/c/${slug}`,
     },

@@ -1,0 +1,43 @@
+import { notFound } from "next/navigation";
+import { formatFullDate, formatLongDate } from "../../../../../../lib/dateFormat";
+import {
+  isExactDateInRolloutRange,
+} from "../../../../../../lib/exactDatePages";
+import {
+  parseExactDateParams,
+  resolveExactDateCountdown,
+  type ExactDateParams,
+} from "../../../../../../lib/exactDateCountdown";
+import {
+  createCountdownOgImage,
+  ogImageContentType,
+  ogImageSize,
+} from "../../../../../../lib/ogImage";
+
+export const size = ogImageSize;
+export const contentType = ogImageContentType;
+
+interface ExactDateOgImageProps {
+  params: Promise<ExactDateParams>;
+}
+
+export default async function OgImage({ params }: ExactDateOgImageProps) {
+  const resolvedParams = await params;
+  const targetDate = parseExactDateParams(resolvedParams);
+
+  if (!targetDate || !isExactDateInRolloutRange(targetDate)) {
+    notFound();
+  }
+
+  const resolvedCountdown = resolveExactDateCountdown(resolvedParams);
+
+  if (!resolvedCountdown) {
+    notFound();
+  }
+
+  return createCountdownOgImage({
+    count: resolvedCountdown.countdown.daysRemaining.toLocaleString("en-GB"),
+    label: formatLongDate(targetDate, "en-GB"),
+    footer: formatFullDate(targetDate, "en-GB"),
+  });
+}

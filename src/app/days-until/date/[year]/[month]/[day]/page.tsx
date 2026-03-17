@@ -53,6 +53,7 @@ export async function generateMetadata({
   const longDate = formatLongDate(targetDate, "en-GB");
   const title = `How Many Days Until ${longDate}? (Live Countdown)`;
   const description = `There are ${resolvedCountdown.countdown.daysRemaining} days until ${longDate}. See a live countdown including weeks, hours, and minutes remaining.`;
+  const imageUrl = `${getExactDateRoutePath(targetDate)}/opengraph-image`;
 
   return {
     title,
@@ -65,6 +66,13 @@ export async function generateMetadata({
       description,
       url: getExactDateRoutePath(targetDate),
       type: "website",
+      images: [imageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }

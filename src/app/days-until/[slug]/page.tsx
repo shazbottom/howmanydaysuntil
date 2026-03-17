@@ -36,18 +36,27 @@ export async function generateMetadata({
   const { event, targetDate, countdown } = resolvedCountdown;
   const targetYear = targetDate.getFullYear();
   const description = `There are ${countdown.daysRemaining} days until ${event.name} ${targetYear}. See a live countdown including weeks, hours, and minutes remaining.`;
+  const imageUrl = `/days-until/${event.slug}/opengraph-image`;
+  const title = `How Many Days Until ${event.name} ${targetYear}? (Live Countdown)`;
 
   return {
-    title: `How Many Days Until ${event.name} ${targetYear}? (Live Countdown)`,
+    title,
     description,
     alternates: {
       canonical: `/days-until/${event.slug}`,
     },
     openGraph: {
-      title: `How Many Days Until ${event.name} ${targetYear}? (Live Countdown)`,
+      title,
       description,
       url: `/days-until/${event.slug}`,
       type: "website",
+      images: [imageUrl],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }
