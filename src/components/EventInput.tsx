@@ -55,7 +55,7 @@ export function EventInput({
       </label>
       <div className="flex flex-col items-center text-center">
         <div className="w-full max-w-[38rem] sm:max-w-[44rem]">
-          <div className="mx-auto max-w-[11ch] text-[clamp(2rem,10vw,5rem)] font-semibold leading-[0.94] tracking-[-0.08em] sm:max-w-none sm:text-[clamp(2.45rem,5.8vw,5rem)]">
+          <div className="mx-auto max-w-[11ch] text-[clamp(2rem,10vw,5rem)] font-semibold leading-[0.94] tracking-[-0.08em] text-black dark:text-white sm:max-w-none sm:text-[clamp(2.45rem,5.8vw,5rem)]">
             <div>How many days until</div>
           </div>
           <div className="mx-auto mt-4 flex max-w-[min(88vw,24rem)] items-end justify-center gap-x-2 sm:max-w-[min(70vw,32rem)] sm:gap-x-3">
@@ -66,10 +66,10 @@ export function EventInput({
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
-                className={`block w-full border-b border-[#18c28f]/35 bg-transparent px-2 pb-2 text-center font-semibold italic leading-[1.02] tracking-[-0.07em] text-[#18c28f] outline-none transition placeholder:text-[#18c28f]/28 focus:border-[#18c28f] ${valueSizeClasses.input}`}
+                className={`block w-full border-b border-[#169c76]/35 bg-transparent px-2 pb-2 text-center font-semibold italic leading-[1.02] tracking-[-0.07em] text-[#169c76] outline-none transition placeholder:text-[#169c76]/28 focus:border-[#169c76] dark:border-[#4ab494]/40 dark:text-[#4ab494] dark:placeholder:text-[#4ab494]/28 dark:focus:border-[#4ab494] ${valueSizeClasses.input}`}
               />
             </div>
-            <span className={`shrink-0 leading-none text-[#18c28f] ${valueSizeClasses.punctuation}`}>
+            <span className={`shrink-0 leading-none text-[#169c76] dark:text-[#4ab494] ${valueSizeClasses.punctuation}`}>
               ?
             </span>
           </div>

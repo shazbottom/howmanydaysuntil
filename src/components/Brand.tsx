@@ -5,6 +5,7 @@ interface BrandProps {
   height?: number;
   className?: string;
   priority?: boolean;
+  invertInDarkMode?: boolean;
 }
 
 const BRAND_ASSETS = {
@@ -30,6 +31,7 @@ export function Brand({
   height,
   className = "",
   priority = false,
+  invertInDarkMode = true,
 }: BrandProps) {
   const asset = BRAND_ASSETS[variant];
   const resolvedHeight = height ?? (
@@ -44,7 +46,7 @@ export function Brand({
       width={scaledWidth}
       height={resolvedHeight}
       priority={priority}
-      className={`w-auto ${className}`.trim()}
+      className={`w-auto ${invertInDarkMode ? "dark:brightness-0 dark:invert" : ""} ${className}`.trim()}
     />
   );
 }

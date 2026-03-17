@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SeoCountdownPage } from "../../../components/SeoCountdownPage";
-import { findSeoHubEventBySlug, seoHubEvents } from "../../../data/seoHubEvents";
+import { seoHubEvents } from "../../../data/seoHubEvents";
 import { formatFullDate } from "../../../lib/dateFormat";
 import { resolveSeoHubEventCountdown } from "../../../lib/seoHubEventResolver";
+import { getSeoHubRelatedLinks } from "../../../lib/seoHubRelatedLinks";
 
 interface EventPageProps {
   params: Promise<{
@@ -60,14 +61,7 @@ export default async function EventPage({ params }: EventPageProps) {
   }
 
   const { event, countdown, targetDate } = resolvedCountdown;
-  const relatedEvents = event.relatedEventSlugs
-    .map((relatedSlug) => findSeoHubEventBySlug(relatedSlug))
-    .filter((relatedEvent) => relatedEvent !== undefined)
-    .slice(0, 36)
-    .map((relatedEvent) => ({
-      href: `/days-until/${relatedEvent.slug}`,
-      label: `Days until ${relatedEvent.name}`,
-    }));
+  const relatedEvents = getSeoHubRelatedLinks(event);
   const eyebrow =
     event.category === "season"
       ? "Season countdown"

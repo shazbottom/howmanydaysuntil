@@ -107,9 +107,9 @@ export function CountdownDisplay({
     return (
       <section
         aria-label="Countdown display"
-        className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6"
+        className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10"
       >
-        <div className="bg-[#18c28f] px-6 py-5 text-left text-white sm:px-8">
+        <div className="bg-[#169c76] px-6 py-5 text-left text-white dark:bg-[#176f59] sm:px-8">
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
@@ -126,7 +126,7 @@ export function CountdownDisplay({
           </div>
         </div>
         <div className="px-8 py-[4.83rem]">
-          <p className="text-sm text-black/50">Enter an event or date to start a countdown.</p>
+          <p className="text-sm text-black/50 dark:text-white/56">Enter an event or date to start a countdown.</p>
         </div>
       </section>
     );
@@ -148,9 +148,9 @@ export function CountdownDisplay({
   return (
     <section
       aria-label="Countdown display"
-      className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6"
+      className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10"
     >
-      <div className="bg-[#18c28f] px-6 py-5 text-white sm:px-8">
+      <div className="bg-[#169c76] px-6 py-5 text-white dark:bg-[#176f59] sm:px-8">
         <div className="flex items-end justify-between gap-6">
           <div className="text-left">
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
@@ -167,19 +167,19 @@ export function CountdownDisplay({
         </div>
       </div>
       <div className="px-5 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
-        <p className="text-xs uppercase tracking-[0.24em] text-black/42">{label}</p>
-        <div className="mt-7 border-b border-black/[0.05] pb-8">
+        <p className="text-xs uppercase tracking-[0.24em] text-black/42 dark:text-white/44">{label}</p>
+        <div className="mt-7 border-b border-black/[0.05] pb-8 dark:border-white/8">
           <p
             suppressHydrationWarning
-            className="text-[clamp(4.35rem,22vw,5.5rem)] font-semibold leading-none tracking-[-0.08em] text-black sm:text-[7.3rem]"
+            className="text-[clamp(4.35rem,22vw,5.5rem)] font-semibold leading-none tracking-[-0.08em] text-black dark:text-white sm:text-[7.3rem]"
           >
             {liveCountdown.daysRemaining}
           </p>
-          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.34em] text-black/42">
+          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.34em] text-black/42 dark:text-white/42">
             {liveCountdown.daysRemaining === 1 ? "day" : "days"} remaining
           </p>
         </div>
-        <p className="mt-6 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 sm:text-[1rem]">
+        <p className="mt-6 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
           {weeksSummary}
         </p>
         <div className="mt-7 flex justify-center">
@@ -191,7 +191,7 @@ export function CountdownDisplay({
               >
                 <p
                   suppressHydrationWarning
-                  className="font-mono text-lg font-semibold tabular-nums tracking-[0.01em] text-black min-[380px]:text-xl sm:text-2xl"
+                  className="font-mono text-lg font-semibold tabular-nums tracking-[0.01em] text-black dark:text-white min-[380px]:text-xl sm:text-2xl"
                 >
                   <span suppressHydrationWarning className="sm:hidden">
                     {timeBlock.compactValue}
@@ -200,7 +200,7 @@ export function CountdownDisplay({
                     {timeBlock.value}
                   </span>
                 </p>
-                <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-black/22 sm:text-[10px]">
+                <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-black/22 dark:text-white/28 sm:text-[10px]">
                   {timeBlock.label}
                 </p>
               </div>

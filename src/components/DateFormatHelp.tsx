@@ -36,7 +36,7 @@ export function DateFormatHelp({
 
   return (
     <>
-      <div className="mt-4 flex flex-col items-center gap-y-1.5 text-center text-xs text-black/38">
+      <div className="mt-4 flex flex-col items-center gap-y-1.5 text-center text-xs text-black/38 dark:text-white/38">
         <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
           <span>Try:</span>
           <span>25 Dec 2026</span>
@@ -49,7 +49,7 @@ export function DateFormatHelp({
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40 dark:decoration-white/18 dark:hover:text-white dark:hover:decoration-white/40"
           >
             Accepted formats
           </button>
@@ -70,7 +70,7 @@ export function DateFormatHelp({
 
               input.click();
             }}
-            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+            className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40 dark:decoration-white/18 dark:hover:text-white dark:hover:decoration-white/40"
           >
             Pick a date
           </button>
@@ -80,7 +80,7 @@ export function DateFormatHelp({
               <button
                 type="button"
                 onClick={onClear}
-                className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40"
+                className="underline decoration-black/18 underline-offset-4 transition hover:text-black hover:decoration-black/40 dark:decoration-white/18 dark:hover:text-white dark:hover:decoration-white/40"
               >
                 Clear
               </button>
@@ -104,21 +104,21 @@ export function DateFormatHelp({
       </div>
       {isOpen ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 px-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-6"
           onClick={() => setIsOpen(false)}
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="date-format-title"
-            className="w-full max-w-md rounded-[1.5rem] bg-white p-6 text-left ring-1 ring-black/8"
+            className="w-full max-w-md rounded-[1.5rem] bg-white p-6 text-left ring-1 ring-black/8 dark:bg-[#171717] dark:ring-white/10"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h2
                   id="date-format-title"
-                  className="text-lg font-semibold tracking-tight text-black"
+                  className="text-lg font-semibold tracking-tight text-black dark:text-white"
                 >
                   Accepted date formats
                 </h2>
@@ -126,28 +126,28 @@ export function DateFormatHelp({
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-sm text-black/45 transition hover:text-black"
+                className="text-sm text-black/45 transition hover:text-black dark:text-white/45 dark:hover:text-white"
               >
                 Close
               </button>
             </div>
-            <div className="mt-5 space-y-5 text-sm text-black/72">
+            <div className="mt-5 space-y-5 text-sm text-black/72 dark:text-white/72">
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42 dark:text-white/44">
                   ISO
                 </h3>
                 <p className="mt-2">2026-12-25</p>
                 <p>26-12-25</p>
               </section>
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42 dark:text-white/44">
                   Day-first numeric
                 </h3>
                 <p className="mt-2">25/12/2026 or 25/12/26</p>
                 <p>25-12-2026 or 25-12-26</p>
               </section>
               <section>
-                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.22em] text-black/42 dark:text-white/44">
                   Month name
                 </h3>
                 <p className="mt-2">25 Dec 2026</p>

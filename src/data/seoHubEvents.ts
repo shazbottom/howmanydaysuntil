@@ -96,7 +96,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Christmas is celebrated on December 25 and sits at the center of the late-year holiday season for many households around the world.",
       "People often count down to Christmas for travel, celebrations, gift giving, and time spent with family and friends.",
     ],
-    relatedEventSlugs: ["christmas-eve", "new-year", "halloween"],
+    relatedEventSlugs: ["christmas-eve", "new-year", "winter", "halloween", "friday"],
     indexable: true,
   },
   {
@@ -112,7 +112,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Christmas Eve is the day before Christmas Day and is often used for travel, festive meals, church services, and final preparations.",
       "For many people it marks the emotional start of the Christmas period rather than just a date on the calendar.",
     ],
-    relatedEventSlugs: ["christmas", "new-year", "thanksgiving"],
+    relatedEventSlugs: ["christmas", "new-year", "winter", "thanksgiving", "friday"],
     indexable: true,
   },
   {
@@ -128,7 +128,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "New Year’s Day is the first day of the calendar year and follows New Year’s Eve celebrations around the world.",
       "It is commonly associated with resolutions, fresh starts, public holidays, and a clean reset for the year ahead.",
     ],
-    relatedEventSlugs: ["christmas", "valentines-day", "2027"],
+    relatedEventSlugs: ["christmas", "christmas-eve", "winter", "valentines-day", "2027"],
     indexable: true,
   },
   {
@@ -144,7 +144,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Halloween arrives at the end of October and is one of the most recognizable seasonal dates in the year.",
       "Many people count down to Halloween for parties, school events, decorations, and the start of the late-year holiday run.",
     ],
-    relatedEventSlugs: ["thanksgiving", "christmas", "black-friday"],
+    relatedEventSlugs: ["autumn", "thanksgiving", "christmas", "black-friday", "friday"],
     indexable: true,
   },
   {
@@ -160,7 +160,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Valentine’s Day is one of the earliest widely recognized annual occasions after New Year.",
       "People often count down to it for dinner plans, gifts, cards, flowers, and other relationship milestones.",
     ],
-    relatedEventSlugs: ["new-year", "easter", "2027"],
+    relatedEventSlugs: ["new-year", "spring", "easter", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -176,7 +176,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Easter does not land on the same calendar date every year, which makes it one of the most useful holidays to count down to with a live tool.",
       "It is associated with church observance, school breaks, family gatherings, and the wider spring holiday period.",
     ],
-    relatedEventSlugs: ["spring", "valentines-day", "thanksgiving"],
+    relatedEventSlugs: ["spring", "valentines-day", "summer", "thanksgiving", "sunday"],
     indexable: true,
   },
   {
@@ -197,7 +197,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Thanksgiving is tied to a weekday rule rather than a fixed date, so its calendar day changes from year to year.",
       "It is closely associated with family travel, large meals, and the transition into the Christmas shopping season.",
     ],
-    relatedEventSlugs: ["black-friday", "christmas", "halloween"],
+    relatedEventSlugs: ["black-friday", "christmas", "autumn", "halloween", "friday"],
     indexable: true,
   },
   {
@@ -219,7 +219,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Because Black Friday is tied to Thanksgiving, its date changes every year rather than staying fixed on the calendar.",
       "People often count down to Black Friday for sales, product launches, and major shopping promotions.",
     ],
-    relatedEventSlugs: ["thanksgiving", "christmas", "halloween"],
+    relatedEventSlugs: ["thanksgiving", "christmas", "autumn", "new-year", "friday"],
     indexable: true,
   },
   {
@@ -240,7 +240,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Spring is commonly linked with the vernal equinox, warmer weather, and the return of new growth.",
       "For many people it marks the beginning of outdoor plans, lighter evenings, and the move away from winter.",
     ],
-    relatedEventSlugs: ["summer", "autumn", "winter", "easter"],
+    relatedEventSlugs: ["summer", "easter", "valentines-day", "winter", "friday"],
     indexable: true,
   },
   {
@@ -261,7 +261,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Summer is associated with the summer solstice, school holidays, travel, and long stretches of daylight.",
       "It is one of the most commonly searched seasonal countdowns for weather, events, and vacation planning.",
     ],
-    relatedEventSlugs: ["spring", "autumn", "winter"],
+    relatedEventSlugs: ["spring", "autumn", "halloween", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -282,7 +282,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Autumn is often associated with harvest season, falling leaves, and the autumnal equinox.",
       "It also leads into Halloween, Thanksgiving, and the final stretch of the calendar year.",
     ],
-    relatedEventSlugs: ["spring", "summer", "winter", "halloween"],
+    relatedEventSlugs: ["halloween", "thanksgiving", "winter", "summer", "friday"],
     indexable: true,
   },
   {
@@ -303,7 +303,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Winter starts near the winter solstice and is associated with colder weather, holiday travel, and long nights.",
       "For many people it marks the last astronomical season before the year turns again toward spring.",
     ],
-    relatedEventSlugs: ["spring", "summer", "autumn", "christmas"],
+    relatedEventSlugs: ["christmas", "new-year", "spring", "thanksgiving", "friday"],
     indexable: true,
   },
   {
@@ -319,7 +319,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A Monday countdown is useful for work schedules, travel planning, and weekly routines that restart at the beginning of the week.",
       "Because it is recurring, the next Monday can be resolved from any day of the week without needing a fixed calendar date.",
     ],
-    relatedEventSlugs: ["friday", "weekend", "saturday"],
+    relatedEventSlugs: ["friday", "weekend", "saturday", "sunday", "christmas"],
     indexable: true,
   },
   {
@@ -335,7 +335,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "People frequently count down to Friday for the end of the working week, travel plans, and social events.",
       "Because Friday is recurring, the live countdown always points to the next upcoming occurrence.",
     ],
-    relatedEventSlugs: ["weekend", "saturday", "monday"],
+    relatedEventSlugs: ["weekend", "saturday", "monday", "halloween", "christmas"],
     indexable: true,
   },
   {
@@ -351,7 +351,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Saturday is commonly linked with travel, sport, family plans, and time away from work or school.",
       "A Saturday countdown is useful when you want a simple live answer for the next weekend start.",
     ],
-    relatedEventSlugs: ["sunday", "weekend", "friday"],
+    relatedEventSlugs: ["sunday", "weekend", "friday", "monday", "christmas"],
     indexable: true,
   },
   {
@@ -367,7 +367,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Sunday is often associated with rest, family time, sport, and preparation for the coming week.",
       "Because it is recurring, the next Sunday can be calculated from any current date without a fixed annual rule.",
     ],
-    relatedEventSlugs: ["saturday", "weekend", "monday"],
+    relatedEventSlugs: ["weekend", "saturday", "monday", "friday", "easter"],
     indexable: true,
   },
   {
@@ -383,7 +383,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A weekend countdown is useful when you want the fastest answer to how long remains until your next break from the working week.",
       "This page resolves to the next upcoming weekend day rather than a fixed annual event.",
     ],
-    relatedEventSlugs: ["friday", "saturday", "sunday"],
+    relatedEventSlugs: ["friday", "saturday", "sunday", "monday", "christmas"],
     indexable: true,
   },
   {
@@ -399,7 +399,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Year countdowns are useful for planning long-term goals, deadlines, travel, and milestone events.",
       "Unlike recurring holidays, a page for 2027 points to one fixed calendar date rather than repeating annually.",
     ],
-    relatedEventSlugs: ["2028", "2030", "new-year"],
+    relatedEventSlugs: ["new-year", "2028", "2030", "christmas", "summer"],
     indexable: true,
   },
   {
@@ -415,7 +415,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A countdown to 2028 is useful for multi-year planning, financial goals, and long-range project timelines.",
       "It is a one-off target date rather than a recurring annual holiday or weekday cycle.",
     ],
-    relatedEventSlugs: ["2027", "2030", "new-year"],
+    relatedEventSlugs: ["new-year", "2027", "2030", "christmas", "summer"],
     indexable: true,
   },
   {
@@ -431,7 +431,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A 2030 countdown is commonly used for long-term personal or business milestones, planning horizons, and deadline tracking.",
       "It gives a simple live answer to a fixed-year target without requiring users to enter the date manually.",
     ],
-    relatedEventSlugs: ["2027", "2028", "new-year"],
+    relatedEventSlugs: ["new-year", "2028", "2027", "christmas", "summer"],
     indexable: true,
   },
 ];
