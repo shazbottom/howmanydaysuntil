@@ -5,7 +5,10 @@ import {
   findSeoHubEventBySlug,
   type SeoHubEventDefinition,
 } from "../data/seoHubEvents";
-import { findSeoHubEventsForDate } from "./seoHubEventResolver";
+import {
+  findSeoHubEventsForDate,
+  resolveSeoHubEventDate,
+} from "./seoHubEventResolver";
 
 export const EXACT_DATE_ROLLOUT_DAYS = 500;
 
@@ -28,9 +31,22 @@ function getYearSlug(date: Date): string | null {
   return findSeoHubEventBySlug(yearSlug) ? yearSlug : null;
 }
 
-function getPrimarySeasonSlug(date: Date): string | null {
-  const season = findSeoHubEventsForDate(date).find((event) => event.category === "season");
-  return season?.slug ?? null;
+function getPrimarySeasonSlug(date: Date): string {
+  const monthDay = (date.getMonth() + 1) * 100 + date.getDate();
+
+  if (monthDay >= 320 && monthDay <= 620) {
+    return "spring";
+  }
+
+  if (monthDay >= 621 && monthDay <= 921) {
+    return "summer";
+  }
+
+  if (monthDay >= 922 && monthDay <= 1220) {
+    return "autumn";
+  }
+
+  return "winter";
 }
 
 function getMatchedHolidaySlugs(date: Date): string[] {
@@ -105,30 +121,55 @@ export function getExactDateSupportingCopy(date: Date): string[] {
 }
 
 export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
+  const dateStart = startOfLocalDay(date);
   const relatedSlugs: string[] = [];
+
+  const yearSlug = getYearSlug(date);
+  if (yearSlug) {
+    relatedSlugs.push(yearSlug);
+  }
+
+  relatedSlugs.push(getPrimarySeasonSlug(date));
 
   for (const slug of getMatchedHolidaySlugs(date)) {
     relatedSlugs.push(slug);
   }
 
-  const seasonSlug = getPrimarySeasonSlug(date);
+  const majorEventSlugs = [
+    "christmas",
+    "christmas-eve",
+    "new-year",
+    "halloween",
+    "valentines-day",
+    "easter",
+    "thanksgiving",
+    "black-friday",
+  ];
 
-  if (seasonSlug) {
-    relatedSlugs.push(seasonSlug);
-  }
+  const proximitySortedSlugs = majorEventSlugs
+    .map((slug) => {
+      const event = findSeoHubEventBySlug(slug);
+      const eventDate = event ? resolveSeoHubEventDate(event, dateStart) : null;
 
-  const yearSlug = getYearSlug(date);
+      if (!event || !eventDate) {
+        return null;
+      }
 
-  if (yearSlug) {
-    relatedSlugs.push(yearSlug);
-  }
+      const daysAway = Math.round(
+        (startOfLocalDay(eventDate).getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24),
+      );
 
-  if (date.getMonth() <= 5) {
-    relatedSlugs.push("new-year", "easter", "summer", "christmas");
-  } else if (date.getMonth() <= 8) {
-    relatedSlugs.push("summer", "halloween", "christmas", "new-year");
-  } else {
-    relatedSlugs.push("halloween", "thanksgiving", "christmas", "new-year");
+      return {
+        slug,
+        daysAway,
+      };
+    })
+    .filter((entry): entry is { slug: string; daysAway: number } => entry !== null)
+    .sort((left, right) => left.daysAway - right.daysAway)
+    .map((entry) => entry.slug);
+
+  for (const slug of proximitySortedSlugs.slice(0, 2)) {
+    relatedSlugs.push(slug);
   }
 
   const uniqueSlugs = Array.from(new Set(relatedSlugs))

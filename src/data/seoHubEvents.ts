@@ -387,6 +387,22 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
     indexable: true,
   },
   {
+    slug: "2026",
+    name: "2026",
+    category: "year",
+    aliases: ["year 2026"],
+    recurrenceType: "fixed-year-date",
+    recurrence: { recurrenceType: "fixed-year-date", year: 2026, month: 1, day: 1 },
+    description: "Start of the year 2026.",
+    seoDescription: "2026 begins on January 1, 2026 and represents a fixed future year countdown.",
+    supportingCopy: [
+      "Year countdowns are useful for planning long-term goals, deadlines, travel, and milestone events.",
+      "Unlike recurring holidays, a page for 2026 points to one fixed calendar date rather than repeating annually.",
+    ],
+    relatedEventSlugs: ["new-year", "2027", "2028", "christmas", "summer"],
+    indexable: true,
+  },
+  {
     slug: "2027",
     name: "2027",
     category: "year",
