@@ -1,4 +1,5 @@
 import { getCountdown } from "./countdown";
+import { formatFullDate } from "./dateFormat";
 
 export interface CustomCountdown {
   id: string;
@@ -34,27 +35,52 @@ function collapseWhitespace(value: string): string {
 }
 
 export function createLocalDateFromIso(isoDate: string): Date | null {
-  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const match = isoDate.match(
+    /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?$/,
+  );
 
   if (!match) {
     return null;
   }
 
-  const [, yearText, monthText, dayText] = match;
+  const [, yearText, monthText, dayText, hourText = "0", minuteText = "0"] = match;
   const year = Number(yearText);
   const month = Number(monthText);
   const day = Number(dayText);
-  const date = new Date(year, month - 1, day);
+  const hours = Number(hourText);
+  const minutes = Number(minuteText);
+  const date = new Date(year, month - 1, day, hours, minutes);
 
   if (
     date.getFullYear() !== year ||
     date.getMonth() !== month - 1 ||
-    date.getDate() !== day
+    date.getDate() !== day ||
+    date.getHours() !== hours ||
+    date.getMinutes() !== minutes
   ) {
     return null;
   }
 
   return date;
+}
+
+function hasExplicitTime(value: string): boolean {
+  return value.includes("T");
+}
+
+export function formatCustomCountdownDate(date: Date, locale = "en-GB"): string {
+  if (date.getHours() === 0 && date.getMinutes() === 0) {
+    return formatFullDate(date, locale);
+  }
+
+  return new Intl.DateTimeFormat(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
 }
 
 function isValidTimeZone(timeZone: string): boolean {
@@ -169,17 +195,20 @@ export function validateCustomCountdownInput(input: CreateCustomCountdownInput):
   const note = collapseWhitespace(input.note ?? "");
   const timezone = collapseWhitespace(input.timezone ?? "");
   const parsedDate = createLocalDateFromIso(input.targetDate);
-  const today = new Date();
-  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const now = new Date();
+  const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   if (!title) {
     errors.title = "Enter a title for your countdown.";
   }
 
   if (!parsedDate) {
-    errors.targetDate = "Choose a valid target date.";
-  } else if (parsedDate < todayStart) {
-    errors.targetDate = "Choose a target date that is today or in the future.";
+    errors.targetDate = "Choose a valid target date and time.";
+  } else if (
+    (hasExplicitTime(input.targetDate) && parsedDate < now) ||
+    (!hasExplicitTime(input.targetDate) && parsedDate < nowStart)
+  ) {
+    errors.targetDate = "Choose a target date and time that is in the future.";
   }
 
   if (timezone && !isValidTimeZone(timezone)) {

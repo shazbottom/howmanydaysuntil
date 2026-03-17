@@ -84,10 +84,10 @@ export function CreateCountdownForm() {
           <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
             <label className="text-left">
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-black/48 dark:text-white/48">
-                Target date
+                Target date and time
               </span>
               <input
-                type="date"
+                type="datetime-local"
                 value={targetDate}
                 onChange={(event) => setTargetDate(event.target.value)}
                 className="mt-2 w-full rounded-[1.4rem] border border-black/10 bg-white px-4 py-3.5 text-base outline-none transition focus:border-black/25 dark:border-white/10 dark:bg-[#111111] dark:text-white dark:focus:border-white/22"
