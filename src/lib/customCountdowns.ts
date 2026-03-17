@@ -1,6 +1,3 @@
-import { randomBytes, randomUUID } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { getCountdown } from "./countdown";
 
 export interface CustomCountdown {
@@ -28,14 +25,15 @@ export interface CustomCountdownPageData {
   countdown: ReturnType<typeof getCountdown> | null;
 }
 
-const STORAGE_PATH = path.join(process.cwd(), "data", "custom-countdowns.json");
+export const CUSTOM_COUNTDOWNS_STORAGE_KEY = "daysuntil_custom_countdowns";
+const MAX_CUSTOM_COUNTDOWNS = 50;
 const SLUG_SUFFIX_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 function collapseWhitespace(value: string): string {
   return value.trim().replace(/\s+/g, " ");
 }
 
-function createLocalDateFromIso(isoDate: string): Date | null {
+export function createLocalDateFromIso(isoDate: string): Date | null {
   const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
   if (!match) {
@@ -81,51 +79,80 @@ function slugifyTitle(title: string): string {
 }
 
 function createSlugSuffix(length = 5): string {
-  let result = "";
+  if (typeof globalThis.crypto?.getRandomValues === "function") {
+    const bytes = new Uint8Array(length);
+    globalThis.crypto.getRandomValues(bytes);
 
-  while (result.length < length) {
-    const bytes = randomBytes(length);
+    return Array.from(bytes, (byte) => SLUG_SUFFIX_ALPHABET[byte % SLUG_SUFFIX_ALPHABET.length]).join("");
+  }
 
-    for (const byte of bytes) {
-      result += SLUG_SUFFIX_ALPHABET[byte % SLUG_SUFFIX_ALPHABET.length];
+  return Array.from({ length }, () =>
+    SLUG_SUFFIX_ALPHABET[Math.floor(Math.random() * SLUG_SUFFIX_ALPHABET.length)],
+  ).join("");
+}
 
-      if (result.length === length) {
-        break;
-      }
+function createCountdownId(): string {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `countdown-${Date.now()}-${createSlugSuffix(8)}`;
+}
+
+export function readCustomCountdowns(): CustomCountdown[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  try {
+    const storedValue = window.localStorage.getItem(CUSTOM_COUNTDOWNS_STORAGE_KEY);
+
+    if (!storedValue) {
+      return [];
     }
-  }
 
-  return result;
-}
+    const parsedValue = JSON.parse(storedValue) as unknown;
 
-async function ensureStorageFile(): Promise<void> {
-  await mkdir(path.dirname(STORAGE_PATH), { recursive: true });
+    if (!Array.isArray(parsedValue)) {
+      return [];
+    }
 
-  try {
-    await readFile(STORAGE_PATH, "utf8");
-  } catch {
-    await writeFile(STORAGE_PATH, "[]\n", "utf8");
-  }
-}
+    return parsedValue.filter((value): value is CustomCountdown => {
+      if (!value || typeof value !== "object") {
+        return false;
+      }
 
-async function readCustomCountdowns(): Promise<CustomCountdown[]> {
-  await ensureStorageFile();
-  const fileContents = await readFile(STORAGE_PATH, "utf8");
-
-  try {
-    const parsed = JSON.parse(fileContents) as CustomCountdown[];
-    return Array.isArray(parsed) ? parsed : [];
+      const candidate = value as Partial<CustomCountdown>;
+      return (
+        typeof candidate.id === "string" &&
+        typeof candidate.title === "string" &&
+        typeof candidate.slug === "string" &&
+        typeof candidate.targetDate === "string" &&
+        typeof candidate.createdAt === "string"
+      );
+    });
   } catch {
     return [];
   }
 }
 
-async function writeCustomCountdowns(records: CustomCountdown[]): Promise<void> {
-  await ensureStorageFile();
-  await writeFile(STORAGE_PATH, `${JSON.stringify(records, null, 2)}\n`, "utf8");
+function writeCustomCountdowns(records: CustomCountdown[]): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  try {
+    window.localStorage.setItem(
+      CUSTOM_COUNTDOWNS_STORAGE_KEY,
+      JSON.stringify(records.slice(0, MAX_CUSTOM_COUNTDOWNS)),
+    );
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-function validateCustomCountdownInput(input: CreateCustomCountdownInput): {
+export function validateCustomCountdownInput(input: CreateCustomCountdownInput): {
   title?: string;
   targetDate?: string;
   timezone?: string;
@@ -166,15 +193,16 @@ function validateCustomCountdownInput(input: CreateCustomCountdownInput): {
   return errors;
 }
 
-export async function createCustomCountdown(input: CreateCustomCountdownInput): Promise<{
+export function createCustomCountdown(input: CreateCustomCountdownInput): {
   record?: CustomCountdown;
   errors?: {
     title?: string;
     targetDate?: string;
     timezone?: string;
     note?: string;
+    form?: string;
   };
-}> {
+} {
   const errors = validateCustomCountdownInput(input);
 
   if (Object.keys(errors).length > 0) {
@@ -184,7 +212,7 @@ export async function createCustomCountdown(input: CreateCustomCountdownInput): 
   const title = collapseWhitespace(input.title);
   const note = collapseWhitespace(input.note ?? "");
   const timezone = collapseWhitespace(input.timezone ?? "");
-  const existingRecords = await readCustomCountdowns();
+  const existingRecords = readCustomCountdowns();
   const titleSlug = slugifyTitle(title);
 
   let slug = `${titleSlug}-${createSlugSuffix()}`;
@@ -194,7 +222,7 @@ export async function createCustomCountdown(input: CreateCustomCountdownInput): 
   }
 
   const record: CustomCountdown = {
-    id: randomUUID(),
+    id: createCountdownId(),
     title,
     slug,
     targetDate: input.targetDate,
@@ -205,19 +233,29 @@ export async function createCustomCountdown(input: CreateCustomCountdownInput): 
     noindex: true,
   };
 
-  await writeCustomCountdowns([...existingRecords, record]);
+  const nextRecords = [record, ...existingRecords.filter((existingRecord) => existingRecord.slug !== slug)];
+
+  if (!writeCustomCountdowns(nextRecords)) {
+    return {
+      errors: {
+        form: "Unable to save this countdown on this device.",
+      },
+    };
+  }
 
   return { record };
 }
 
-export async function findCustomCountdownBySlug(slug: string): Promise<CustomCountdown | null> {
-  const records = await readCustomCountdowns();
-
-  return records.find((record) => record.slug === slug) ?? null;
+export function findCustomCountdownBySlug(slug: string): CustomCountdown | null {
+  return readCustomCountdowns().find((record) => record.slug === slug) ?? null;
 }
 
-export async function getCustomCountdownPageData(slug: string): Promise<CustomCountdownPageData | null> {
-  const record = await findCustomCountdownBySlug(slug);
+export function getRecentCustomCountdowns(limit = 10): CustomCountdown[] {
+  return readCustomCountdowns().slice(0, limit);
+}
+
+export function getCustomCountdownPageData(slug: string): CustomCountdownPageData | null {
+  const record = findCustomCountdownBySlug(slug);
 
   if (!record) {
     return null;

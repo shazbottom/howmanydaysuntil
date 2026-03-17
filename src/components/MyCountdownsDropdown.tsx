@@ -2,72 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import {
-  readSavedCountdownSlugs,
-  removeSavedCountdownSlug,
-} from "../lib/myCountdowns";
-
-interface SavedCountdownLink {
-  slug: string;
-  title: string;
-  path: string;
-}
+import { getRecentCustomCountdowns, type CustomCountdown } from "../lib/customCountdowns";
 
 export function MyCountdownsDropdown() {
-  const [countdowns, setCountdowns] = useState<SavedCountdownLink[]>([]);
+  const [countdowns, setCountdowns] = useState<CustomCountdown[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    let isCancelled = false;
-
-    async function loadCountdowns() {
-      const savedSlugs = readSavedCountdownSlugs().slice(0, 5);
-
-      if (savedSlugs.length === 0) {
-        if (!isCancelled) {
-          setCountdowns([]);
-          setIsReady(true);
-        }
-        return;
-      }
-
-      const resolvedCountdowns = await Promise.all(
-        savedSlugs.map(async (slug) => {
-          try {
-            const response = await fetch(`/api/custom-countdowns/${slug}`, {
-              cache: "no-store",
-            });
-
-            if (!response.ok) {
-              removeSavedCountdownSlug(slug);
-              return null;
-            }
-
-            const payload = (await response.json()) as SavedCountdownLink;
-            return payload;
-          } catch {
-            return null;
-          }
-        }),
-      );
-
-      if (!isCancelled) {
-        setCountdowns(
-          resolvedCountdowns.filter(
-            (countdown): countdown is SavedCountdownLink => countdown !== null,
-          ),
-        );
-        setIsReady(true);
-      }
-    }
-
-    void loadCountdowns();
-
-    return () => {
-      isCancelled = true;
-    };
+    setCountdowns(getRecentCustomCountdowns(5));
+    setIsReady(true);
   }, []);
 
   useEffect(() => {
@@ -126,7 +71,7 @@ export function MyCountdownsDropdown() {
             {countdowns.map((countdown) => (
               <Link
                 key={countdown.slug}
-                href={countdown.path}
+                href={`/c/${countdown.slug}`}
                 onClick={() => setIsOpen(false)}
                 className="block cursor-pointer px-4 py-3 text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"
               >

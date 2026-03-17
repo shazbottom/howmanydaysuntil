@@ -40,11 +40,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Custom countdowns are created at `/create` and published at `/c/[slug]`.
 
 - Slugs use a readable title plus a short random suffix, for example `our-wedding-a8k3x`.
-- Records are stored in a local JSON file at `data/custom-countdowns.json`, which is created on demand.
+- Records are stored only in browser `localStorage` under `daysuntil_custom_countdowns`.
 - Custom countdown pages are marked `noindex` by default and are intended for sharing rather than SEO.
-- Newly created custom countdown slugs are also saved in browser `localStorage` under `daysuntil_my_countdowns` so the homepage can show a lightweight `Your countdowns` section for the most recent items.
+- Because storage is device-local, a custom countdown is only available in the browser where it was created unless the URL is recreated there.
 
-This file-backed storage is the lightest v1 persistence approach for a single-instance deployment. If you later add accounts, private countdowns, or multi-instance hosting, the next step is to replace the JSON file with a shared database table while keeping the same `slug`-based page routes.
+This browser-only storage is the lightest v1 approach and avoids server persistence entirely. If you later add accounts, private countdowns, or cross-device access, the next step is to replace localStorage with a shared database while keeping the same `slug`-based page routes.
 
 ## Google Search Console
 

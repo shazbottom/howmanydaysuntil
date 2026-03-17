@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { buildCustomCountdownPreview } from "../lib/customCountdownPreview";
-import { saveCountdownSlug } from "../lib/myCountdowns";
+import { createCustomCountdown } from "../lib/customCountdowns";
 
 interface FormErrors {
   title?: string;
@@ -36,41 +36,26 @@ export function CreateCountdownForm() {
           event.preventDefault();
           setIsSubmitting(true);
           setErrors({});
-
-          const response = await fetch("/api/custom-countdowns", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title,
-              targetDate,
-              timezone,
-              note,
-            }),
+          const result = createCustomCountdown({
+            title,
+            targetDate,
+            timezone,
+            note,
           });
 
-          const payload = (await response.json()) as {
-            errors?: FormErrors;
-            path?: string;
-          };
-
-          if (!response.ok) {
-            setErrors(payload.errors ?? { form: "Unable to create countdown." });
+          if (result.errors) {
+            setErrors(result.errors);
             setIsSubmitting(false);
             return;
           }
 
-          if (payload.path) {
-            if (payload.path.startsWith("/c/")) {
-              saveCountdownSlug(payload.path.replace("/c/", ""));
-            }
-            router.push(payload.path);
+          if (!result.record) {
+            setErrors({ form: "Unable to create countdown." });
+            setIsSubmitting(false);
             return;
           }
 
-          setErrors({ form: "Unable to create countdown." });
-          setIsSubmitting(false);
+          router.push(`/c/${result.record.slug}`);
         }}
       >
         <div className="border-b border-black/6 pb-6 text-left dark:border-white/10">
