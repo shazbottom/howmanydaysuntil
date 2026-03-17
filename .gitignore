@@ -42,3 +42,5 @@ next-env.d.ts
 
 # local runtime storage
 /data/custom-countdowns.json
+
+.vercel
