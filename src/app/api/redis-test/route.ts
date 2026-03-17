@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
-import { getRedis, isRedisConfigured } from "../../../lib/redis";
+import {
+  getRedis,
+  getRedisConfigurationStatus,
+} from "../../../lib/redis";
 
 export async function GET() {
-  if (!isRedisConfigured()) {
+  const configurationStatus = getRedisConfigurationStatus();
+
+  if (!configurationStatus.configured) {
     return NextResponse.json(
       {
         ok: false,
-        error:
-          "Missing Redis environment variables. Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.",
+        error: configurationStatus.error,
       },
       { status: 500 },
     );
@@ -35,6 +39,7 @@ export async function GET() {
     return NextResponse.json({
       ok: value === expectedValue,
       key,
+      source: configurationStatus.source,
       written: expectedValue,
       read: value,
     });
