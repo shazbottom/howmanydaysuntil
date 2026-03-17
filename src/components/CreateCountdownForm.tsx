@@ -128,7 +128,7 @@ export function CreateCountdownForm() {
           </label>
           {errors.form ? <p className="text-sm text-red-600">{errors.form}</p> : null}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-black/42 dark:text-white/42">Your page will be private-style and noindex by default.</p>
+            <p className="text-sm text-black/42 dark:text-white/42">Your countdown can be shared with a direct link and wont be indexed by search engines.</p>
             <button
               type="submit"
               disabled={isSubmitting}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AddToCalendarMenu } from "./AddToCalendarMenu";
 import { Brand } from "./Brand";
 import { CopyCountdownLinkButton } from "./CopyCountdownLinkButton";
 import { CountdownDisplay } from "./CountdownDisplay";
@@ -95,6 +96,7 @@ export function CustomCountdownPageClient({ slug }: CustomCountdownPageClientPro
                 <CountdownDisplay label={pageData.record.title} countdown={pageData.countdown} />
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <AddToCalendarMenu record={pageData.record} />
                 <CopyCountdownLinkButton />
                 <Link
                   href="/create"
