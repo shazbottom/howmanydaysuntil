@@ -25,9 +25,6 @@ export interface CustomCountdownPageData {
   targetDate: Date;
   countdown: ReturnType<typeof getCountdown> | null;
 }
-
-export const CUSTOM_COUNTDOWNS_STORAGE_KEY = "daysuntil_custom_countdowns";
-const MAX_CUSTOM_COUNTDOWNS = 50;
 const SLUG_SUFFIX_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 function collapseWhitespace(value: string): string {
@@ -92,7 +89,7 @@ function isValidTimeZone(timeZone: string): boolean {
   }
 }
 
-function slugifyTitle(title: string): string {
+export function slugifyTitle(title: string): string {
   const baseSlug = title
     .toLowerCase()
     .normalize("NFKD")
@@ -104,7 +101,7 @@ function slugifyTitle(title: string): string {
   return baseSlug || "countdown";
 }
 
-function createSlugSuffix(length = 5): string {
+export function createSlugSuffix(length = 5): string {
   if (typeof globalThis.crypto?.getRandomValues === "function") {
     const bytes = new Uint8Array(length);
     globalThis.crypto.getRandomValues(bytes);
@@ -117,65 +114,12 @@ function createSlugSuffix(length = 5): string {
   ).join("");
 }
 
-function createCountdownId(): string {
+export function createCountdownId(): string {
   if (typeof globalThis.crypto?.randomUUID === "function") {
     return globalThis.crypto.randomUUID();
   }
 
   return `countdown-${Date.now()}-${createSlugSuffix(8)}`;
-}
-
-export function readCustomCountdowns(): CustomCountdown[] {
-  if (typeof window === "undefined") {
-    return [];
-  }
-
-  try {
-    const storedValue = window.localStorage.getItem(CUSTOM_COUNTDOWNS_STORAGE_KEY);
-
-    if (!storedValue) {
-      return [];
-    }
-
-    const parsedValue = JSON.parse(storedValue) as unknown;
-
-    if (!Array.isArray(parsedValue)) {
-      return [];
-    }
-
-    return parsedValue.filter((value): value is CustomCountdown => {
-      if (!value || typeof value !== "object") {
-        return false;
-      }
-
-      const candidate = value as Partial<CustomCountdown>;
-      return (
-        typeof candidate.id === "string" &&
-        typeof candidate.title === "string" &&
-        typeof candidate.slug === "string" &&
-        typeof candidate.targetDate === "string" &&
-        typeof candidate.createdAt === "string"
-      );
-    });
-  } catch {
-    return [];
-  }
-}
-
-function writeCustomCountdowns(records: CustomCountdown[]): boolean {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  try {
-    window.localStorage.setItem(
-      CUSTOM_COUNTDOWNS_STORAGE_KEY,
-      JSON.stringify(records.slice(0, MAX_CUSTOM_COUNTDOWNS)),
-    );
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export function validateCustomCountdownInput(input: CreateCustomCountdownInput): {
@@ -222,35 +166,15 @@ export function validateCustomCountdownInput(input: CreateCustomCountdownInput):
   return errors;
 }
 
-export function createCustomCountdown(input: CreateCustomCountdownInput): {
-  record?: CustomCountdown;
-  errors?: {
-    title?: string;
-    targetDate?: string;
-    timezone?: string;
-    note?: string;
-    form?: string;
-  };
-} {
-  const errors = validateCustomCountdownInput(input);
-
-  if (Object.keys(errors).length > 0) {
-    return { errors };
-  }
-
+export function buildCustomCountdownRecord(
+  input: CreateCustomCountdownInput,
+  slug: string,
+): CustomCountdown {
   const title = collapseWhitespace(input.title);
   const note = collapseWhitespace(input.note ?? "");
   const timezone = collapseWhitespace(input.timezone ?? "");
-  const existingRecords = readCustomCountdowns();
-  const titleSlug = slugifyTitle(title);
 
-  let slug = `${titleSlug}-${createSlugSuffix()}`;
-
-  while (existingRecords.some((record) => record.slug === slug)) {
-    slug = `${titleSlug}-${createSlugSuffix(6)}`;
-  }
-
-  const record: CustomCountdown = {
+  return {
     id: createCountdownId(),
     title,
     slug,
@@ -260,53 +184,5 @@ export function createCustomCountdown(input: CreateCustomCountdownInput): {
     createdAt: new Date().toISOString(),
     isPublic: true,
     noindex: true,
-  };
-
-  const nextRecords = [record, ...existingRecords.filter((existingRecord) => existingRecord.slug !== slug)];
-
-  if (!writeCustomCountdowns(nextRecords)) {
-    return {
-      errors: {
-        form: "Unable to save this countdown on this device.",
-      },
-    };
-  }
-
-  return { record };
-}
-
-export function findCustomCountdownBySlug(slug: string): CustomCountdown | null {
-  return readCustomCountdowns().find((record) => record.slug === slug) ?? null;
-}
-
-export function getRecentCustomCountdowns(limit = 10): CustomCountdown[] {
-  return readCustomCountdowns().slice(0, limit);
-}
-
-export function getCustomCountdownPageData(slug: string): CustomCountdownPageData | null {
-  const record = findCustomCountdownBySlug(slug);
-
-  if (!record) {
-    return null;
-  }
-
-  const targetDate = createLocalDateFromIso(record.targetDate);
-
-  if (!targetDate) {
-    return null;
-  }
-
-  let countdown: ReturnType<typeof getCountdown> | null = null;
-
-  try {
-    countdown = getCountdown(targetDate);
-  } catch {
-    countdown = null;
-  }
-
-  return {
-    record,
-    targetDate,
-    countdown,
   };
 }

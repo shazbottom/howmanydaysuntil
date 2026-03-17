@@ -1,12 +1,36 @@
-import {
-  findCustomCountdownBySlug,
-  type CustomCountdown,
-} from "./customCountdowns";
-
 export const MY_COUNTDOWNS_STORAGE_KEY = "daysuntil_my_countdowns";
 const MAX_SAVED_COUNTDOWNS = 10;
 
-export function readSavedCountdownSlugs(): string[] {
+export interface SavedCountdownReference {
+  slug: string;
+  title: string;
+}
+
+function toSavedCountdownReference(value: unknown): SavedCountdownReference | null {
+  if (typeof value === "string") {
+    return {
+      slug: value,
+      title: value,
+    };
+  }
+
+  if (!value || typeof value !== "object") {
+    return null;
+  }
+
+  const candidate = value as Partial<SavedCountdownReference>;
+
+  if (typeof candidate.slug !== "string" || typeof candidate.title !== "string") {
+    return null;
+  }
+
+  return {
+    slug: candidate.slug,
+    title: candidate.title,
+  };
+}
+
+export function readSavedCountdowns(): SavedCountdownReference[] {
   if (typeof window === "undefined") {
     return [];
   }
@@ -24,58 +48,38 @@ export function readSavedCountdownSlugs(): string[] {
       return [];
     }
 
-    return parsedValue.filter((value): value is string => typeof value === "string");
+    return parsedValue
+      .map((value) => toSavedCountdownReference(value))
+      .filter((value): value is SavedCountdownReference => value !== null);
   } catch {
     return [];
   }
 }
 
-function writeSavedCountdownSlugs(slugs: string[]): void {
+function writeSavedCountdowns(countdowns: SavedCountdownReference[]): void {
   if (typeof window === "undefined") {
     return;
   }
 
   window.localStorage.setItem(
     MY_COUNTDOWNS_STORAGE_KEY,
-    JSON.stringify(slugs.slice(0, MAX_SAVED_COUNTDOWNS)),
+    JSON.stringify(countdowns.slice(0, MAX_SAVED_COUNTDOWNS)),
   );
 }
 
-export function saveCountdownSlug(slug: string): void {
-  const existingSlugs = readSavedCountdownSlugs().filter((existingSlug) => existingSlug !== slug);
-  writeSavedCountdownSlugs([slug, ...existingSlugs]);
+export function saveCountdownReference(countdown: SavedCountdownReference): void {
+  const existingCountdowns = readSavedCountdowns().filter(
+    (existingCountdown) => existingCountdown.slug !== countdown.slug,
+  );
+  writeSavedCountdowns([countdown, ...existingCountdowns]);
 }
 
 export function removeSavedCountdownSlug(slug: string): void {
-  writeSavedCountdownSlugs(
-    readSavedCountdownSlugs().filter((existingSlug) => existingSlug !== slug),
+  writeSavedCountdowns(
+    readSavedCountdowns().filter((existingCountdown) => existingCountdown.slug !== slug),
   );
 }
 
-export function getSavedCountdowns(limit = 5): CustomCountdown[] {
-  const resolvedCountdowns: CustomCountdown[] = [];
-  const missingSlugs: string[] = [];
-
-  for (const slug of readSavedCountdownSlugs()) {
-    const countdown = findCustomCountdownBySlug(slug);
-
-    if (!countdown) {
-      missingSlugs.push(slug);
-      continue;
-    }
-
-    resolvedCountdowns.push(countdown);
-
-    if (resolvedCountdowns.length === limit) {
-      break;
-    }
-  }
-
-  if (missingSlugs.length > 0) {
-    writeSavedCountdownSlugs(
-      readSavedCountdownSlugs().filter((slug) => !missingSlugs.includes(slug)),
-    );
-  }
-
-  return resolvedCountdowns;
+export function getSavedCountdowns(limit = 5): SavedCountdownReference[] {
+  return readSavedCountdowns().slice(0, limit);
 }

@@ -4,8 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { buildCustomCountdownPreview } from "../lib/customCountdownPreview";
-import { createCustomCountdown } from "../lib/customCountdowns";
-import { saveCountdownSlug } from "../lib/myCountdowns";
+import { saveCountdownReference } from "../lib/myCountdowns";
 
 interface FormErrors {
   title?: string;
@@ -37,27 +36,49 @@ export function CreateCountdownForm() {
           event.preventDefault();
           setIsSubmitting(true);
           setErrors({});
-          const result = createCustomCountdown({
-            title,
-            targetDate,
-            timezone,
-            note,
-          });
+          try {
+            const response = await fetch("/api/custom-countdowns", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title,
+                targetDate,
+                timezone,
+                note,
+              }),
+            });
 
-          if (result.errors) {
-            setErrors(result.errors);
-            setIsSubmitting(false);
+            const payload = (await response.json()) as {
+              errors?: FormErrors;
+              path?: string | null;
+              slug?: string;
+              title?: string;
+            };
+
+            if (!response.ok) {
+              setErrors(payload.errors ?? { form: "Unable to create countdown." });
+              setIsSubmitting(false);
+              return;
+            }
+
+            if (!payload.path || !payload.slug || !payload.title) {
+              setErrors({ form: "Unable to create countdown." });
+              setIsSubmitting(false);
+              return;
+            }
+
+            saveCountdownReference({
+              slug: payload.slug,
+              title: payload.title,
+            });
+            router.push(payload.path);
             return;
-          }
-
-          if (!result.record) {
-            setErrors({ form: "Unable to create countdown." });
+          } catch {
+            setErrors({ form: "Unable to create countdown right now. Please try again." });
             setIsSubmitting(false);
-            return;
           }
-
-          saveCountdownSlug(result.record.slug);
-          router.push(`/c/${result.record.slug}`);
         }}
       >
         <div className="border-b border-black/6 pb-6 text-left dark:border-white/10">

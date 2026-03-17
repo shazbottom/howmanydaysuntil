@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { CustomCountdown } from "../lib/customCountdowns";
 import {
   getSavedCountdowns,
   removeSavedCountdownSlug,
+  type SavedCountdownReference,
 } from "../lib/myCountdowns";
 
 export function MyCountdownsDropdown() {
-  const [countdowns, setCountdowns] = useState<CustomCountdown[]>([]);
+  const [countdowns, setCountdowns] = useState<SavedCountdownReference[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);

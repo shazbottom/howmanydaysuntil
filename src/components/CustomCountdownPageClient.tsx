@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { AddToCalendarMenu } from "./AddToCalendarMenu";
 import { Brand } from "./Brand";
 import { CopyCountdownLinkButton } from "./CopyCountdownLinkButton";
@@ -9,23 +6,14 @@ import { CountdownDisplay } from "./CountdownDisplay";
 import { ThemeToggle } from "./ThemeToggle";
 import {
   formatCustomCountdownDate,
-  getCustomCountdownPageData,
   type CustomCountdownPageData,
 } from "../lib/customCountdowns";
 
 interface CustomCountdownPageClientProps {
-  slug: string;
+  pageData: CustomCountdownPageData | null;
 }
 
-export function CustomCountdownPageClient({ slug }: CustomCountdownPageClientProps) {
-  const [pageData, setPageData] = useState<CustomCountdownPageData | null>(null);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    setPageData(getCustomCountdownPageData(slug));
-    setIsReady(true);
-  }, [slug]);
-
+export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClientProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center">
@@ -47,17 +35,16 @@ export function CustomCountdownPageClient({ slug }: CustomCountdownPageClientPro
           </div>
         </div>
         <section className="mt-16 flex w-full flex-1 flex-col items-center text-center sm:mt-20">
-          {isReady && !pageData ? (
+          {!pageData ? (
             <>
               <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-black/42 dark:text-white/44">
                 Custom countdown
               </p>
               <h1 className="mt-4 max-w-3xl text-[clamp(2.6rem,9vw,5.2rem)] font-semibold tracking-tight">
-                Countdown not found on this device
+                Countdown not found
               </h1>
               <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-                Custom countdowns are currently stored only in this browser. If you created it on a
-                different device or cleared local data, it will not appear here.
+                This countdown could not be found or may no longer be available.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link
@@ -74,7 +61,7 @@ export function CustomCountdownPageClient({ slug }: CustomCountdownPageClientPro
                 </Link>
               </div>
             </>
-          ) : pageData ? (
+          ) : (
             <>
               <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-black/42 dark:text-white/44">
                 Custom countdown
@@ -106,7 +93,7 @@ export function CustomCountdownPageClient({ slug }: CustomCountdownPageClientPro
                 </Link>
               </div>
             </>
-          ) : null}
+          )}
         </section>
       </div>
     </main>
