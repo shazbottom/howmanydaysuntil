@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { getRecentCustomCountdowns, type CustomCountdown } from "../lib/customCountdowns";
+import type { CustomCountdown } from "../lib/customCountdowns";
+import {
+  getSavedCountdowns,
+  removeSavedCountdownSlug,
+} from "../lib/myCountdowns";
 
 export function MyCountdownsDropdown() {
   const [countdowns, setCountdowns] = useState<CustomCountdown[]>([]);
@@ -11,7 +15,7 @@ export function MyCountdownsDropdown() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setCountdowns(getRecentCustomCountdowns(5));
+    setCountdowns(getSavedCountdowns(5));
     setIsReady(true);
   }, []);
 
@@ -41,8 +45,11 @@ export function MyCountdownsDropdown() {
     };
   }, [isOpen]);
 
-  if (!isReady || countdowns.length === 0) {
-    return null;
+  function handleRemoveCountdown(slug: string) {
+    removeSavedCountdownSlug(slug);
+    setCountdowns((currentCountdowns) =>
+      currentCountdowns.filter((countdown) => countdown.slug !== slug),
+    );
   }
 
   return (
@@ -68,16 +75,53 @@ export function MyCountdownsDropdown() {
             Your countdowns
           </div>
           <div className="py-2">
-            {countdowns.map((countdown) => (
-              <Link
-                key={countdown.slug}
-                href={`/c/${countdown.slug}`}
-                onClick={() => setIsOpen(false)}
-                className="block cursor-pointer px-4 py-3 text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"
-              >
-                {countdown.title}
-              </Link>
-            ))}
+            {isReady && countdowns.length === 0 ? (
+              <div className="px-4 py-3 text-sm text-black/46 dark:text-white/46">
+                No saved countdowns yet
+              </div>
+            ) : (
+              countdowns.map((countdown) => (
+                <div
+                  key={countdown.slug}
+                  className="group flex items-center gap-2 px-2"
+                >
+                  <Link
+                    href={`/c/${countdown.slug}`}
+                    onClick={() => setIsOpen(false)}
+                    className="min-w-0 flex-1 rounded-[0.95rem] px-2 py-3 text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"
+                  >
+                    <span className="block truncate">{countdown.title}</span>
+                  </Link>
+                  <button
+                    type="button"
+                    aria-label={`Remove ${countdown.title} from saved countdowns`}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      handleRemoveCountdown(countdown.slug);
+                    }}
+                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.85rem] text-black/32 transition hover:bg-black/[0.04] hover:text-black/58 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#169c76]/20 dark:text-white/28 dark:hover:bg-white/8 dark:hover:text-white/56 dark:focus-visible:ring-[#4ab494]/28"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 20 20"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4.5 5.5h11" />
+                      <path d="M7.5 5.5V4.4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1.1" />
+                      <path d="M6.2 5.5l.55 8.1c.04.7.63 1.24 1.33 1.24h3.8c.7 0 1.29-.54 1.33-1.24l.55-8.1" />
+                      <path d="M8.6 8.2v4.4" />
+                      <path d="M11.4 8.2v4.4" />
+                    </svg>
+                  </button>
+                </div>
+              ))
+            )}
           </div>
           <div className="border-t border-black/6 p-2 dark:border-white/10">
             <Link

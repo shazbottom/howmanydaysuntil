@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { buildCustomCountdownPreview } from "../lib/customCountdownPreview";
 import { createCustomCountdown } from "../lib/customCountdowns";
+import { saveCountdownSlug } from "../lib/myCountdowns";
 
 interface FormErrors {
   title?: string;
@@ -55,6 +56,7 @@ export function CreateCountdownForm() {
             return;
           }
 
+          saveCountdownSlug(result.record.slug);
           router.push(`/c/${result.record.slug}`);
         }}
       >
