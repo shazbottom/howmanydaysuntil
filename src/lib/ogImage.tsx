@@ -22,16 +22,17 @@ export function createCountdownOgImage({
     (
       <div
         style={{
-          height: "100%",
-          width: "100%",
+          height: 630,
+          width: 1200,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "56px 64px",
-          background: "#f5f3ed",
+          paddingTop: 56,
+          paddingRight: 64,
+          paddingBottom: 48,
+          paddingLeft: 64,
+          backgroundColor: "#f5f3ed",
           color: "#121212",
-          fontFamily:
-            'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          fontFamily: "sans-serif",
         }}
       >
         <div
@@ -39,12 +40,13 @@ export function createCountdownOgImage({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <div
             style={{
               fontSize: 24,
-              letterSpacing: "0.28em",
+              letterSpacing: 6,
               fontWeight: 600,
               opacity: 0.58,
               textTransform: "uppercase",
@@ -57,7 +59,7 @@ export function createCountdownOgImage({
               height: 14,
               width: 14,
               borderRadius: 999,
-              background: "#1f8f73",
+              backgroundColor: "#1f8f73",
               opacity: 0.85,
             }}
           />
@@ -66,15 +68,13 @@ export function createCountdownOgImage({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 16,
+            marginTop: 92,
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "baseline",
-              gap: 18,
-              flexWrap: "wrap",
             }}
           >
             <div
@@ -82,17 +82,18 @@ export function createCountdownOgImage({
                 fontSize: 172,
                 lineHeight: 0.9,
                 fontWeight: 700,
-                letterSpacing: "-0.06em",
+                letterSpacing: -10,
               }}
             >
-              {count}
+              {String(count)}
             </div>
             <div
               style={{
+                marginLeft: 18,
                 fontSize: 54,
                 lineHeight: 1,
                 fontWeight: 600,
-                letterSpacing: "-0.04em",
+                letterSpacing: -2,
               }}
             >
               days
@@ -100,10 +101,11 @@ export function createCountdownOgImage({
           </div>
           <div
             style={{
+              marginTop: 18,
               fontSize: 56,
               lineHeight: 1.05,
               fontWeight: 600,
-              letterSpacing: "-0.05em",
+              letterSpacing: -3,
               maxWidth: 980,
             }}
           >
@@ -115,8 +117,12 @@ export function createCountdownOgImage({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
+            marginTop: "auto",
             paddingTop: 28,
-            borderTop: "1px solid rgba(18,18,18,0.12)",
+            borderTopWidth: 1,
+            borderTopStyle: "solid",
+            borderTopColor: "rgba(18,18,18,0.12)",
           }}
         >
           <div
@@ -131,7 +137,7 @@ export function createCountdownOgImage({
           <div
             style={{
               fontSize: 24,
-              letterSpacing: "0.22em",
+              letterSpacing: 4,
               fontWeight: 600,
               textTransform: "uppercase",
               opacity: 0.42,

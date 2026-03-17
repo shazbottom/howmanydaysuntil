@@ -17,16 +17,24 @@ interface EventPageOgImageProps {
 }
 
 export default async function OgImage({ params }: EventPageOgImageProps) {
-  const { slug } = await params;
-  const resolvedCountdown = resolveSeoHubEventCountdown(slug);
+  try {
+    const { slug } = await params;
+    const resolvedCountdown = resolveSeoHubEventCountdown(slug);
 
-  if (!resolvedCountdown) {
-    notFound();
+    if (!resolvedCountdown) {
+      notFound();
+    }
+
+    return createCountdownOgImage({
+      count: resolvedCountdown.countdown.daysRemaining,
+      label: resolvedCountdown.event.name,
+      footer: formatFullDate(resolvedCountdown.targetDate, "en-GB"),
+    });
+  } catch {
+    return createCountdownOgImage({
+      count: "—",
+      label: "countdown",
+      footer: "DaysUntil",
+    });
   }
-
-  return createCountdownOgImage({
-    count: resolvedCountdown.countdown.daysRemaining.toLocaleString("en-GB"),
-    label: resolvedCountdown.event.name,
-    footer: formatFullDate(resolvedCountdown.targetDate, "en-GB"),
-  });
 }

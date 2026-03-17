@@ -22,22 +22,30 @@ interface ExactDateOgImageProps {
 }
 
 export default async function OgImage({ params }: ExactDateOgImageProps) {
-  const resolvedParams = await params;
-  const targetDate = parseExactDateParams(resolvedParams);
+  try {
+    const resolvedParams = await params;
+    const targetDate = parseExactDateParams(resolvedParams);
 
-  if (!targetDate || !isExactDateInRolloutRange(targetDate)) {
-    notFound();
+    if (!targetDate || !isExactDateInRolloutRange(targetDate)) {
+      notFound();
+    }
+
+    const resolvedCountdown = resolveExactDateCountdown(resolvedParams);
+
+    if (!resolvedCountdown) {
+      notFound();
+    }
+
+    return createCountdownOgImage({
+      count: resolvedCountdown.countdown.daysRemaining,
+      label: formatLongDate(targetDate, "en-GB"),
+      footer: formatFullDate(targetDate, "en-GB"),
+    });
+  } catch {
+    return createCountdownOgImage({
+      count: "—",
+      label: "date",
+      footer: "DaysUntil",
+    });
   }
-
-  const resolvedCountdown = resolveExactDateCountdown(resolvedParams);
-
-  if (!resolvedCountdown) {
-    notFound();
-  }
-
-  return createCountdownOgImage({
-    count: resolvedCountdown.countdown.daysRemaining.toLocaleString("en-GB"),
-    label: formatLongDate(targetDate, "en-GB"),
-    footer: formatFullDate(targetDate, "en-GB"),
-  });
 }

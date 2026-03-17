@@ -19,22 +19,28 @@ interface CustomCountdownOgImageProps {
 }
 
 export default async function OgImage({ params }: CustomCountdownOgImageProps) {
-  const { slug } = await params;
-  const pageData = await getCustomCountdownPageDataFromRedis(slug);
+  try {
+    const { slug } = await params;
+    const pageData = await getCustomCountdownPageDataFromRedis(slug);
 
-  if (!pageData) {
+    if (!pageData) {
+      return createCountdownOgImage({
+        count: "—",
+        label: "countdown",
+        footer: "Countdown unavailable",
+      });
+    }
+
+    return createCountdownOgImage({
+      count: pageData.countdown ? pageData.countdown.daysRemaining : 0,
+      label: pageData.record.title,
+      footer: formatCustomCountdownDate(pageData.targetDate, "en-GB"),
+    });
+  } catch {
     return createCountdownOgImage({
       count: "—",
       label: "countdown",
       footer: "Countdown unavailable",
     });
   }
-
-  return createCountdownOgImage({
-    count: pageData.countdown
-      ? pageData.countdown.daysRemaining.toLocaleString("en-GB")
-      : "0",
-    label: pageData.record.title,
-    footer: formatCustomCountdownDate(pageData.targetDate, "en-GB"),
-  });
 }
