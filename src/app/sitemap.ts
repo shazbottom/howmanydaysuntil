@@ -1,5 +1,9 @@
 import type { MetadataRoute } from "next";
 import { seoHubEvents } from "../data/seoHubEvents";
+import {
+  getExactDateRoutePath,
+  getExactDateStaticParams,
+} from "../lib/exactDatePages";
 
 const SITE_URL = "https://daysuntil.is";
 
@@ -12,6 +16,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: event.category === "holiday" || event.category === "season" ? 0.9 : 0.8,
     }));
 
+  const datePages: MetadataRoute.Sitemap = getExactDateStaticParams().map((params) => ({
+    url: `${SITE_URL}${getExactDateRoutePath(
+      new Date(Number(params.year), Number(params.month) - 1, Number(params.day)),
+    )}`,
+    changeFrequency: "daily",
+    priority: 0.6,
+  }));
+
   return [
     {
       url: SITE_URL,
@@ -19,5 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     ...hubPages,
+    ...datePages,
   ];
 }

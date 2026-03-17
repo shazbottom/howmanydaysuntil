@@ -67,11 +67,15 @@ export function resolveExactDateCountdown(
     return null;
   }
 
-  const targetDate = startOfLocalDay(exactDate);
+  const startOfTargetDate = startOfLocalDay(exactDate);
+  const today = startOfLocalDay(now);
 
-  if (targetDate < startOfLocalDay(now)) {
+  if (startOfTargetDate < today) {
     return null;
   }
+
+  const targetDate =
+    startOfTargetDate.getTime() === today.getTime() ? now : startOfTargetDate;
 
   return {
     targetDate,

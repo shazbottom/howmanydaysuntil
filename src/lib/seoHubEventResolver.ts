@@ -2,6 +2,7 @@ import type { CountdownResult } from "./countdown";
 import { getCountdown, startOfLocalDay } from "./countdown";
 import {
   findSeoHubEventBySlug,
+  seoHubEvents,
   type SeoHubEventDefinition,
 } from "../data/seoHubEvents";
 
@@ -166,6 +167,61 @@ function getNextEasterDate(now: Date): Date {
   }
 
   return candidate;
+}
+
+export function doesSeoHubEventOccurOnDate(
+  event: SeoHubEventDefinition,
+  date: Date,
+): boolean {
+  const targetDate = startOfLocalDay(date);
+
+  switch (event.recurrence.recurrenceType) {
+    case "fixed-annual-date":
+    case "season-approximate":
+      return (
+        targetDate.getMonth() === event.recurrence.month - 1 &&
+        targetDate.getDate() === event.recurrence.day
+      );
+    case "annual-nth-weekday": {
+      const candidate = getNthWeekdayOfMonth(
+        targetDate.getFullYear(),
+        event.recurrence.month,
+        event.recurrence.weekday,
+        event.recurrence.occurrence,
+      );
+      return isSameLocalDay(candidate, targetDate);
+    }
+    case "annual-relative-to-nth-weekday": {
+      const candidate = getRelativeDateFromNthWeekday(
+        targetDate.getFullYear(),
+        event.recurrence.month,
+        event.recurrence.weekday,
+        event.recurrence.occurrence,
+        event.recurrence.offsetDays,
+      );
+      return isSameLocalDay(candidate, targetDate);
+    }
+    case "weekday-recurring":
+      return event.recurrence.weekdays.includes(targetDate.getDay());
+    case "fixed-year-date":
+      return (
+        targetDate.getFullYear() === event.recurrence.year &&
+        targetDate.getMonth() === event.recurrence.month - 1 &&
+        targetDate.getDate() === event.recurrence.day
+      );
+    case "easter": {
+      const candidate = getEasterSunday(targetDate.getFullYear());
+      return isSameLocalDay(candidate, targetDate);
+    }
+    default:
+      return false;
+  }
+}
+
+export function findSeoHubEventsForDate(date: Date): SeoHubEventDefinition[] {
+  return seoHubEvents.filter(
+    (event) => event.indexable && doesSeoHubEventOccurOnDate(event, date),
+  );
 }
 
 export function resolveSeoHubEventDate(
