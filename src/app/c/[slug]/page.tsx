@@ -3,6 +3,9 @@ import { CustomCountdownPageClient } from "../../../components/CustomCountdownPa
 import { formatCustomCountdownDate } from "../../../lib/customCountdowns";
 import { getCustomCountdownPageDataFromRedis } from "../../../lib/customCountdownStore";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface CustomCountdownPageProps {
   params: Promise<{
     slug: string;

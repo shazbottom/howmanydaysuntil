@@ -1,3 +1,5 @@
+import "server-only";
+
 import { getCountdown } from "./countdown";
 import {
   buildCustomCountdownRecord,
@@ -59,11 +61,39 @@ export async function createCustomCountdownInRedis(
   }
 
   const record = buildCustomCountdownRecord(input, slug);
+  const redisKey = getCountdownRedisKey(slug);
 
   try {
-    await redis.set(getCountdownRedisKey(slug), record);
+    await redis.set(redisKey, record);
+    const persistedRecord = await redis.get<CustomCountdown>(redisKey);
+
+    if (!persistedRecord || persistedRecord.slug !== slug) {
+      console.warn("[custom-countdown:create] Redis write verification failed", {
+        slug,
+        redisKey,
+        persisted: Boolean(persistedRecord),
+      });
+
+      return {
+        errors: {
+          form: "Unable to save this countdown right now. Please try again.",
+        },
+      };
+    }
+
+    console.info("[custom-countdown:create] Stored countdown", {
+      slug,
+      redisKey,
+    });
+
     return { record };
-  } catch {
+  } catch (error) {
+    console.error("[custom-countdown:create] Redis write failed", {
+      slug,
+      redisKey,
+      error: error instanceof Error ? error.message : "unknown",
+    });
+
     return {
       errors: {
         form: "Unable to save this countdown right now. Please try again.",
@@ -85,10 +115,25 @@ export async function findCustomCountdownBySlugFromRedis(
     return null;
   }
 
+  const redisKey = getCountdownRedisKey(slug);
+
   try {
-    const record = await redis.get<CustomCountdown>(getCountdownRedisKey(slug));
+    const record = await redis.get<CustomCountdown>(redisKey);
+
+    console.info("[custom-countdown:read] Lookup", {
+      slug,
+      redisKey,
+      found: Boolean(record),
+    });
+
     return record ?? null;
-  } catch {
+  } catch (error) {
+    console.error("[custom-countdown:read] Redis read failed", {
+      slug,
+      redisKey,
+      error: error instanceof Error ? error.message : "unknown",
+    });
+
     return null;
   }
 }
