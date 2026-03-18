@@ -7,6 +7,8 @@ import { getCountdown } from "../lib/countdown";
 export interface CountdownDisplayProps {
   label: string;
   countdown: CountdownResult | null;
+  fullHeightWhenEmpty?: boolean;
+  headerColorClassName?: string;
 }
 
 interface LiveTimeParts {
@@ -79,6 +81,8 @@ function formatWeeksSummary(weeks: number, days: number): string {
 export function CountdownDisplay({
   label,
   countdown,
+  fullHeightWhenEmpty = false,
+  headerColorClassName = "bg-[#169c76] dark:bg-[#176f59]",
 }: CountdownDisplayProps) {
   const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(countdown);
   useEffect(() => {
@@ -109,7 +113,7 @@ export function CountdownDisplay({
         aria-label="Countdown display"
         className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10"
       >
-        <div className="bg-[#169c76] px-6 py-5 text-left text-white dark:bg-[#176f59] sm:px-8">
+        <div className={`${headerColorClassName} px-6 py-5 text-left text-white sm:px-8`}>
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
@@ -125,8 +129,20 @@ export function CountdownDisplay({
             </div>
           </div>
         </div>
-        <div className="px-8 py-[4.83rem]">
-          <p className="text-sm text-black/50 dark:text-white/56">Enter an event or date to start a countdown.</p>
+        <div
+          className={`px-8 ${fullHeightWhenEmpty ? "py-[2.84rem] sm:py-[3.31rem]" : "py-[4.83rem]"}`}
+        >
+          <div
+            className={
+              fullHeightWhenEmpty
+                ? "flex min-h-[21.5rem] flex-col items-center justify-center sm:min-h-[23.6rem]"
+                : ""
+            }
+          >
+            <p className="text-sm text-black/50 dark:text-white/56">
+              Enter an event or date to start a countdown.
+            </p>
+          </div>
         </div>
       </section>
     );
@@ -150,7 +166,7 @@ export function CountdownDisplay({
       aria-label="Countdown display"
       className="w-full overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-center ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10"
     >
-      <div className="bg-[#169c76] px-6 py-5 text-white dark:bg-[#176f59] sm:px-8">
+      <div className={`${headerColorClassName} px-6 py-5 text-white sm:px-8`}>
         <div className="flex items-end justify-between gap-6">
           <div className="text-left">
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">

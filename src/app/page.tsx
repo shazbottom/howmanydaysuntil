@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Brand } from "../components/Brand";
 import { CountdownLinkList } from "../components/CountdownLinkList";
 import { CountdownDisplay } from "../components/CountdownDisplay";
-import { DateFormatHelp } from "../components/DateFormatHelp";
 import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
 import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
@@ -194,12 +193,9 @@ function buildStateFromTargetDate(
 }
 
 export default function Home() {
-  const defaultCountdown = buildStateFromQuery("Christmas");
-  const [query, setQuery] = useState(defaultCountdown.state?.inputValue ?? "Christmas");
-  const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(
-    defaultCountdown.state,
-  );
-  const [error, setError] = useState<string | null>(defaultCountdown.error);
+  const [query, setQuery] = useState("");
+  const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
@@ -230,12 +226,6 @@ export default function Home() {
     submitQuery(event.label);
   }
 
-  function clearQuery() {
-    setQuery("");
-    setResolvedState(null);
-    setError(null);
-  }
-
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
@@ -257,49 +247,53 @@ export default function Home() {
               value={query}
               onValueChange={setQuery}
               onSubmit={() => submitQuery(query)}
+              onDatePick={(nextDate) => {
+                setQuery(nextDate);
+                submitQuery(nextDate);
+              }}
+              fieldLabel="Enter a date or event"
+              placeholder="Try Christmas, Friday, or 25 Dec 2026"
+              variant="preview"
             />
           </div>
-          <DateFormatHelp
-            hasValue={query.trim().length > 0}
-            onClear={clearQuery}
-            onDatePick={(nextDate) => {
-              setQuery(nextDate);
-              submitQuery(nextDate);
-            }}
-          />
           <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-3">
-            {MILESTONE_BUTTONS.map((milestone) => (
-              <button
-                key={milestone.label}
-                type="button"
-                onClick={() => {
-                  const targetDate = milestone.getTargetDate();
-                  submitMilestone(milestone.label, targetDate);
-                }}
-                className="rounded-[1.05rem] border border-black/6 bg-[#f3f2ee] px-5 py-3 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#169c76]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28 dark:focus-visible:ring-offset-[#0d0d0d]"
-              >
-                {milestone.label}
-              </button>
-            ))}
+            {MILESTONE_BUTTONS.map((milestone) => {
+              const isSelected = resolvedState?.label === milestone.label;
+
+              return (
+                <button
+                  key={milestone.label}
+                  type="button"
+                  onClick={() => {
+                    const targetDate = milestone.getTargetDate();
+                    submitMilestone(milestone.label, targetDate);
+                  }}
+                  className={`rounded-[1.05rem] px-5 py-3 text-sm font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0d0d0d] ${
+                    isSelected
+                      ? "border border-[#B0C4DE] bg-[#B0C4DE] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(16,24,40,0.04)] hover:bg-[#a7bdd8] focus-visible:ring-[#B0C4DE]/34 dark:border-[#7f96b1] dark:bg-[#7f96b1] dark:text-[#0d1117] dark:hover:bg-[#8ca3be] dark:focus-visible:ring-[#B0C4DE]/30"
+                      : "border border-black/6 bg-[#f3f2ee] text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:bg-[#eceae4] focus-visible:ring-[#169c76]/20 dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28"
+                  }`}
+                >
+                  {milestone.label}
+                </button>
+              );
+            })}
           </div>
           <div className="mt-6 w-full max-w-[34rem]">
             <EventChipList
               events={QUICK_EVENT_CHIPS}
               selectedSlug={resolvedState?.selectedSlug ?? null}
               onSelect={submitQuickChip}
+              variant="preview"
             />
           </div>
-          {error ? (
-            <p className="mt-5 text-sm text-red-600">{error}</p>
-          ) : (
-            <p className="mt-5 text-sm text-black/45 dark:text-white/46">
-              Supports common events, years, weekdays, and exact dates.
-            </p>
-          )}
+          {error ? <p className="mt-5 text-sm text-red-600">{error}</p> : null}
           <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay
               label={resolvedState?.label ?? "Countdown"}
               countdown={resolvedState?.countdown ?? null}
+              fullHeightWhenEmpty
+              headerColorClassName="bg-[#6495ED] dark:bg-[#4b74be]"
             />
           </div>
         </section>
