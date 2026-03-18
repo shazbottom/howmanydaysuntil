@@ -12,7 +12,7 @@ import {
 } from "./seoHubEventResolver";
 
 export const EXACT_DATE_ROLLOUT_END = {
-  year: 2028,
+  year: 2030,
   month: 12,
   day: 31,
 } as const;
