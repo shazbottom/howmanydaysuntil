@@ -10,7 +10,11 @@ import {
   resolveSeoHubEventDate,
 } from "./seoHubEventResolver";
 
-export const EXACT_DATE_ROLLOUT_DAYS = 500;
+export const EXACT_DATE_ROLLOUT_END = {
+  year: 2028,
+  month: 12,
+  day: 31,
+} as const;
 
 function addDays(date: Date, days: number): Date {
   const nextDate = new Date(date);
@@ -20,6 +24,14 @@ function addDays(date: Date, days: number): Date {
 
 function padDatePart(value: number): string {
   return String(value).padStart(2, "0");
+}
+
+function getExactDateRolloutEndDate(): Date {
+  return new Date(
+    EXACT_DATE_ROLLOUT_END.year,
+    EXACT_DATE_ROLLOUT_END.month - 1,
+    EXACT_DATE_ROLLOUT_END.day,
+  );
 }
 
 function formatWeekday(date: Date): string {
@@ -76,21 +88,31 @@ export function getExactDateStaticParams(now: Date = new Date()): Array<{
   day: string;
 }> {
   const today = startOfLocalDay(now);
+  const lastDate = getExactDateRolloutEndDate();
+  const params: Array<{
+    year: string;
+    month: string;
+    day: string;
+  }> = [];
 
-  return Array.from({ length: EXACT_DATE_ROLLOUT_DAYS + 1 }, (_, offset) => {
-    const date = addDays(today, offset);
-
-    return {
+  for (
+    let date = new Date(today);
+    date <= lastDate;
+    date = addDays(date, 1)
+  ) {
+    params.push({
       year: String(date.getFullYear()),
       month: padDatePart(date.getMonth() + 1),
       day: padDatePart(date.getDate()),
-    };
-  });
+    });
+  }
+
+  return params;
 }
 
 export function isExactDateInRolloutRange(date: Date, now: Date = new Date()): boolean {
   const today = startOfLocalDay(now);
-  const lastDate = addDays(today, EXACT_DATE_ROLLOUT_DAYS);
+  const lastDate = getExactDateRolloutEndDate();
   const targetDate = startOfLocalDay(date);
 
   return targetDate >= today && targetDate <= lastDate;
