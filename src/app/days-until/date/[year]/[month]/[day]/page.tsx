@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { CountdownLinkList } from "../../../../../../components/CountdownLinkList";
 import { SeoCountdownPage } from "../../../../../../components/SeoCountdownPage";
 import { formatLongDate } from "../../../../../../lib/dateFormat";
 import {
+  getExactDateDetails,
+  getExactDateNearbyLinks,
   getExactDateRelatedLinks,
   getExactDateRoutePath,
   getExactDateStaticParams,
@@ -92,6 +95,8 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
   }
 
   const longDate = formatLongDate(targetDate, "en-GB");
+  const nearbyLinks = getExactDateNearbyLinks(targetDate);
+  const dateDetails = getExactDateDetails(targetDate, resolvedCountdown.countdown);
 
   return (
     <SeoCountdownPage
@@ -102,6 +107,21 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       countdown={resolvedCountdown.countdown}
       supportingCopy={getExactDateSupportingCopy(targetDate)}
       relatedLinks={getExactDateRelatedLinks(targetDate)}
+      extraSection={
+        <>
+          <section className="mt-12 w-full max-w-2xl text-left">
+            <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
+              Date details
+            </h2>
+            <div className="mt-4 space-y-3 text-sm leading-6 text-black/62 dark:text-white/66 sm:text-base">
+              {dateDetails.map((detail) => (
+                <p key={detail}>{detail}</p>
+              ))}
+            </div>
+          </section>
+          <CountdownLinkList title="Nearby dates" links={nearbyLinks} centered />
+        </>
+      }
     />
   );
 }

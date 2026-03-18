@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Brand } from "./Brand";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
@@ -12,6 +13,7 @@ export interface SeoCountdownPageProps {
   countdown: Parameters<typeof CountdownDisplay>[0]["countdown"];
   supportingCopy: string[];
   relatedLinks: CountdownLinkItem[];
+  extraSection?: ReactNode;
 }
 
 export function SeoCountdownPage({
@@ -22,6 +24,7 @@ export function SeoCountdownPage({
   countdown,
   supportingCopy,
   relatedLinks,
+  extraSection,
 }: SeoCountdownPageProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -64,6 +67,7 @@ export function SeoCountdownPage({
             ))}
           </div>
         </section>
+        {extraSection}
         <CountdownLinkList title="Related countdowns" links={relatedLinks} />
       </div>
     </main>

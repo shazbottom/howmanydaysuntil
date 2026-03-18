@@ -1,4 +1,5 @@
 import type { CountdownLinkItem } from "../components/CountdownLinkList";
+import type { CountdownResult } from "./countdown";
 import { formatLongDate } from "./dateFormat";
 import { startOfLocalDay } from "./countdown";
 import {
@@ -36,6 +37,24 @@ function getExactDateRolloutEndDate(): Date {
 
 function formatWeekday(date: Date): string {
   return new Intl.DateTimeFormat("en-GB", { weekday: "long" }).format(date);
+}
+
+function getAustralianSeasonName(date: Date): string {
+  const monthDay = (date.getMonth() + 1) * 100 + date.getDate();
+
+  if (monthDay >= 301 && monthDay <= 531) {
+    return "Autumn";
+  }
+
+  if (monthDay >= 601 && monthDay <= 831) {
+    return "Winter";
+  }
+
+  if (monthDay >= 901 && monthDay <= 1130) {
+    return "Spring";
+  }
+
+  return "Summer";
 }
 
 function getYearSlug(date: Date): string | null {
@@ -142,6 +161,55 @@ export function getExactDateSupportingCopy(date: Date): string[] {
   return paragraphs.slice(0, 3);
 }
 
+export function getExactDateDetails(date: Date, countdown: CountdownResult): string[] {
+  const longDate = formatLongDate(date, "en-GB");
+  const weekday = formatWeekday(date);
+  const australianSeason = getAustralianSeasonName(date);
+  const matchingEvents = findSeoHubEventsForDate(date);
+  const matchingHoliday = matchingEvents.find((event) => event.category === "holiday");
+  const detailLines: string[] = [];
+
+  if (date.getDate() % 2 === 0) {
+    detailLines.push(`${longDate} lands on a ${weekday}.`);
+  } else {
+    detailLines.push(`${longDate} falls on a ${weekday}.`);
+  }
+
+  const { weeks, days } = countdown.weeksRemaining;
+
+  if (days === 0) {
+    detailLines.push(
+      weeks === 1
+        ? "There is 1 week remaining until this date."
+        : `There are ${weeks} weeks remaining until this date.`,
+    );
+  } else {
+    const weekLabel = weeks === 1 ? "week" : "weeks";
+    const dayLabel = days === 1 ? "day" : "days";
+
+    if ((date.getMonth() + 1) % 2 === 0) {
+      detailLines.push(`There are ${weeks} ${weekLabel} and ${days} ${dayLabel} left until this date.`);
+    } else {
+      detailLines.push(`This date is ${weeks} ${weekLabel} and ${days} ${dayLabel} away.`);
+    }
+  }
+
+  if (matchingHoliday) {
+    detailLines.push(`This date is ${matchingHoliday.name}.`);
+  } else {
+    detailLines.push("This is a standard calendar date.");
+  }
+
+  detailLines.push(`This date is in the ${australianSeason} season in Australia.`);
+
+  if (countdown.hoursRemaining > 0) {
+    const hourLabel = countdown.hoursRemaining === 1 ? "hour" : "hours";
+    detailLines.push(`${countdown.hoursRemaining.toLocaleString("en-GB")} ${hourLabel} remain until this date.`);
+  }
+
+  return detailLines.slice(0, 5);
+}
+
 export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
   const dateStart = startOfLocalDay(date);
   const relatedSlugs: string[] = [];
@@ -202,4 +270,28 @@ export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
     const event = findSeoHubEventBySlug(slug) as SeoHubEventDefinition;
     return buildRelatedLink(`Days until ${event.name}`, slug);
   });
+}
+
+export function getExactDateNearbyLinks(date: Date): CountdownLinkItem[] {
+  const nearbyDates = [
+    { offset: -1, prefix: "" },
+    { offset: 1, prefix: "" },
+    { offset: 7, prefix: "" },
+    { offset: 30, prefix: "" },
+  ]
+    .map(({ offset, prefix }) => {
+      const targetDate = addDays(date, offset);
+
+      if (!isExactDateInRolloutRange(targetDate)) {
+        return null;
+      }
+
+      return {
+        href: getExactDateRoutePath(targetDate),
+        label: `${prefix}${formatLongDate(targetDate, "en-GB")}`,
+      };
+    })
+    .filter((item): item is CountdownLinkItem => item !== null);
+
+  return nearbyDates;
 }
