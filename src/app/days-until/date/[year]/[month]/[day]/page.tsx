@@ -102,7 +102,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       relatedLinks={getExactDateRelatedLinks(targetDate)}
       extraSection={
         <>
-          <section className="mt-12 w-full max-w-2xl text-left">
+          <section className="mt-12 w-full max-w-2xl px-3 text-left sm:px-5">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Date details
             </h2>
