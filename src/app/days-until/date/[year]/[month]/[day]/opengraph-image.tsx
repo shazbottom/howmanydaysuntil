@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import { formatFullDate, formatLongDate } from "../../../../../../lib/dateFormat";
-import {
-  isExactDateInRolloutRange,
-} from "../../../../../../lib/exactDatePages";
+import { isExactDateInRolloutRange } from "../../../../../../lib/exactDatePages";
 import {
   parseExactDateParams,
   resolveExactDateCountdown,

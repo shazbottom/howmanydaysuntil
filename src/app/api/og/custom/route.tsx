@@ -1,6 +1,4 @@
-import {
-  createCountdownOgImage,
-} from "../../../../lib/ogImage";
+import { createCountdownOgImage } from "../../../../lib/ogImage";
 
 export const runtime = "edge";
 

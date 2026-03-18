@@ -26,6 +26,7 @@ export function createCountdownOgImage({
           width: 1200,
           display: "flex",
           flexDirection: "column",
+          justifyContent: "space-between",
           paddingTop: 56,
           paddingRight: 64,
           paddingBottom: 48,
@@ -68,13 +69,14 @@ export function createCountdownOgImage({
           style={{
             display: "flex",
             flexDirection: "column",
-            marginTop: 92,
+            marginTop: 56,
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "baseline",
+              width: "100%",
             }}
           >
             <div
@@ -107,9 +109,10 @@ export function createCountdownOgImage({
               fontWeight: 600,
               letterSpacing: -3,
               maxWidth: 980,
+              display: "flex",
             }}
           >
-            until {label}
+            {`until ${label}`}
           </div>
         </div>
         <div
@@ -118,7 +121,6 @@ export function createCountdownOgImage({
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
-            marginTop: "auto",
             paddingTop: 28,
             borderTopWidth: 1,
             borderTopStyle: "solid",
