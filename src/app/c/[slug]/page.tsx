@@ -22,7 +22,12 @@ export async function generateMetadata({
     ? pageData.record.note ??
       `A shareable countdown to ${formatCustomCountdownDate(pageData.targetDate, "en-GB")}.`
     : `A shareable custom countdown.`;
-  const imageUrl = `/c/${slug}/opengraph-image`;
+  const imageQuery = new URLSearchParams({
+    count: pageData?.countdown ? String(pageData.countdown.daysRemaining) : "—",
+    label: pageData?.record.title ?? "countdown",
+    footer: pageData ? formatCustomCountdownDate(pageData.targetDate, "en-GB") : "DaysUntil",
+  });
+  const imageUrl = `/api/og/custom?${imageQuery.toString()}`;
 
   return {
     title,

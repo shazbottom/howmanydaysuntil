@@ -16,7 +16,7 @@ import {
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 interface ExactDateOgImageProps {
   params: Promise<ExactDateParams>;
