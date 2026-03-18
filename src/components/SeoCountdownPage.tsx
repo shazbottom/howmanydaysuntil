@@ -61,11 +61,13 @@ export function SeoCountdownPage({
           <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay label={countdownLabel} countdown={countdown} />
           </div>
-          <div className="mt-8 max-w-2xl space-y-4 text-left text-sm leading-6 text-black/65 dark:text-white/66 sm:text-base">
-            {supportingCopy.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
+          {supportingCopy.length > 0 ? (
+            <div className="mt-8 max-w-2xl space-y-4 text-left text-sm leading-6 text-black/65 dark:text-white/66 sm:text-base">
+              {supportingCopy.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          ) : null}
         </section>
         {extraSection}
         <CountdownLinkList title="Related countdowns" links={relatedLinks} />

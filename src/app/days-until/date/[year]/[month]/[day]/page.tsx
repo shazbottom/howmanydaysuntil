@@ -9,7 +9,6 @@ import {
   getExactDateRelatedLinks,
   getExactDateRoutePath,
   getExactDateStaticParams,
-  getExactDateSupportingCopy,
   isExactDateInRolloutRange,
 } from "../../../../../../lib/exactDatePages";
 import {
@@ -20,11 +19,6 @@ import {
 
 interface ExactDatePageProps {
   params: Promise<ExactDateParams>;
-}
-
-function buildLead(targetDate: Date): string {
-  const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "long" }).format(targetDate);
-  return `${formatLongDate(targetDate, "en-GB")} falls on a ${weekday}.`;
 }
 
 export function generateStaticParams() {
@@ -102,10 +96,9 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
     <SeoCountdownPage
       eyebrow="Exact date countdown"
       title={`How many days until ${longDate}?`}
-      lead={buildLead(targetDate)}
       countdownLabel={longDate}
       countdown={resolvedCountdown.countdown}
-      supportingCopy={getExactDateSupportingCopy(targetDate)}
+      supportingCopy={[]}
       relatedLinks={getExactDateRelatedLinks(targetDate)}
       extraSection={
         <>

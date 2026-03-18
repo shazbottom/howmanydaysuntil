@@ -137,43 +137,13 @@ export function isExactDateInRolloutRange(date: Date, now: Date = new Date()): b
   return targetDate >= today && targetDate <= lastDate;
 }
 
-export function getExactDateSupportingCopy(date: Date): string[] {
-  const longDate = formatLongDate(date, "en-GB");
-  const weekday = formatWeekday(date);
-  const matchingEvents = findSeoHubEventsForDate(date);
-  const matchingHoliday = matchingEvents.find((event) => event.category === "holiday");
-  const matchingSeason = matchingEvents.find((event) => event.category === "season");
-
-  const paragraphs = [`${longDate} falls on a ${weekday}.`];
-
-  if (matchingHoliday) {
-    paragraphs.push(`This date is ${matchingHoliday.name}.`);
-  }
-
-  if (matchingSeason) {
-    paragraphs.push(`This date falls in ${matchingSeason.name} in the Northern Hemisphere.`);
-  }
-
-  if (paragraphs.length === 1) {
-    paragraphs.push("This exact-date countdown gives a live answer for a specific calendar day.");
-  }
-
-  return paragraphs.slice(0, 3);
-}
-
 export function getExactDateDetails(date: Date, countdown: CountdownResult): string[] {
   const longDate = formatLongDate(date, "en-GB");
   const weekday = formatWeekday(date);
   const australianSeason = getAustralianSeasonName(date);
   const matchingEvents = findSeoHubEventsForDate(date);
   const matchingHoliday = matchingEvents.find((event) => event.category === "holiday");
-  const detailLines: string[] = [];
-
-  if (date.getDate() % 2 === 0) {
-    detailLines.push(`${longDate} lands on a ${weekday}.`);
-  } else {
-    detailLines.push(`${longDate} falls on a ${weekday}.`);
-  }
+  const detailLines: string[] = [`${longDate} falls on a ${weekday}.`];
 
   const { weeks, days } = countdown.weeksRemaining;
 
@@ -186,12 +156,7 @@ export function getExactDateDetails(date: Date, countdown: CountdownResult): str
   } else {
     const weekLabel = weeks === 1 ? "week" : "weeks";
     const dayLabel = days === 1 ? "day" : "days";
-
-    if ((date.getMonth() + 1) % 2 === 0) {
-      detailLines.push(`There are ${weeks} ${weekLabel} and ${days} ${dayLabel} left until this date.`);
-    } else {
-      detailLines.push(`This date is ${weeks} ${weekLabel} and ${days} ${dayLabel} away.`);
-    }
+    detailLines.push(`There are ${weeks} ${weekLabel} and ${days} ${dayLabel} remaining until this date.`);
   }
 
   if (matchingHoliday) {
@@ -202,12 +167,7 @@ export function getExactDateDetails(date: Date, countdown: CountdownResult): str
 
   detailLines.push(`This date is in the ${australianSeason} season in Australia.`);
 
-  if (countdown.hoursRemaining > 0) {
-    const hourLabel = countdown.hoursRemaining === 1 ? "hour" : "hours";
-    detailLines.push(`${countdown.hoursRemaining.toLocaleString("en-GB")} ${hourLabel} remain until this date.`);
-  }
-
-  return detailLines.slice(0, 5);
+  return detailLines.slice(0, 4);
 }
 
 export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
