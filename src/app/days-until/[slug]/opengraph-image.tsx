@@ -9,6 +9,7 @@ import { resolveSeoHubEventCountdown } from "../../../lib/seoHubEventResolver";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
+export const runtime = "nodejs";
 
 interface EventPageOgImageProps {
   params: Promise<{
