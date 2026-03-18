@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { Brand } from "../components/Brand";
-import type { CountdownLinkItem } from "../components/CountdownLinkList";
-import { CountdownDisplay } from "../components/CountdownDisplay";
-import { EventChipList, type EventChip } from "../components/EventChipList";
-import { EventInput } from "../components/EventInput";
-import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { Brand } from "./Brand";
+import type { CountdownLinkItem } from "./CountdownLinkList";
+import { CountdownDisplay } from "./CountdownDisplay";
+import { EventChipList, type EventChip } from "./EventChipList";
+import { EventInput } from "./EventInput";
+import { MyCountdownsDropdown } from "./MyCountdownsDropdown";
+import { ThemeToggle } from "./ThemeToggle";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
 import { formatLongDate, formatShortDate } from "../lib/dateFormat";
@@ -268,7 +268,7 @@ function getExploreByMonthLinks(now: Date): CountdownLinkItem[] {
   });
 }
 
-function HomepageChipLinks({
+function PreviewChipLinks({
   title,
   links,
   emphasis = "standard",
@@ -301,7 +301,11 @@ function HomepageChipLinks({
       <h2 className={titleClasses}>{title}</h2>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         {links.map((link) => (
-          <Link key={link.href} href={link.href} className={chipClasses}>
+          <Link
+            key={link.href}
+            href={link.href}
+            className={chipClasses}
+          >
             {link.label}
           </Link>
         ))}
@@ -310,13 +314,14 @@ function HomepageChipLinks({
   );
 }
 
-export default function Home() {
+export function HomepagePreviewClient() {
   const [query, setQuery] = useState("");
   const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const homepageNow = useMemo(() => new Date(), []);
-  const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(homepageNow), [homepageNow]);
-  const exploreByMonthLinks = useMemo(() => getExploreByMonthLinks(homepageNow), [homepageNow]);
+
+  const previewNow = useMemo(() => new Date(), []);
+  const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(previewNow), [previewNow]);
+  const exploreByMonthLinks = useMemo(() => getExploreByMonthLinks(previewNow), [previewNow]);
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
@@ -363,7 +368,10 @@ export default function Home() {
           </div>
         </div>
         <section className="mt-20 flex w-full flex-1 flex-col items-center text-center">
-          <div className="w-full max-w-[46rem]">
+          <p className="rounded-full border border-black/10 bg-black/[0.03] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-black/52 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/54">
+            Preview prototype
+          </p>
+          <div className="mt-6 w-full max-w-[46rem]">
             <EventInput
               value={query}
               onValueChange={setQuery}
@@ -378,27 +386,29 @@ export default function Home() {
             />
           </div>
           <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-3">
-            {MILESTONE_BUTTONS.map((milestone) => {
-              const isSelected = resolvedState?.label === milestone.label;
+            {MILESTONE_BUTTONS.map((milestone) => (
+              (() => {
+                const isSelected = resolvedState?.label === milestone.label;
 
-              return (
-                <button
-                  key={milestone.label}
-                  type="button"
-                  onClick={() => {
-                    const targetDate = milestone.getTargetDate();
-                    submitMilestone(milestone.label, targetDate);
-                  }}
-                  className={`rounded-[1.05rem] px-5 py-3 text-sm font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0d0d0d] ${
-                    isSelected
-                      ? "border border-[#B0C4DE] bg-[#B0C4DE] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(16,24,40,0.04)] hover:bg-[#a7bdd8] focus-visible:ring-[#B0C4DE]/34 dark:border-[#7f96b1] dark:bg-[#7f96b1] dark:text-[#0d1117] dark:hover:bg-[#8ca3be] dark:focus-visible:ring-[#B0C4DE]/30"
-                      : "border border-black/6 bg-[#f3f2ee] text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:bg-[#eceae4] focus-visible:ring-[#169c76]/20 dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28"
-                  }`}
-                >
-                  {milestone.label}
-                </button>
-              );
-            })}
+                return (
+              <button
+                key={milestone.label}
+                type="button"
+                onClick={() => {
+                  const targetDate = milestone.getTargetDate();
+                  submitMilestone(milestone.label, targetDate);
+                }}
+                className={`rounded-[1.05rem] px-5 py-3 text-sm font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0d0d0d] ${
+                  isSelected
+                    ? "border border-[#B0C4DE] bg-[#B0C4DE] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(16,24,40,0.04)] hover:bg-[#a7bdd8] focus-visible:ring-[#B0C4DE]/34 dark:border-[#7f96b1] dark:bg-[#7f96b1] dark:text-[#0d1117] dark:hover:bg-[#8ca3be] dark:focus-visible:ring-[#B0C4DE]/30"
+                    : "border border-black/6 bg-[#f3f2ee] text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:bg-[#eceae4] focus-visible:ring-[#169c76]/20 dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28"
+                }`}
+              >
+                {milestone.label}
+              </button>
+                );
+              })()
+            ))}
           </div>
           <div className="mt-6 w-full max-w-[34rem]">
             <EventChipList
@@ -418,9 +428,9 @@ export default function Home() {
             />
           </div>
         </section>
-        <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />
-        <HomepageChipLinks title="Coming up soon" links={comingUpSoonLinks} />
-        <HomepageChipLinks title="Explore by month" links={exploreByMonthLinks} emphasis="muted" />
+        <PreviewChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />
+        <PreviewChipLinks title="Coming up soon" links={comingUpSoonLinks} />
+        <PreviewChipLinks title="Explore by month" links={exploreByMonthLinks} emphasis="muted" />
       </div>
     </main>
   );

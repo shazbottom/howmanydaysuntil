@@ -82,7 +82,7 @@ export function CountdownDisplay({
   label,
   countdown,
   fullHeightWhenEmpty = false,
-  headerColorClassName = "bg-[#169c76] dark:bg-[#176f59]",
+  headerColorClassName = "bg-[#6495ED] dark:bg-[#4b74be]",
 }: CountdownDisplayProps) {
   const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(countdown);
   useEffect(() => {
