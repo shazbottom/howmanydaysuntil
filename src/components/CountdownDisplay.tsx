@@ -194,11 +194,11 @@ export function CountdownDisplay({
           <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.34em] text-black/42 dark:text-white/42">
             {liveCountdown.daysRemaining === 1 ? "day" : "days"} remaining
           </p>
+          <p className="mt-5 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
+            {weeksSummary}
+          </p>
         </div>
-        <p className="mt-6 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
-          {weeksSummary}
-        </p>
-        <div className="mt-7 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:grid-cols-3 sm:gap-10">
             {timeBlocks.map((timeBlock) => (
               <div
