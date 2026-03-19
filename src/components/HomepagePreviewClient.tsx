@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Brand } from "./Brand";
 import type { CountdownLinkItem } from "./CountdownLinkList";
 import { CountdownDisplay } from "./CountdownDisplay";
@@ -55,6 +55,10 @@ const MAJOR_EVENT_SLUGS = [
   "valentines-day",
   "thanksgiving",
   "easter",
+] as const;
+
+const CHRISTMAS_FLYBY_FRAMES = [
+  "/seasonal/1.svg",
 ] as const;
 
 function isSameLocalDay(left: Date, right: Date): boolean {
@@ -318,6 +322,7 @@ export function HomepagePreviewClient() {
   const [query, setQuery] = useState("");
   const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [christmasFrameIndex, setChristmasFrameIndex] = useState(0);
 
   const previewNow = useMemo(() => new Date(), []);
   const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(previewNow), [previewNow]);
@@ -351,6 +356,25 @@ export function HomepagePreviewClient() {
 
     submitQuery(event.label);
   }
+
+  const showChristmasPreview = resolvedState?.selectedSlug === "christmas";
+
+  useEffect(() => {
+    if (!showChristmasPreview) {
+      setChristmasFrameIndex(0);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setChristmasFrameIndex((currentFrameIndex) =>
+        (currentFrameIndex + 1) % CHRISTMAS_FLYBY_FRAMES.length,
+      );
+    }, 150);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [showChristmasPreview]);
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -419,7 +443,21 @@ export function HomepagePreviewClient() {
             />
           </div>
           {error ? <p className="mt-5 text-sm text-red-600">{error}</p> : null}
-          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+          <div className="relative mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+            {showChristmasPreview ? (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-[4.75rem] overflow-hidden"
+              >
+                <div className="daysuntil-christmas-flyby absolute left-0 top-0">
+                  <img
+                    src={CHRISTMAS_FLYBY_FRAMES[christmasFrameIndex]}
+                    alt=""
+                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] sm:w-[17.5rem]"
+                  />
+                </div>
+              </div>
+            ) : null}
             <CountdownDisplay
               label={resolvedState?.label ?? "Countdown"}
               countdown={resolvedState?.countdown ?? null}

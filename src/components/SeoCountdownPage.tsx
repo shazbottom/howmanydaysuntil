@@ -14,6 +14,7 @@ export interface SeoCountdownPageProps {
   supportingCopy: string[];
   relatedLinks: CountdownLinkItem[];
   extraSection?: ReactNode;
+  showChristmasFlyby?: boolean;
 }
 
 export function SeoCountdownPage({
@@ -25,6 +26,7 @@ export function SeoCountdownPage({
   supportingCopy,
   relatedLinks,
   extraSection,
+  showChristmasFlyby = false,
 }: SeoCountdownPageProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -58,7 +60,21 @@ export function SeoCountdownPage({
               {lead}
             </p>
           ) : null}
-          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+          <div className="relative mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+            {showChristmasFlyby ? (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-[4.75rem] overflow-hidden"
+              >
+                <div className="daysuntil-christmas-flyby absolute left-0 top-0">
+                  <img
+                    src="/seasonal/1.svg"
+                    alt=""
+                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] sm:w-[17.5rem]"
+                  />
+                </div>
+              </div>
+            ) : null}
             <CountdownDisplay label={countdownLabel} countdown={countdown} />
           </div>
           {supportingCopy.length > 0 ? (

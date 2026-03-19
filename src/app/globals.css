@@ -28,3 +28,18 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+@keyframes daysuntil-christmas-flyby {
+  0% {
+    transform: translateX(-18.5rem);
+  }
+
+  100% {
+    transform: translateX(calc(100vw + 2rem));
+  }
+}
+
+.daysuntil-christmas-flyby {
+  animation: daysuntil-christmas-flyby 6.5s linear infinite;
+  will-change: transform;
+}

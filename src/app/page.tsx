@@ -57,6 +57,8 @@ const MAJOR_EVENT_SLUGS = [
   "easter",
 ] as const;
 
+const CHRISTMAS_FLYBY_FRAME = "/seasonal/1.svg";
+
 function isSameLocalDay(left: Date, right: Date): boolean {
   return (
     left.getFullYear() === right.getFullYear() &&
@@ -317,6 +319,7 @@ export default function Home() {
   const homepageNow = useMemo(() => new Date(), []);
   const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(homepageNow), [homepageNow]);
   const exploreByMonthLinks = useMemo(() => getExploreByMonthLinks(homepageNow), [homepageNow]);
+  const showChristmasFlyby = resolvedState?.selectedSlug === "christmas";
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
@@ -409,7 +412,21 @@ export default function Home() {
             />
           </div>
           {error ? <p className="mt-5 text-sm text-red-600">{error}</p> : null}
-          <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+          <div className="relative mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+            {showChristmasFlyby ? (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-[4.75rem] overflow-hidden"
+              >
+                <div className="daysuntil-christmas-flyby absolute left-0 top-0">
+                  <img
+                    src={CHRISTMAS_FLYBY_FRAME}
+                    alt=""
+                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] sm:w-[17.5rem]"
+                  />
+                </div>
+              </div>
+            ) : null}
             <CountdownDisplay
               label={resolvedState?.label ?? "Countdown"}
               countdown={resolvedState?.countdown ?? null}

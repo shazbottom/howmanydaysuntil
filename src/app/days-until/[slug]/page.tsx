@@ -90,6 +90,7 @@ export default async function EventPage({ params }: EventPageProps) {
       countdown={countdown}
       supportingCopy={event.supportingCopy}
       relatedLinks={relatedEvents}
+      showChristmasFlyby={event.slug === "christmas"}
     />
   );
 }
