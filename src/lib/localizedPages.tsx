@@ -3,7 +3,10 @@ import { notFound } from "next/navigation";
 import { CountryHubPage } from "../components/CountryHubPage";
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
-import { getLocalizedEventsForCountry } from "./events";
+import {
+  getLocalizedEventCanonicalPath,
+  getLocalizedEventsForCountry,
+} from "./events";
 import {
   getCountryTodayLabel,
   getLocalizedCountdownPageData,
@@ -72,7 +75,7 @@ export function getCountryEventMetadata(
     title: `How many days until ${data.event.displayName} in ${data.country.name}? | DaysUntil`,
     description: `Find out how many days until ${data.event.displayName} in ${data.country.name} with a live countdown.`,
     alternates: {
-      canonical: `/${data.country.code}/days-until/${data.event.slug}`,
+      canonical: getLocalizedEventCanonicalPath(data.country.code, data.event),
     },
   };
 }
