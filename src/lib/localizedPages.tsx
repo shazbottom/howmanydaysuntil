@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CountryHubPage } from "../components/CountryHubPage";
+import { LocalizedDateCountdownPage } from "../components/LocalizedDateCountdownPage";
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
 import {
@@ -10,7 +11,9 @@ import {
 import {
   getCountryTodayLabel,
   getLocalizedCountdownPageData,
-  getLocalizedEventLinksForCountry,
+  getLocalizedDateCountdownPageData,
+  getPopularLocalizedEventLinksForCountry,
+  getUpcomingLocalizedEventLinksForCountry,
 } from "./localizedCountdowns";
 
 export function getLocalizedCountryCodes(): CountryCode[] {
@@ -28,7 +31,8 @@ export function renderCountryHub(countryCode: CountryCode) {
     <CountryHubPage
       country={country}
       todayLabel={getCountryTodayLabel(country)}
-      eventLinks={getLocalizedEventLinksForCountry(countryCode)}
+      popularLinks={getPopularLocalizedEventLinksForCountry(countryCode)}
+      upcomingLinks={getUpcomingLocalizedEventLinksForCountry(countryCode)}
     />
   );
 }
@@ -44,8 +48,8 @@ export function getCountryHubMetadata(countryCode: CountryCode): Metadata {
   }
 
   return {
-    title: `${country.name} Countdown Hub | DaysUntil`,
-    description: `Browse countdown pages for ${country.name}, including regional events and global holidays.`,
+    title: `Days Until Events in ${country.name} | Countdown Timers`,
+    description: `Track how many days until upcoming events in ${country.name}, including holidays and key dates with live countdowns.`,
     alternates: {
       canonical: `/${country.code}`,
     },
@@ -62,6 +66,18 @@ export function getCountryEventMetadata(
   countryCode: CountryCode,
   eventSlug: string,
 ): Metadata {
+  const dateData = getLocalizedDateCountdownPageData(countryCode, eventSlug);
+
+  if (dateData) {
+    return {
+      title: `How many days until ${dateData.targetDateLabel} in ${dateData.country.name}? | DaysUntil`,
+      description: `Find out how many days until ${dateData.targetDateLabel} in ${dateData.country.name} with a live countdown.`,
+      alternates: {
+        canonical: `/${dateData.country.code}/days-until/${dateData.dateSlug}`,
+      },
+    };
+  }
+
   const data = getLocalizedCountdownPageData(countryCode, eventSlug);
 
   if (!data) {
@@ -81,6 +97,12 @@ export function getCountryEventMetadata(
 }
 
 export function renderCountryEventPage(countryCode: CountryCode, eventSlug: string) {
+  const dateData = getLocalizedDateCountdownPageData(countryCode, eventSlug);
+
+  if (dateData) {
+    return <LocalizedDateCountdownPage data={dateData} />;
+  }
+
   const data = getLocalizedCountdownPageData(countryCode, eventSlug);
 
   if (!data) {

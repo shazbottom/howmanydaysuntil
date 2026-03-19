@@ -33,6 +33,24 @@ export interface LocalizedCountdownPageData {
   occurrenceRows: LocalizedOccurrenceRow[];
 }
 
+export interface LocalizedDateCountdownPageData {
+  country: CountryDefinition;
+  targetDate: Date;
+  countdown: CountdownResult;
+  todayLabel: string;
+  targetDateLabel: string;
+  dateSlug: string;
+}
+
+export interface LocalizedHubEventLink {
+  href: string;
+  label: string;
+}
+
+export interface LocalizedUpcomingEventLink extends LocalizedHubEventLink {
+  daysRemaining: number;
+}
+
 function getTimeZoneDateParts(date: Date, timeZone: string): TimeZoneDateParts {
   const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone,
@@ -97,6 +115,20 @@ function createDateInTimeZone(
   }
 
   return resolvedDate;
+}
+
+function createValidLocalDate(year: number, month: number, day: number): Date | null {
+  const date = new Date(year, month - 1, day);
+
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return null;
+  }
+
+  return date;
 }
 
 function getEasterSundayForYear(year: number): { month: number; day: number } {
@@ -212,6 +244,61 @@ export function getLocalizedEventOccurrenceForYear(
   );
 }
 
+export function parseLocalizedDateSlug(dateSlug: string): Date | null {
+  const match = dateSlug.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, yearText, monthText, dayText] = match;
+  return createValidLocalDate(Number(yearText), Number(monthText), Number(dayText));
+}
+
+export function getLocalizedDateCountdownPageData(
+  countryCode: CountryCode,
+  dateSlug: string,
+  now: Date = new Date(),
+): LocalizedDateCountdownPageData | null {
+  const country = getCountryByCode(countryCode);
+  const parsedDate = parseLocalizedDateSlug(dateSlug);
+
+  if (!country || !parsedDate) {
+    return null;
+  }
+
+  const nowParts = getTimeZoneDateParts(now, country.timezone);
+  const targetParts = {
+    year: parsedDate.getFullYear(),
+    month: parsedDate.getMonth() + 1,
+    day: parsedDate.getDate(),
+  };
+
+  if (compareDateParts(targetParts, nowParts) < 0) {
+    return null;
+  }
+
+  const targetDate =
+    compareDateParts(targetParts, nowParts) === 0
+      ? now
+      : createDateInTimeZone(targetParts.year, targetParts.month, targetParts.day, country.timezone);
+
+  return {
+    country,
+    targetDate,
+    countdown: getCountdown(targetDate, now),
+    todayLabel: getCountryTodayLabel(country, now),
+    targetDateLabel: new Intl.DateTimeFormat(country.locale, {
+      timeZone: country.timezone,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(targetDate),
+    dateSlug,
+  };
+}
+
 export function getLocalizedCountdownPageData(
   countryCode: CountryCode,
   eventSlug: string,
@@ -290,6 +377,53 @@ export function getLocalizedEventLinksForCountry(countryCode: CountryCode): Arra
 }> {
   return getLocalizedEventsForCountry(countryCode).map((event) => ({
     href: `/${countryCode}/days-until/${event.slug}`,
-    label: `Days until ${event.displayName}`,
+    label: event.displayName,
   }));
+}
+
+export function getPopularLocalizedEventLinksForCountry(
+  countryCode: CountryCode,
+  limit = 5,
+): LocalizedHubEventLink[] {
+  return getLocalizedEventLinksForCountry(countryCode).slice(0, limit);
+}
+
+export function getUpcomingLocalizedEventLinksForCountry(
+  countryCode: CountryCode,
+  now: Date = new Date(),
+  limit = 5,
+): LocalizedUpcomingEventLink[] {
+  return getLocalizedEventsForCountry(countryCode)
+    .map((event) => {
+      const pageData = getLocalizedCountdownPageData(countryCode, event.slug, now);
+
+      if (!pageData) {
+        return null;
+      }
+
+      return {
+        href: `/${countryCode}/days-until/${event.slug}`,
+        label: event.displayName,
+        daysRemaining: pageData.countdown.daysRemaining,
+        targetDate: pageData.targetDate,
+      };
+    })
+    .filter(
+      (
+        eventLink,
+      ): eventLink is LocalizedUpcomingEventLink & { targetDate: Date } => eventLink !== null,
+    )
+    .sort((left, right) => {
+      if (left.daysRemaining !== right.daysRemaining) {
+        return left.daysRemaining - right.daysRemaining;
+      }
+
+      return left.targetDate.getTime() - right.targetDate.getTime();
+    })
+    .slice(0, limit)
+    .map(({ href, label, daysRemaining }) => ({
+      href,
+      label,
+      daysRemaining,
+    }));
 }
