@@ -4,6 +4,8 @@ import {
   getExactDateRoutePath,
   getExactDateStaticParams,
 } from "../lib/exactDatePages";
+import { countries } from "../lib/countries";
+import { getLocalizedEventsForCountry } from "../lib/events";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
 
 const SITE_URL = "https://daysuntil.is";
@@ -25,6 +27,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  const localizedCountryPages: MetadataRoute.Sitemap = countries.map((country) => ({
+    url: `${SITE_URL}/${country.code}`,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  const localizedEventPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
+    getLocalizedEventsForCountry(country.code).map((event) => ({
+      url: `${SITE_URL}/${country.code}/days-until/${event.slug}`,
+      changeFrequency: "daily" as const,
+      priority: 0.75,
+    })),
+  );
+
   return [
     {
       url: SITE_URL,
@@ -33,5 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...hubPages,
     ...datePages,
+    ...localizedCountryPages,
+    ...localizedEventPages,
   ];
 }

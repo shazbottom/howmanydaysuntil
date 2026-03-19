@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { Brand } from "../components/Brand";
 import type { CountdownLinkItem } from "../components/CountdownLinkList";
 import { CountdownDisplay } from "../components/CountdownDisplay";
+import { CountrySelectorDropdown } from "../components/CountrySelectorDropdown";
 import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
 import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
@@ -363,6 +364,7 @@ export default function Home() {
             <Brand variant="horizontal" height={55} className="h-[55px] w-auto" />
           </Link>
           <div className="flex items-center gap-3">
+            <CountrySelectorDropdown />
             <ThemeToggle />
             <MyCountdownsDropdown />
           </div>

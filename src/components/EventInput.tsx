@@ -84,7 +84,7 @@ export function EventInput({
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
-                className="block h-[3.7rem] min-w-0 flex-1 bg-transparent px-4 text-left text-[41px] font-semibold text-black outline-none transition placeholder:text-[15px] placeholder:font-medium placeholder:text-black/38 dark:text-white dark:placeholder:text-white/34"
+                className="block h-[3.7rem] min-w-0 flex-1 bg-transparent px-4 text-center text-[41px] font-semibold text-black outline-none transition placeholder:text-[15px] placeholder:font-medium placeholder:text-black/38 dark:text-white dark:placeholder:text-white/34"
               />
               {onDatePick ? (
                 <>
