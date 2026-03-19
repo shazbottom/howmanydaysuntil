@@ -10,6 +10,7 @@ import {
   type LocalizedEventRule,
 } from "./events";
 import {
+  buildRegionEventUrl,
   getRegionByCountryAndSlug,
   type RegionDefinition,
 } from "./regions";
@@ -565,7 +566,48 @@ export function getUpcomingLocalizedEventLinksForRegion(
       }
 
       return {
-        href: `/${countryCode}/${regionSlug}/days-until/${event.slug}`,
+        href: buildRegionEventUrl(region, event.slug),
+        label: event.displayName,
+        daysRemaining: pageData.countdown.daysRemaining,
+        targetDate: pageData.targetDate,
+      };
+    })
+    .filter(
+      (
+        eventLink,
+      ): eventLink is LocalizedUpcomingEventLink & { targetDate: Date } => eventLink !== null,
+    )
+    .sort((left, right) => {
+      if (left.daysRemaining !== right.daysRemaining) {
+        return left.daysRemaining - right.daysRemaining;
+      }
+
+      return left.targetDate.getTime() - right.targetDate.getTime();
+    })
+    .slice(0, limit)
+    .map(({ href, label, daysRemaining }) => ({
+      href,
+      label,
+      daysRemaining,
+    }));
+}
+
+export function getSecondaryGlobalEventLinksForRegion(
+  countryCode: CountryCode,
+  now: Date = new Date(),
+  limit = 2,
+): LocalizedUpcomingEventLink[] {
+  return getLocalizedEventsForCountry(countryCode)
+    .filter((event) => event.scope === "global")
+    .map((event) => {
+      const pageData = getLocalizedCountdownPageData(countryCode, event.slug, now);
+
+      if (!pageData) {
+        return null;
+      }
+
+      return {
+        href: `/${countryCode}/days-until/${event.slug}`,
         label: event.displayName,
         daysRemaining: pageData.countdown.daysRemaining,
         targetDate: pageData.targetDate,

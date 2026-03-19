@@ -6,11 +6,12 @@ import {
 } from "../lib/exactDatePages";
 import { countries } from "../lib/countries";
 import {
-  getLocalizedEventCanonicalPath,
+  getCanonicalUrl,
   getLocalizedEventsForCountry,
+  getEventsForRegion,
+  hasIndexableRegionContent,
 } from "../lib/events";
-import { regions } from "../lib/regions";
-import { getAllRegionEventStaticParams } from "../lib/regionPages";
+import { getRegionId, regions } from "../lib/regions";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
 
 const SITE_URL = "https://daysuntil.is";
@@ -38,28 +39,55 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const localizedRegionHubPages: MetadataRoute.Sitemap = regions.map((region) => ({
-    url: `${SITE_URL}/${region.countryCode}/${region.slug}`,
-    changeFrequency: "weekly",
-    priority: 0.65,
-  }));
+  const localizedRegionHubPages: MetadataRoute.Sitemap = regions
+    .filter((region) => hasIndexableRegionContent(getRegionId(region)))
+    .map((region) => ({
+      url: `${SITE_URL}/${region.countryCode}/${region.slug}`,
+      changeFrequency: "weekly",
+      priority: 0.65,
+    }));
 
-  const localizedRegionalEventPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
+  const localizedCountryEventPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
     getLocalizedEventsForCountry(country.code)
-      .filter((event) => event.canonicalStrategy === "self")
-      .map((event) => ({
-        url: `${SITE_URL}${getLocalizedEventCanonicalPath(country.code, event)}`,
-        changeFrequency: "daily" as const,
-        priority: 0.75,
-      })),
+      .flatMap((event) => {
+        const currentUrl = `/${country.code}/days-until/${event.slug}`;
+        const canonicalUrl = getCanonicalUrl(event, {
+          countryCode: country.code,
+          currentUrl,
+        });
+
+        if (!event.indexable || canonicalUrl !== currentUrl) {
+          return [];
+        }
+
+        return [{
+          url: `${SITE_URL}${currentUrl}`,
+          changeFrequency: "daily" as const,
+          priority: 0.75,
+        }];
+      }),
   );
 
-  const localizedRegionEventPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
-    getAllRegionEventStaticParams(country.code).map((params) => ({
-      url: `${SITE_URL}/${country.code}/${params.region}/days-until/${params.event}`,
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    })),
+  const localizedRegionEventPages: MetadataRoute.Sitemap = regions.flatMap((region) =>
+    getEventsForRegion(region)
+      .flatMap((event) => {
+        const currentUrl = `/${region.countryCode}/${region.slug}/days-until/${event.slug}`;
+        const canonicalUrl = getCanonicalUrl(event, {
+          countryCode: region.countryCode,
+          region,
+          currentUrl,
+        });
+
+        if (!event.indexable || canonicalUrl !== currentUrl) {
+          return [];
+        }
+
+        return [{
+          url: `${SITE_URL}${currentUrl}`,
+          changeFrequency: "daily" as const,
+          priority: 0.7,
+        }];
+      }),
   );
 
   return [
@@ -72,7 +100,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...datePages,
     ...localizedCountryPages,
     ...localizedRegionHubPages,
-    ...localizedRegionalEventPages,
+    ...localizedCountryEventPages,
     ...localizedRegionEventPages,
   ];
 }

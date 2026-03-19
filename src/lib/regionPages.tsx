@@ -1,15 +1,27 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { RegionHubPage } from "../components/RegionHubPage";
 import { RegionalCountdownPage } from "../components/RegionalCountdownPage";
 import { getCountryByCode, type CountryCode } from "./countries";
-import { getEventsForRegion } from "./events";
+import {
+  getCanonicalUrl,
+  getEventsForRegion,
+  hasIndexableRegionContent,
+} from "./events";
 import {
   getRegionTodayLabel,
   getRegionalCountdownPageData,
+  getSecondaryGlobalEventLinksForRegion,
   getUpcomingLocalizedEventLinksForRegion,
 } from "./localizedCountdowns";
-import { getRegionByCountryAndSlug, getRegionsForCountry } from "./regions";
+import {
+  getRegionByCountryAndSlug,
+  getRegionId,
+  getRegionsForCountry,
+  resolveRegionByCountryAndSlug,
+  buildRegionUrl,
+  buildRegionEventUrl,
+} from "./regions";
 
 export function getRegionHubStaticParams(countryCode: CountryCode) {
   return getRegionsForCountry(countryCode).map((region) => ({
@@ -40,10 +52,15 @@ export function getAllRegionEventStaticParams(countryCode: CountryCode) {
 
 export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
   const country = getCountryByCode(countryCode);
-  const region = getRegionByCountryAndSlug(countryCode, regionSlug);
+  const resolvedRegion = resolveRegionByCountryAndSlug(countryCode, regionSlug);
+  const region = resolvedRegion?.region ?? null;
 
   if (!country || !region) {
     notFound();
+  }
+
+  if (resolvedRegion?.isLegacyMatch) {
+    permanentRedirect(buildRegionUrl(region));
   }
 
   return (
@@ -52,6 +69,7 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
       region={region}
       todayLabel={getRegionTodayLabel(region, country.locale)}
       upcomingLinks={getUpcomingLocalizedEventLinksForRegion(countryCode, regionSlug)}
+      secondaryGlobalLinks={getSecondaryGlobalEventLinksForRegion(countryCode)}
     />
   );
 }
@@ -70,13 +88,18 @@ export function getRegionHubMetadata(
     };
   }
 
-  const regionName = region.seoName ?? region.displayName;
+  const regionName = region.seoName ?? region.name;
+  const isIndexable = hasIndexableRegionContent(getRegionId(region));
 
   return {
     title: `Days Until Events in ${regionName}, ${country.name} | DaysUntil`,
     description: `Track how many days until upcoming events and holidays in ${regionName}, ${country.name} with live countdowns.`,
     alternates: {
       canonical: `/${country.code}/${region.slug}`,
+    },
+    robots: {
+      index: isIndexable,
+      follow: true,
     },
   };
 }
@@ -86,7 +109,9 @@ export function getRegionEventMetadata(
   regionSlug: string,
   eventSlug: string,
 ): Metadata {
-  const data = getRegionalCountdownPageData(countryCode, regionSlug, eventSlug);
+  const resolvedRegion = resolveRegionByCountryAndSlug(countryCode, regionSlug);
+  const canonicalRegionSlug = resolvedRegion?.region.slug ?? regionSlug;
+  const data = getRegionalCountdownPageData(countryCode, canonicalRegionSlug, eventSlug);
 
   if (!data) {
     return {
@@ -95,11 +120,23 @@ export function getRegionEventMetadata(
     };
   }
 
+  const currentUrl = `/${data.country.code}/${data.region.slug}/days-until/${data.event.slug}`;
+  const canonicalUrl = getCanonicalUrl(data.event, {
+    countryCode: data.country.code,
+    region: data.region,
+    currentUrl,
+  });
+  const canIndexCurrentUrl = data.event.indexable && canonicalUrl === currentUrl;
+
   return {
-    title: `How many days until ${data.event.displayName} in ${data.region.displayName}? | DaysUntil`,
-    description: `Find out how many days until ${data.event.displayName} in ${data.region.displayName}, ${data.country.name} with a live countdown.`,
+    title: `How many days until ${data.event.displayName} in ${data.region.name}? | DaysUntil`,
+    description: `Find out how many days until ${data.event.displayName} in ${data.region.name}, ${data.country.name} with a live countdown.`,
     alternates: {
-      canonical: `/${data.country.code}/${data.region.slug}/days-until/${data.event.slug}`,
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: canIndexCurrentUrl,
+      follow: true,
     },
   };
 }
@@ -109,7 +146,14 @@ export function renderRegionEventPage(
   regionSlug: string,
   eventSlug: string,
 ) {
-  const data = getRegionalCountdownPageData(countryCode, regionSlug, eventSlug);
+  const resolvedRegion = resolveRegionByCountryAndSlug(countryCode, regionSlug);
+  const region = resolvedRegion?.region ?? null;
+
+  if (resolvedRegion?.isLegacyMatch && region) {
+    permanentRedirect(buildRegionEventUrl(region, eventSlug));
+  }
+
+  const data = region ? getRegionalCountdownPageData(countryCode, region.slug, eventSlug) : null;
 
   if (!data) {
     notFound();

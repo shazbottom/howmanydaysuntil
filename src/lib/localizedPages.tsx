@@ -5,7 +5,7 @@ import { LocalizedDateCountdownPage } from "../components/LocalizedDateCountdown
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
 import {
-  getLocalizedEventCanonicalPath,
+  getCanonicalUrl,
   getLocalizedEventsForCountry,
 } from "./events";
 import {
@@ -87,11 +87,22 @@ export function getCountryEventMetadata(
     };
   }
 
+  const currentUrl = `/${data.country.code}/days-until/${data.event.slug}`;
+  const canonicalUrl = getCanonicalUrl(data.event, {
+    countryCode: data.country.code,
+    currentUrl,
+  });
+  const canIndexCurrentUrl = data.event.indexable && canonicalUrl === currentUrl;
+
   return {
     title: `How many days until ${data.event.displayName} in ${data.country.name}? | DaysUntil`,
     description: `Find out how many days until ${data.event.displayName} in ${data.country.name} with a live countdown.`,
     alternates: {
-      canonical: getLocalizedEventCanonicalPath(data.country.code, data.event),
+      canonical: canonicalUrl,
+    },
+    robots: {
+      index: canIndexCurrentUrl,
+      follow: true,
     },
   };
 }

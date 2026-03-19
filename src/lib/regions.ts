@@ -1,43 +1,237 @@
 import type { CountryCode } from "./countries";
 
 export interface RegionDefinition {
+  id: string;
   countryCode: CountryCode;
-  regionCode: string;
   slug: string;
-  displayName: string;
+  legacySlugs?: string[];
+  name: string;
+  shortName?: string;
   timezone: string;
   seoName?: string;
 }
 
+export interface ResolvedRegionMatch {
+  region: RegionDefinition;
+  isLegacyMatch: boolean;
+  matchedSlug: string;
+}
+
 export const regions: RegionDefinition[] = [
-  { countryCode: "au", regionCode: "act", slug: "act", displayName: "Australian Capital Territory", timezone: "Australia/Sydney" },
-  { countryCode: "au", regionCode: "nsw", slug: "nsw", displayName: "New South Wales", timezone: "Australia/Sydney" },
-  { countryCode: "au", regionCode: "nt", slug: "nt", displayName: "Northern Territory", timezone: "Australia/Darwin" },
-  { countryCode: "au", regionCode: "qld", slug: "qld", displayName: "Queensland", timezone: "Australia/Brisbane" },
-  { countryCode: "au", regionCode: "sa", slug: "sa", displayName: "South Australia", timezone: "Australia/Adelaide" },
-  { countryCode: "au", regionCode: "tas", slug: "tas", displayName: "Tasmania", timezone: "Australia/Hobart" },
-  { countryCode: "au", regionCode: "vic", slug: "vic", displayName: "Victoria", timezone: "Australia/Melbourne" },
-  { countryCode: "au", regionCode: "wa", slug: "wa", displayName: "Western Australia", timezone: "Australia/Perth" },
-  { countryCode: "ca", regionCode: "ab", slug: "ab", displayName: "Alberta", timezone: "America/Edmonton" },
-  { countryCode: "ca", regionCode: "bc", slug: "bc", displayName: "British Columbia", timezone: "America/Vancouver" },
-  { countryCode: "ca", regionCode: "on", slug: "on", displayName: "Ontario", timezone: "America/Toronto" },
-  { countryCode: "ca", regionCode: "qc", slug: "qc", displayName: "Quebec", timezone: "America/Toronto" },
-  { countryCode: "nz", regionCode: "auckland", slug: "auckland", displayName: "Auckland", timezone: "Pacific/Auckland" },
-  { countryCode: "nz", regionCode: "canterbury", slug: "canterbury", displayName: "Canterbury", timezone: "Pacific/Auckland" },
-  { countryCode: "nz", regionCode: "wellington", slug: "wellington", displayName: "Wellington", timezone: "Pacific/Auckland" },
-  { countryCode: "uk", regionCode: "england", slug: "england", displayName: "England", timezone: "Europe/London" },
-  { countryCode: "uk", regionCode: "northern-ireland", slug: "northern-ireland", displayName: "Northern Ireland", timezone: "Europe/London" },
-  { countryCode: "uk", regionCode: "scotland", slug: "scotland", displayName: "Scotland", timezone: "Europe/London" },
-  { countryCode: "uk", regionCode: "wales", slug: "wales", displayName: "Wales", timezone: "Europe/London" },
+  {
+    id: "au-act",
+    countryCode: "au",
+    slug: "australian-capital-territory",
+    legacySlugs: ["act"],
+    name: "Australian Capital Territory",
+    shortName: "ACT",
+    timezone: "Australia/Sydney",
+  },
+  {
+    id: "au-nsw",
+    countryCode: "au",
+    slug: "new-south-wales",
+    legacySlugs: ["nsw"],
+    name: "New South Wales",
+    shortName: "NSW",
+    timezone: "Australia/Sydney",
+  },
+  {
+    id: "au-nt",
+    countryCode: "au",
+    slug: "northern-territory",
+    legacySlugs: ["nt"],
+    name: "Northern Territory",
+    shortName: "NT",
+    timezone: "Australia/Darwin",
+  },
+  {
+    id: "au-qld",
+    countryCode: "au",
+    slug: "queensland",
+    legacySlugs: ["qld"],
+    name: "Queensland",
+    shortName: "QLD",
+    timezone: "Australia/Brisbane",
+  },
+  {
+    id: "au-sa",
+    countryCode: "au",
+    slug: "south-australia",
+    legacySlugs: ["sa"],
+    name: "South Australia",
+    shortName: "SA",
+    timezone: "Australia/Adelaide",
+  },
+  {
+    id: "au-tas",
+    countryCode: "au",
+    slug: "tasmania",
+    legacySlugs: ["tas"],
+    name: "Tasmania",
+    shortName: "TAS",
+    timezone: "Australia/Hobart",
+  },
+  {
+    id: "au-vic",
+    countryCode: "au",
+    slug: "victoria",
+    legacySlugs: ["vic"],
+    name: "Victoria",
+    shortName: "VIC",
+    timezone: "Australia/Melbourne",
+  },
+  {
+    id: "au-wa",
+    countryCode: "au",
+    slug: "western-australia",
+    legacySlugs: ["wa"],
+    name: "Western Australia",
+    shortName: "WA",
+    timezone: "Australia/Perth",
+  },
+  {
+    id: "ca-ab",
+    countryCode: "ca",
+    slug: "alberta",
+    legacySlugs: ["ab"],
+    name: "Alberta",
+    shortName: "AB",
+    timezone: "America/Edmonton",
+  },
+  {
+    id: "ca-bc",
+    countryCode: "ca",
+    slug: "british-columbia",
+    legacySlugs: ["bc"],
+    name: "British Columbia",
+    shortName: "BC",
+    timezone: "America/Vancouver",
+  },
+  {
+    id: "ca-on",
+    countryCode: "ca",
+    slug: "ontario",
+    legacySlugs: ["on"],
+    name: "Ontario",
+    shortName: "ON",
+    timezone: "America/Toronto",
+  },
+  {
+    id: "ca-qc",
+    countryCode: "ca",
+    slug: "quebec",
+    legacySlugs: ["qc"],
+    name: "Quebec",
+    shortName: "QC",
+    timezone: "America/Toronto",
+  },
+  {
+    id: "nz-auckland",
+    countryCode: "nz",
+    slug: "auckland",
+    name: "Auckland",
+    timezone: "Pacific/Auckland",
+  },
+  {
+    id: "nz-canterbury",
+    countryCode: "nz",
+    slug: "canterbury",
+    name: "Canterbury",
+    timezone: "Pacific/Auckland",
+  },
+  {
+    id: "nz-wellington",
+    countryCode: "nz",
+    slug: "wellington",
+    name: "Wellington",
+    timezone: "Pacific/Auckland",
+  },
+  {
+    id: "uk-england",
+    countryCode: "uk",
+    slug: "england",
+    name: "England",
+    timezone: "Europe/London",
+  },
+  {
+    id: "uk-northern-ireland",
+    countryCode: "uk",
+    slug: "northern-ireland",
+    name: "Northern Ireland",
+    timezone: "Europe/London",
+  },
+  {
+    id: "uk-scotland",
+    countryCode: "uk",
+    slug: "scotland",
+    name: "Scotland",
+    timezone: "Europe/London",
+  },
+  {
+    id: "uk-wales",
+    countryCode: "uk",
+    slug: "wales",
+    name: "Wales",
+    timezone: "Europe/London",
+  },
 ];
+
+export function getRegionId(region: Pick<RegionDefinition, "id">): string {
+  return region.id;
+}
 
 export function getRegionsForCountry(countryCode: CountryCode): RegionDefinition[] {
   return regions.filter((region) => region.countryCode === countryCode);
+}
+
+export function resolveRegionByCountryAndSlug(
+  countryCode: CountryCode,
+  slug: string,
+): ResolvedRegionMatch | null {
+  const canonicalMatch = getRegionsForCountry(countryCode).find((region) => region.slug === slug);
+
+  if (canonicalMatch) {
+    return {
+      region: canonicalMatch,
+      isLegacyMatch: false,
+      matchedSlug: slug,
+    };
+  }
+
+  const legacyMatch = getRegionsForCountry(countryCode).find(
+    (region) => region.legacySlugs?.includes(slug) === true,
+  );
+
+  if (!legacyMatch) {
+    return null;
+  }
+
+  return {
+    region: legacyMatch,
+    isLegacyMatch: true,
+    matchedSlug: slug,
+  };
 }
 
 export function getRegionByCountryAndSlug(
   countryCode: CountryCode,
   slug: string,
 ): RegionDefinition | null {
-  return getRegionsForCountry(countryCode).find((region) => region.slug === slug) ?? null;
+  return resolveRegionByCountryAndSlug(countryCode, slug)?.region ?? null;
+}
+
+export function getRegionById(regionId: string): RegionDefinition | null {
+  return regions.find((region) => region.id === regionId) ?? null;
+}
+
+export function buildRegionUrl(region: Pick<RegionDefinition, "countryCode" | "slug">): string {
+  return `/${region.countryCode}/${region.slug}`;
+}
+
+export function buildRegionEventUrl(
+  region: Pick<RegionDefinition, "countryCode" | "slug">,
+  eventSlug: string,
+): string {
+  return `${buildRegionUrl(region)}/days-until/${eventSlug}`;
 }

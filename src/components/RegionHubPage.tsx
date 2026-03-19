@@ -11,6 +11,7 @@ export interface RegionHubPageProps {
   region: RegionDefinition;
   todayLabel: string;
   upcomingLinks: LocalizedUpcomingEventLink[];
+  secondaryGlobalLinks: LocalizedUpcomingEventLink[];
 }
 
 export function RegionHubPage({
@@ -18,6 +19,7 @@ export function RegionHubPage({
   region,
   todayLabel,
   upcomingLinks,
+  secondaryGlobalLinks,
 }: RegionHubPageProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -45,14 +47,14 @@ export function RegionHubPage({
             Regional countdowns
           </p>
           <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-7xl">
-            {region.displayName}
+            {region.name}
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Explore upcoming events and holiday countdowns in {region.displayName}, {country.name}.
+            Explore upcoming events and holiday countdowns in {region.name}, {country.name}.
             This regional page is ready for state and province specific countdowns as they are added.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-black/48 dark:text-white/52 sm:text-base">
-            Today in {region.displayName} is {todayLabel}.
+            Today in {region.name} is {todayLabel}.
           </p>
           <div className="mt-12 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
@@ -73,10 +75,29 @@ export function RegionHubPage({
               </div>
             ) : (
               <p className="mt-6 text-sm leading-6 text-black/52 dark:text-white/56">
-                Regional event countdowns for {region.displayName} will appear here as they are added.
+                Regional event countdowns for {region.name} will appear here as they are added.
               </p>
             )}
           </div>
+          {secondaryGlobalLinks.length > 0 ? (
+            <div className="mt-10 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
+              <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
+                Also tracked nationally
+              </h2>
+              <div className="mt-6 space-y-3">
+                {secondaryGlobalLinks.map((eventLink) => (
+                  <Link
+                    key={eventLink.href}
+                    href={eventLink.href}
+                    className="flex items-center justify-between gap-4 rounded-[1.05rem] border border-black/6 bg-[#f3f2ee] px-4 py-3 text-sm shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#169c76]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white/10 dark:bg-[#1d1f1e] dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28 dark:focus-visible:ring-offset-[#0d0d0d]"
+                  >
+                    <span className="font-medium text-black dark:text-white/88">{eventLink.label}</span>
+                    <span className="text-black/55 dark:text-white/58">{eventLink.daysRemaining} days</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link
               href={`/${country.code}`}

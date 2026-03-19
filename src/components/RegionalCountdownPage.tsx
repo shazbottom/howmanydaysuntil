@@ -35,10 +35,10 @@ export function RegionalCountdownPage({ data }: RegionalCountdownPageProps) {
             Regional countdown
           </p>
           <h1 className="mt-4 max-w-3xl text-5xl font-semibold tracking-tight sm:text-7xl">
-            How many days until {event.displayName} in {region.displayName}?
+            How many days until {event.displayName} in {region.name}?
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Today in {region.displayName}, {country.name} is {todayLabel}. The next {event.displayName} falls on {targetDateLabel}.
+            Today in {region.name}, {country.name} is {todayLabel}. The next {event.displayName} falls on {targetDateLabel}.
           </p>
           <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay label={event.displayName} countdown={countdown} />
@@ -70,7 +70,7 @@ export function RegionalCountdownPage({ data }: RegionalCountdownPageProps) {
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link href={`/${country.code}/${region.slug}`} className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white">
-              Back to {region.displayName}
+              Back to {region.name}
             </Link>
             <Link href={`/${country.code}`} className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white">
               Back to {country.name}
