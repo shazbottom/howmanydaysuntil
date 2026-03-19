@@ -4,16 +4,17 @@ import {
   type SeoHubEventDefinition,
 } from "../data/seoHubEvents";
 import type { CountdownLinkItem } from "../components/CountdownLinkList";
+import { getSeoLandingPath } from "./seoLandingPages";
 
 const MIN_RELATED_LINKS = 4;
 const MAX_RELATED_LINKS = 6;
 
 const categoryFallbackSlugs: Record<SeoHubEventDefinition["category"], string[]> = {
-  holiday: ["new-year", "winter", "halloween", "friday", "christmas"],
-  season: ["christmas", "new-year", "halloween", "friday", "summer", "winter"],
+  holiday: ["new-year", "halloween", "friday", "christmas", "thanksgiving"],
+  season: ["christmas", "new-year", "halloween", "friday", "thanksgiving", "easter"],
   weekday: ["friday", "weekend", "saturday", "monday", "christmas", "halloween"],
   weekend: ["friday", "saturday", "sunday", "monday", "christmas", "halloween"],
-  year: ["new-year", "christmas", "summer", "halloween", "friday", "2028"],
+  year: ["new-year", "christmas", "halloween", "friday", "2028", "thanksgiving"],
 };
 
 function uniqueEvents(events: SeoHubEventDefinition[]): SeoHubEventDefinition[] {
@@ -58,7 +59,7 @@ export function getSeoHubRelatedLinks(event: SeoHubEventDefinition): CountdownLi
   );
 
   return selectedEvents.map((relatedEvent) => ({
-    href: `/days-until/${relatedEvent.slug}`,
+    href: getSeoLandingPath(relatedEvent.slug),
     label: `Days until ${relatedEvent.name}`,
   }));
 }

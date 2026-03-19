@@ -4,6 +4,7 @@ import {
   getExactDateRoutePath,
   getExactDateStaticParams,
 } from "../lib/exactDatePages";
+import { getSeoLandingPath } from "../lib/seoLandingPages";
 
 const SITE_URL = "https://daysuntil.is";
 
@@ -11,9 +12,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const hubPages: MetadataRoute.Sitemap = seoHubEvents
     .filter((event) => event.indexable)
     .map((event) => ({
-      url: `${SITE_URL}/days-until/${event.slug}`,
+      url: `${SITE_URL}${getSeoLandingPath(event.slug)}`,
     changeFrequency: "daily",
-      priority: event.category === "holiday" || event.category === "season" ? 0.9 : 0.8,
+      priority: event.category === "holiday" ? 0.9 : 0.8,
     }));
 
   const datePages: MetadataRoute.Sitemap = getExactDateStaticParams().map((params) => ({

@@ -17,6 +17,7 @@ import { getNextEasterDate } from "../lib/easterDate";
 import { getExactDateRoutePath } from "../lib/exactDatePages";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
 import { parseInput, type ParseResult } from "../lib/parseInput";
+import { getSeoLandingPath } from "../lib/seoLandingPages";
 
 interface ResolvedCountdownState {
   label: string;
@@ -35,11 +36,11 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
 ];
 
 const POPULAR_COUNTDOWN_LINKS = [
-  { href: "/days-until/christmas", label: "Days until Christmas" },
-  { href: "/days-until/halloween", label: "Days until Halloween" },
-  { href: "/days-until/new-year", label: "Days until New Year" },
-  { href: "/days-until/valentines-day", label: "Days until Valentine's Day" },
-  { href: "/days-until/thanksgiving", label: "Days until Thanksgiving" },
+  { href: "/days-until-christmas", label: "Days until Christmas" },
+  { href: "/days-until-halloween", label: "Days until Halloween" },
+  { href: "/days-until-new-year", label: "Days until New Year" },
+  { href: "/days-until-valentines-day", label: "Days until Valentine's Day" },
+  { href: "/days-until-thanksgiving", label: "Days until Thanksgiving" },
 ];
 
 const MILESTONE_BUTTONS = [
@@ -213,8 +214,8 @@ function getNearestMajorEventLink(now: Date): CountdownLinkItem | null {
       return null;
     }
 
-    return {
-      href: `/days-until/${event.slug}`,
+      return {
+      href: getSeoLandingPath(event.slug),
       label: `Days until ${event.name}`,
       targetDate,
     };
@@ -238,8 +239,8 @@ function getComingUpSoonLinks(now: Date): CountdownLinkItem[] {
   const nearestMajorEvent = getNearestMajorEventLink(now);
 
   const links: CountdownLinkItem[] = [
-    { href: "/days-until/friday", label: "Days until Friday" },
-    { href: "/days-until/weekend", label: "Days until the weekend" },
+    { href: "/days-until-friday", label: "Days until Friday" },
+    { href: "/days-until-weekend", label: "Days until the weekend" },
     {
       href: getExactDateRoutePath(nextMonth),
       label: `Next month (${new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric" }).format(nextMonth)})`,

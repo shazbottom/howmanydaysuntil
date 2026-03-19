@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { SeoCountdownPage } from "../../../components/SeoCountdownPage";
-import { seoHubEvents } from "../../../data/seoHubEvents";
-import { formatFullDate } from "../../../lib/dateFormat";
-import { resolveSeoHubEventCountdown } from "../../../lib/seoHubEventResolver";
-import { getSeoHubRelatedLinks } from "../../../lib/seoHubRelatedLinks";
+import { notFound, permanentRedirect } from "next/navigation";
+import { seoHubEvents, findSeoHubEventBySlug } from "../../../data/seoHubEvents";
+import { getSeoLandingPath } from "../../../lib/seoLandingPages";
 
 interface EventPageProps {
   params: Promise<{
@@ -24,31 +21,29 @@ export async function generateMetadata({
   params,
 }: EventPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const resolvedCountdown = resolveSeoHubEventCountdown(slug);
+  const event = findSeoHubEventBySlug(slug);
 
-  if (!resolvedCountdown) {
+  if (!event) {
     return {
       title: "Countdown Not Found",
       description: "The requested countdown page could not be found.",
     };
   }
-
-  const { event, targetDate, countdown } = resolvedCountdown;
-  const targetYear = targetDate.getFullYear();
-  const description = `There are ${countdown.daysRemaining} days until ${event.name} ${targetYear}. See a live countdown including weeks, hours, and minutes remaining.`;
+  const canonicalPath = getSeoLandingPath(event.slug);
   const imageUrl = `/days-until/${event.slug}/opengraph-image`;
-  const title = `How Many Days Until ${event.name} ${targetYear}? (Live Countdown)`;
+  const title = `How Many Days Until ${event.name}? (Live Countdown)`;
+  const description = `Live countdown for ${event.name}. This legacy URL redirects to the canonical countdown page.`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/days-until/${event.slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
       title,
       description,
-      url: `/days-until/${event.slug}`,
+      url: canonicalPath,
       type: "website",
       images: [imageUrl],
     },
@@ -63,34 +58,11 @@ export async function generateMetadata({
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
-  const resolvedCountdown = resolveSeoHubEventCountdown(slug);
+  const event = findSeoHubEventBySlug(slug);
 
-  if (!resolvedCountdown) {
+  if (!event) {
     notFound();
   }
 
-  const { event, countdown, targetDate } = resolvedCountdown;
-  const relatedEvents = getSeoHubRelatedLinks(event);
-  const eyebrow =
-    event.category === "season"
-      ? "Season countdown"
-      : event.category === "year"
-        ? "Year countdown"
-        : event.category === "weekday" || event.category === "weekend"
-          ? "Recurring countdown"
-          : "Event countdown";
-  const lead = `${event.name} ${targetDate.getFullYear()} falls on ${formatFullDate(targetDate, "en-US")}.`;
-
-  return (
-    <SeoCountdownPage
-      eyebrow={eyebrow}
-      title={`How many days until ${event.name}?`}
-      lead={event.seoDescription || lead}
-      countdownLabel={event.name}
-      countdown={countdown}
-      supportingCopy={event.supportingCopy}
-      relatedLinks={relatedEvents}
-      showChristmasFlyby={event.slug === "christmas"}
-    />
-  );
+  permanentRedirect(getSeoLandingPath(event.slug));
 }

@@ -10,6 +10,7 @@ import {
   findSeoHubEventsForDate,
   resolveSeoHubEventDate,
 } from "./seoHubEventResolver";
+import { getSeoLandingPath } from "./seoLandingPages";
 
 export const EXACT_DATE_ROLLOUT_END = {
   year: 2030,
@@ -90,7 +91,7 @@ function buildRelatedLink(label: string, slug: string): CountdownLinkItem {
   const event = findSeoHubEventBySlug(slug);
 
   return {
-    href: `/days-until/${slug}`,
+    href: getSeoLandingPath(slug),
     label: label || `Days until ${event?.name ?? slug}`,
   };
 }
@@ -179,7 +180,11 @@ export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
     relatedSlugs.push(yearSlug);
   }
 
-  relatedSlugs.push(getPrimarySeasonSlug(date));
+  const seasonSlug = getPrimarySeasonSlug(date);
+  const seasonEvent = findSeoHubEventBySlug(seasonSlug);
+  if (seasonEvent?.indexable) {
+    relatedSlugs.push(seasonSlug);
+  }
 
   for (const slug of getMatchedHolidaySlugs(date)) {
     relatedSlugs.push(slug);

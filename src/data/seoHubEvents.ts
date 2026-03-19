@@ -96,7 +96,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Christmas is celebrated on December 25 and sits at the center of the late-year holiday season for many households around the world.",
       "People often count down to Christmas for travel, celebrations, gift giving, and time spent with family and friends.",
     ],
-    relatedEventSlugs: ["christmas-eve", "new-year", "winter", "halloween", "friday"],
+    relatedEventSlugs: ["christmas-eve", "new-year", "halloween", "friday", "thanksgiving"],
     indexable: true,
   },
   {
@@ -112,7 +112,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Christmas Eve is the day before Christmas Day and is often used for travel, festive meals, church services, and final preparations.",
       "For many people it marks the emotional start of the Christmas period rather than just a date on the calendar.",
     ],
-    relatedEventSlugs: ["christmas", "new-year", "winter", "thanksgiving", "friday"],
+    relatedEventSlugs: ["christmas", "new-year", "thanksgiving", "friday", "halloween"],
     indexable: true,
   },
   {
@@ -128,7 +128,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "New Year’s Day is the first day of the calendar year and follows New Year’s Eve celebrations around the world.",
       "It is commonly associated with resolutions, fresh starts, public holidays, and a clean reset for the year ahead.",
     ],
-    relatedEventSlugs: ["christmas", "christmas-eve", "winter", "valentines-day", "2027"],
+    relatedEventSlugs: ["christmas", "christmas-eve", "valentines-day", "2027", "friday"],
     indexable: true,
   },
   {
@@ -176,7 +176,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Easter does not land on the same calendar date every year, which makes it one of the most useful holidays to count down to with a live tool.",
       "It is associated with church observance, school breaks, family gatherings, and the wider spring holiday period.",
     ],
-    relatedEventSlugs: ["spring", "valentines-day", "summer", "thanksgiving", "sunday"],
+    relatedEventSlugs: ["valentines-day", "thanksgiving", "sunday", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -241,7 +241,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "For many people it marks the beginning of outdoor plans, lighter evenings, and the move away from winter.",
     ],
     relatedEventSlugs: ["summer", "easter", "valentines-day", "winter", "friday"],
-    indexable: true,
+    indexable: false,
   },
   {
     slug: "summer",
@@ -262,7 +262,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "It is one of the most commonly searched seasonal countdowns for weather, events, and vacation planning.",
     ],
     relatedEventSlugs: ["spring", "autumn", "halloween", "christmas", "friday"],
-    indexable: true,
+    indexable: false,
   },
   {
     slug: "autumn",
@@ -283,7 +283,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "It also leads into Halloween, Thanksgiving, and the final stretch of the calendar year.",
     ],
     relatedEventSlugs: ["halloween", "thanksgiving", "winter", "summer", "friday"],
-    indexable: true,
+    indexable: false,
   },
   {
     slug: "winter",
@@ -304,7 +304,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "For many people it marks the last astronomical season before the year turns again toward spring.",
     ],
     relatedEventSlugs: ["christmas", "new-year", "spring", "thanksgiving", "friday"],
-    indexable: true,
+    indexable: false,
   },
   {
     slug: "monday",
@@ -399,7 +399,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Year countdowns are useful for planning long-term goals, deadlines, travel, and milestone events.",
       "Unlike recurring holidays, a page for 2026 points to one fixed calendar date rather than repeating annually.",
     ],
-    relatedEventSlugs: ["new-year", "2027", "2028", "christmas", "summer"],
+    relatedEventSlugs: ["new-year", "2027", "2028", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -415,7 +415,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "Year countdowns are useful for planning long-term goals, deadlines, travel, and milestone events.",
       "Unlike recurring holidays, a page for 2027 points to one fixed calendar date rather than repeating annually.",
     ],
-    relatedEventSlugs: ["new-year", "2028", "2030", "christmas", "summer"],
+    relatedEventSlugs: ["new-year", "2028", "2030", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -431,7 +431,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A countdown to 2028 is useful for multi-year planning, financial goals, and long-range project timelines.",
       "It is a one-off target date rather than a recurring annual holiday or weekday cycle.",
     ],
-    relatedEventSlugs: ["new-year", "2027", "2030", "christmas", "summer"],
+    relatedEventSlugs: ["new-year", "2027", "2030", "christmas", "friday"],
     indexable: true,
   },
   {
@@ -447,7 +447,7 @@ export const seoHubEvents: SeoHubEventDefinition[] = [
       "A 2030 countdown is commonly used for long-term personal or business milestones, planning horizons, and deadline tracking.",
       "It gives a simple live answer to a fixed-year target without requiring users to enter the date manually.",
     ],
-    relatedEventSlugs: ["new-year", "2028", "2027", "christmas", "summer"],
+    relatedEventSlugs: ["new-year", "2028", "2027", "christmas", "friday"],
     indexable: true,
   },
 ];
