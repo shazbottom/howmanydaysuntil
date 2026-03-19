@@ -5,6 +5,8 @@ import { CountdownDisplay } from "./CountdownDisplay";
 import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
 import { ThemeToggle } from "./ThemeToggle";
 
+const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
+
 export interface SeoCountdownPageProps {
   eyebrow: string;
   title: string;
@@ -75,7 +77,15 @@ export function SeoCountdownPage({
                 </div>
               </div>
             ) : null}
-            <CountdownDisplay label={countdownLabel} countdown={countdown} />
+            <CountdownDisplay
+              label={countdownLabel}
+              countdown={countdown}
+              headerColorClassName={
+                showChristmasFlyby
+                  ? CHRISTMAS_HEADER_COLOR_CLASS_NAME
+                  : undefined
+              }
+            />
           </div>
           {supportingCopy.length > 0 ? (
             <div className="mt-8 max-w-2xl space-y-4 text-left text-sm leading-6 text-black/65 dark:text-white/66 sm:text-base">

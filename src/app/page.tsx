@@ -59,6 +59,7 @@ const MAJOR_EVENT_SLUGS = [
 ] as const;
 
 const CHRISTMAS_FLYBY_FRAME = "/seasonal/1.svg";
+const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
 
 function isSameLocalDay(left: Date, right: Date): boolean {
   return (
@@ -432,7 +433,11 @@ export default function Home() {
               label={resolvedState?.label ?? "Countdown"}
               countdown={resolvedState?.countdown ?? null}
               fullHeightWhenEmpty
-              headerColorClassName="bg-[#6495ED] dark:bg-[#4b74be]"
+              headerColorClassName={
+                showChristmasFlyby
+                  ? CHRISTMAS_HEADER_COLOR_CLASS_NAME
+                  : "bg-[#6495ED] dark:bg-[#4b74be]"
+              }
             />
           </div>
         </section>
