@@ -2,11 +2,17 @@ import { getCountdown, type CountdownResult } from "./countdown";
 import { formatFullDate } from "./dateFormat";
 import { getCountryByCode, type CountryCode, type CountryDefinition } from "./countries";
 import {
+  getEventsForRegion,
   getLocalizedEventByCountryAndSlug,
   getLocalizedEventsForCountry,
+  getRegionEventByRegionAndSlug,
   type LocalizedEventDefinition,
   type LocalizedEventRule,
 } from "./events";
+import {
+  getRegionByCountryAndSlug,
+  type RegionDefinition,
+} from "./regions";
 
 interface TimeZoneDateParts {
   year: number;
@@ -40,6 +46,17 @@ export interface LocalizedDateCountdownPageData {
   todayLabel: string;
   targetDateLabel: string;
   dateSlug: string;
+}
+
+export interface LocalizedRegionCountdownPageData {
+  country: CountryDefinition;
+  region: RegionDefinition;
+  event: LocalizedEventDefinition;
+  targetDate: Date;
+  countdown: CountdownResult;
+  todayLabel: string;
+  targetDateLabel: string;
+  occurrenceRows: LocalizedOccurrenceRow[];
 }
 
 export interface LocalizedHubEventLink {
@@ -299,6 +316,105 @@ export function getLocalizedDateCountdownPageData(
   };
 }
 
+function formatDateForLocaleAndTimeZone(
+  date: Date,
+  locale: string,
+  timeZone: string,
+): string {
+  return new Intl.DateTimeFormat(locale, {
+    timeZone,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+export function getRegionTodayLabel(
+  region: RegionDefinition,
+  locale: string,
+  now: Date = new Date(),
+): string {
+  return new Intl.DateTimeFormat(locale, {
+    timeZone: region.timezone,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(now);
+}
+
+export function getRegionalCountdownPageData(
+  countryCode: CountryCode,
+  regionSlug: string,
+  eventSlug: string,
+  now: Date = new Date(),
+): LocalizedRegionCountdownPageData | null {
+  const country = getCountryByCode(countryCode);
+  const region = getRegionByCountryAndSlug(countryCode, regionSlug);
+  const event = region ? getRegionEventByRegionAndSlug(region, eventSlug) : null;
+
+  if (!country || !region || !event) {
+    return null;
+  }
+
+  const nowParts = getTimeZoneDateParts(now, region.timezone);
+  let targetYear = nowParts.year;
+  let targetOccurrence = getOccurrencePartsForYear(event.rule, targetYear);
+
+  if (compareDateParts(targetOccurrence, nowParts) < 0) {
+    targetYear += 1;
+    targetOccurrence = getOccurrencePartsForYear(event.rule, targetYear);
+  }
+
+  const targetDate =
+    compareDateParts(targetOccurrence, nowParts) === 0
+      ? now
+      : createDateInTimeZone(
+          targetOccurrence.year,
+          targetOccurrence.month,
+          targetOccurrence.day,
+          region.timezone,
+        );
+
+  const countdown = getCountdown(targetDate, now);
+  const firstOccurrenceYear =
+    compareDateParts(targetOccurrence, nowParts) < 0 ? targetYear + 1 : targetYear;
+  const occurrenceRows = Array.from({ length: 5 }, (_, index) => {
+    const occurrenceDate = createDateInTimeZone(
+      getOccurrencePartsForYear(event.rule, firstOccurrenceYear + index).year,
+      getOccurrencePartsForYear(event.rule, firstOccurrenceYear + index).month,
+      getOccurrencePartsForYear(event.rule, firstOccurrenceYear + index).day,
+      region.timezone,
+    );
+
+    return {
+      year: firstOccurrenceYear + index,
+      formattedDate: new Intl.DateTimeFormat(country.locale, {
+        timeZone: region.timezone,
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(occurrenceDate),
+      dayOfWeek: new Intl.DateTimeFormat(country.locale, {
+        timeZone: region.timezone,
+        weekday: "long",
+      }).format(occurrenceDate),
+    };
+  });
+
+  return {
+    country,
+    region,
+    event,
+    targetDate,
+    countdown,
+    todayLabel: getRegionTodayLabel(region, country.locale, now),
+    targetDateLabel: formatDateForLocaleAndTimeZone(targetDate, country.locale, region.timezone),
+    occurrenceRows,
+  };
+}
+
 export function getLocalizedCountdownPageData(
   countryCode: CountryCode,
   eventSlug: string,
@@ -403,6 +519,53 @@ export function getUpcomingLocalizedEventLinksForCountry(
 
       return {
         href: `/${countryCode}/days-until/${event.slug}`,
+        label: event.displayName,
+        daysRemaining: pageData.countdown.daysRemaining,
+        targetDate: pageData.targetDate,
+      };
+    })
+    .filter(
+      (
+        eventLink,
+      ): eventLink is LocalizedUpcomingEventLink & { targetDate: Date } => eventLink !== null,
+    )
+    .sort((left, right) => {
+      if (left.daysRemaining !== right.daysRemaining) {
+        return left.daysRemaining - right.daysRemaining;
+      }
+
+      return left.targetDate.getTime() - right.targetDate.getTime();
+    })
+    .slice(0, limit)
+    .map(({ href, label, daysRemaining }) => ({
+      href,
+      label,
+      daysRemaining,
+    }));
+}
+
+export function getUpcomingLocalizedEventLinksForRegion(
+  countryCode: CountryCode,
+  regionSlug: string,
+  now: Date = new Date(),
+  limit = 5,
+): LocalizedUpcomingEventLink[] {
+  const region = getRegionByCountryAndSlug(countryCode, regionSlug);
+
+  if (!region) {
+    return [];
+  }
+
+  return getEventsForRegion(region)
+    .map((event) => {
+      const pageData = getRegionalCountdownPageData(countryCode, regionSlug, event.slug, now);
+
+      if (!pageData) {
+        return null;
+      }
+
+      return {
+        href: `/${countryCode}/${regionSlug}/days-until/${event.slug}`,
         label: event.displayName,
         daysRemaining: pageData.countdown.daysRemaining,
         targetDate: pageData.targetDate,

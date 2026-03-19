@@ -1,4 +1,5 @@
 import type { CountryCode } from "./countries";
+import type { RegionDefinition } from "./regions";
 import { getSeoLandingPath } from "./seoLandingPages";
 
 export type LocalizedEventRule =
@@ -21,7 +22,9 @@ export type LocalizedEventRule =
 export interface LocalizedEventDefinition {
   slug: string;
   displayName: string;
-  countries: CountryCode[] | "all";
+  scope: "global" | "country" | "region";
+  appliesToCountries?: CountryCode[] | "all";
+  appliesToRegions?: string[];
   rule: LocalizedEventRule;
   canonicalStrategy: "global" | "self";
 }
@@ -30,72 +33,99 @@ export const localizedEvents: LocalizedEventDefinition[] = [
   {
     slug: "christmas",
     displayName: "Christmas",
-    countries: "all",
+    scope: "global",
+    appliesToCountries: "all",
     rule: { type: "fixed-date", month: 12, day: 25 },
     canonicalStrategy: "global",
   },
   {
     slug: "new-year",
     displayName: "New Year",
-    countries: "all",
+    scope: "global",
+    appliesToCountries: "all",
     rule: { type: "fixed-date", month: 1, day: 1 },
     canonicalStrategy: "global",
   },
   {
     slug: "halloween",
     displayName: "Halloween",
-    countries: "all",
+    scope: "global",
+    appliesToCountries: "all",
     rule: { type: "fixed-date", month: 10, day: 31 },
     canonicalStrategy: "global",
   },
   {
     slug: "australia-day",
     displayName: "Australia Day",
-    countries: ["au"],
+    scope: "country",
+    appliesToCountries: ["au"],
     rule: { type: "fixed-date", month: 1, day: 26 },
     canonicalStrategy: "self",
   },
   {
     slug: "anzac-day",
     displayName: "ANZAC Day",
-    countries: ["au"],
+    scope: "country",
+    appliesToCountries: ["au"],
     rule: { type: "fixed-date", month: 4, day: 25 },
     canonicalStrategy: "self",
   },
   {
     slug: "bonfire-night",
     displayName: "Bonfire Night",
-    countries: ["uk"],
+    scope: "country",
+    appliesToCountries: ["uk"],
     rule: { type: "fixed-date", month: 11, day: 5 },
     canonicalStrategy: "self",
   },
   {
     slug: "mothers-day",
     displayName: "Mother's Day",
-    countries: ["uk"],
+    scope: "country",
+    appliesToCountries: ["uk"],
     rule: { type: "easter-offset", offsetDays: -21 },
     canonicalStrategy: "self",
   },
   {
     slug: "thanksgiving",
     displayName: "Thanksgiving",
-    countries: ["us"],
+    scope: "country",
+    appliesToCountries: ["us"],
     rule: { type: "nth-weekday", month: 11, weekday: 4, occurrence: 4 },
     canonicalStrategy: "self",
   },
   {
     slug: "fathers-day",
     displayName: "Father's Day",
-    countries: ["us"],
+    scope: "country",
+    appliesToCountries: ["us"],
     rule: { type: "nth-weekday", month: 6, weekday: 0, occurrence: 3 },
     canonicalStrategy: "self",
   },
 ];
 
+function appliesToCountry(event: LocalizedEventDefinition, countryCode: CountryCode): boolean {
+  return event.appliesToCountries === "all" || event.appliesToCountries?.includes(countryCode) === true;
+}
+
 export function getLocalizedEventsForCountry(countryCode: CountryCode): LocalizedEventDefinition[] {
   return localizedEvents.filter(
-    (event) => event.countries === "all" || event.countries.includes(countryCode),
+    (event) => event.scope !== "region" && appliesToCountry(event, countryCode),
   );
+}
+
+export function getEventsForCountry(countryCode: CountryCode): LocalizedEventDefinition[] {
+  return getLocalizedEventsForCountry(countryCode);
+}
+
+export function getEventsForRegion(region: RegionDefinition): LocalizedEventDefinition[] {
+  return localizedEvents.filter((event) => {
+    if (event.scope !== "region") {
+      return false;
+    }
+
+    return event.appliesToRegions?.includes(`${region.countryCode}/${region.slug}`) === true;
+  });
 }
 
 export function getLocalizedEventByCountryAndSlug(
@@ -105,6 +135,13 @@ export function getLocalizedEventByCountryAndSlug(
   return (
     getLocalizedEventsForCountry(countryCode).find((event) => event.slug === slug) ?? null
   );
+}
+
+export function getRegionEventByRegionAndSlug(
+  region: RegionDefinition,
+  slug: string,
+): LocalizedEventDefinition | null {
+  return getEventsForRegion(region).find((event) => event.slug === slug) ?? null;
 }
 
 export function getLocalizedEventCanonicalPath(
