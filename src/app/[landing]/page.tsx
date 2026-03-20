@@ -46,8 +46,12 @@ export async function generateMetadata({
 
   const { targetDate, countdown } = resolvedCountdown;
   const targetYear = targetDate.getFullYear();
-  const title = `How Many Days Until ${event.name} ${targetYear}? (Live Countdown)`;
-  const description = `There are ${countdown.daysRemaining} days until ${event.name} ${targetYear}. See a live countdown including weeks, hours, and minutes remaining.`;
+  const eventLabel =
+    event.category === "year" || event.name.includes(String(targetYear))
+      ? event.name
+      : `${event.name} ${targetYear}`;
+  const title = `How Many Days Until ${eventLabel}? (Live Countdown)`;
+  const description = `There are ${countdown.daysRemaining} days until ${eventLabel}. See a live countdown including weeks, hours, and minutes remaining.`;
   const canonicalPath = getSeoLandingPath(event.slug);
   const ogImageUrl = `/days-until/${event.slug}/opengraph-image`;
 
