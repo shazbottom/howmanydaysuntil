@@ -2,6 +2,7 @@ import type { CountryCode } from "./countries";
 import type { RegionDefinition } from "./regions";
 import { buildRegionEventUrl, getRegionById, getRegionId } from "./regions";
 import { getSeoLandingPath } from "./seoLandingPages";
+import { hasRegionReferenceData } from "./regionData";
 
 export type LocalizedEventRule =
   | {
@@ -429,6 +430,17 @@ export function hasIndexableRegionContent(regionId: string): boolean {
 
   if (!region) {
     return false;
+  }
+
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: region.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
+
+  if (hasRegionReferenceData(regionId, currentYear)) {
+    return true;
   }
 
   return getEventsForRegion(region).some((event) => {

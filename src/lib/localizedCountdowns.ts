@@ -545,6 +545,53 @@ export function getUpcomingLocalizedEventLinksForCountry(
     }));
 }
 
+const NATIONAL_HOLIDAY_EVENT_SLUGS = new Set([
+  "christmas",
+  "new-year",
+  "australia-day",
+  "anzac-day",
+  "thanksgiving",
+]);
+
+export function getNationalHolidayLinksForCountry(
+  countryCode: CountryCode,
+  now: Date = new Date(),
+): LocalizedUpcomingEventLink[] {
+  return getLocalizedEventsForCountry(countryCode)
+    .filter((event) => NATIONAL_HOLIDAY_EVENT_SLUGS.has(event.slug))
+    .map((event) => {
+      const pageData = getLocalizedCountdownPageData(countryCode, event.slug, now);
+
+      if (!pageData) {
+        return null;
+      }
+
+      return {
+        href: `/${countryCode}/days-until/${event.slug}`,
+        label: event.displayName,
+        daysRemaining: pageData.countdown.daysRemaining,
+        targetDate: pageData.targetDate,
+      };
+    })
+    .filter(
+      (
+        eventLink,
+      ): eventLink is LocalizedUpcomingEventLink & { targetDate: Date } => eventLink !== null,
+    )
+    .sort((left, right) => {
+      if (left.daysRemaining !== right.daysRemaining) {
+        return left.daysRemaining - right.daysRemaining;
+      }
+
+      return left.targetDate.getTime() - right.targetDate.getTime();
+    })
+    .map(({ href, label, daysRemaining }) => ({
+      href,
+      label,
+      daysRemaining,
+    }));
+}
+
 export function getUpcomingLocalizedEventLinksForRegion(
   countryCode: CountryCode,
   regionSlug: string,
@@ -558,6 +605,54 @@ export function getUpcomingLocalizedEventLinksForRegion(
   }
 
   return getEventsForRegion(region)
+    .map((event) => {
+      const pageData = getRegionalCountdownPageData(countryCode, regionSlug, event.slug, now);
+
+      if (!pageData) {
+        return null;
+      }
+
+      return {
+        href: buildRegionEventUrl(region, event.slug),
+        label: event.displayName,
+        daysRemaining: pageData.countdown.daysRemaining,
+        targetDate: pageData.targetDate,
+      };
+    })
+    .filter(
+      (
+        eventLink,
+      ): eventLink is LocalizedUpcomingEventLink & { targetDate: Date } => eventLink !== null,
+    )
+    .sort((left, right) => {
+      if (left.daysRemaining !== right.daysRemaining) {
+        return left.daysRemaining - right.daysRemaining;
+      }
+
+      return left.targetDate.getTime() - right.targetDate.getTime();
+    })
+    .slice(0, limit)
+    .map(({ href, label, daysRemaining }) => ({
+      href,
+      label,
+      daysRemaining,
+    }));
+}
+
+export function getFeaturedLocalizedEventLinksForRegion(
+  countryCode: CountryCode,
+  regionSlug: string,
+  now: Date = new Date(),
+  limit = 5,
+): LocalizedUpcomingEventLink[] {
+  const region = getRegionByCountryAndSlug(countryCode, regionSlug);
+
+  if (!region) {
+    return [];
+  }
+
+  return getEventsForRegion(region)
+    .filter((event) => event.featured?.regions?.includes(region.id))
     .map((event) => {
       const pageData = getRegionalCountdownPageData(countryCode, regionSlug, event.slug, now);
 

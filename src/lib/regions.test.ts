@@ -13,6 +13,7 @@ import {
   getRegionById,
   resolveRegionByCountryAndSlug,
 } from "./regions";
+import { getRegionReferenceData } from "./regionData";
 
 test("canonical region slug resolves directly", () => {
   const resolved = resolveRegionByCountryAndSlug("au", "victoria");
@@ -126,6 +127,68 @@ test("australian region events do not resolve for invalid regions", () => {
   }
 });
 
+test("uk canonical region slugs resolve directly", () => {
+  const england = resolveRegionByCountryAndSlug("uk", "england");
+  const scotland = resolveRegionByCountryAndSlug("uk", "scotland");
+  const wales = resolveRegionByCountryAndSlug("uk", "wales");
+  const northernIreland = resolveRegionByCountryAndSlug("uk", "northern-ireland");
+
+  assert.ok(england);
+  assert.ok(scotland);
+  assert.ok(wales);
+  assert.ok(northernIreland);
+  assert.equal(england.region.id, "uk-england");
+  assert.equal(scotland.region.id, "uk-scotland");
+  assert.equal(wales.region.id, "uk-wales");
+  assert.equal(northernIreland.region.id, "uk-northern-ireland");
+});
+
+test("uk region reference data is available for 2026", () => {
+  const england = getRegionReferenceData("uk-england", 2026);
+  const scotland = getRegionReferenceData("uk-scotland", 2026);
+  const wales = getRegionReferenceData("uk-wales", 2026);
+  const northernIreland = getRegionReferenceData("uk-northern-ireland", 2026);
+
+  assert.ok(england);
+  assert.ok(scotland);
+  assert.ok(wales);
+  assert.ok(northernIreland);
+  assert.equal(england.publicHolidays.length > 0, true);
+  assert.equal(scotland.schoolTerms.length > 0, true);
+  assert.equal(wales.schoolTerms.length > 0, true);
+  assert.equal(northernIreland.publicHolidays.length > 0, true);
+});
+
+test("new zealand region reference data is available for 2026", () => {
+  const auckland = getRegionReferenceData("nz-auckland", 2026);
+  const canterbury = getRegionReferenceData("nz-canterbury", 2026);
+  const wellington = getRegionReferenceData("nz-wellington", 2026);
+
+  assert.ok(auckland);
+  assert.ok(canterbury);
+  assert.ok(wellington);
+  assert.equal(auckland.publicHolidays.some((row) => row.name === "Auckland Anniversary Day"), true);
+  assert.equal(canterbury.publicHolidays.some((row) => row.name === "Canterbury Anniversary Day"), true);
+  assert.equal(wellington.publicHolidays.some((row) => row.name === "Wellington Anniversary Day"), true);
+  assert.equal(auckland.schoolTerms.length > 0, true);
+});
+
+test("canadian region reference data is available for 2026", () => {
+  const alberta = getRegionReferenceData("ca-ab", 2026);
+  const britishColumbia = getRegionReferenceData("ca-bc", 2026);
+  const ontario = getRegionReferenceData("ca-on", 2026);
+  const quebec = getRegionReferenceData("ca-qc", 2026);
+
+  assert.ok(alberta);
+  assert.ok(britishColumbia);
+  assert.ok(ontario);
+  assert.ok(quebec);
+  assert.equal(alberta.publicHolidays.some((row) => row.name === "Alberta Family Day"), true);
+  assert.equal(britishColumbia.publicHolidays.some((row) => row.name === "B.C. Day"), true);
+  assert.equal(ontario.publicHolidays.some((row) => row.name === "Family Day"), true);
+  assert.equal(quebec.publicHolidays.some((row) => row.name === "National Patriots' Day"), true);
+});
+
 test("canonical URLs for australian region events use canonical full slugs", () => {
   const victoria = getRegionById("au-vic");
   const act = getRegionById("au-act");
@@ -161,6 +224,17 @@ test("sitemap does not include legacy region slugs", () => {
 
   assert.equal(urls.includes("https://daysuntil.is/au/vic"), false);
   assert.equal(urls.includes("https://daysuntil.is/ca/on"), false);
+  assert.equal(urls.includes("https://daysuntil.is/uk/england"), true);
+  assert.equal(urls.includes("https://daysuntil.is/uk/scotland"), true);
+  assert.equal(urls.includes("https://daysuntil.is/uk/wales"), true);
+  assert.equal(urls.includes("https://daysuntil.is/uk/northern-ireland"), true);
+  assert.equal(urls.includes("https://daysuntil.is/nz/auckland"), true);
+  assert.equal(urls.includes("https://daysuntil.is/nz/canterbury"), true);
+  assert.equal(urls.includes("https://daysuntil.is/nz/wellington"), true);
+  assert.equal(urls.includes("https://daysuntil.is/ca/alberta"), true);
+  assert.equal(urls.includes("https://daysuntil.is/ca/british-columbia"), true);
+  assert.equal(urls.includes("https://daysuntil.is/ca/ontario"), true);
+  assert.equal(urls.includes("https://daysuntil.is/ca/quebec"), true);
   assert.equal(
     urls.includes("https://daysuntil.is/au/victoria/days-until/melbourne-cup"),
     true,

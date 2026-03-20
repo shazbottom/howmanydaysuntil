@@ -13,8 +13,9 @@ import {
   getLocalizedCountdownPageData,
   getLocalizedDateCountdownPageData,
   getPopularLocalizedEventLinksForCountry,
-  getUpcomingLocalizedEventLinksForCountry,
 } from "./localizedCountdowns";
+import { getRegionsForCountry } from "./regions";
+import { getCountryReferenceData } from "./countryData";
 
 export function getLocalizedCountryCodes(): CountryCode[] {
   return countries.map((country) => country.code);
@@ -22,6 +23,12 @@ export function getLocalizedCountryCodes(): CountryCode[] {
 
 export function renderCountryHub(countryCode: CountryCode) {
   const country = getCountryByCode(countryCode);
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: country?.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
 
   if (!country) {
     notFound();
@@ -32,7 +39,9 @@ export function renderCountryHub(countryCode: CountryCode) {
       country={country}
       todayLabel={getCountryTodayLabel(country)}
       popularLinks={getPopularLocalizedEventLinksForCountry(countryCode)}
-      upcomingLinks={getUpcomingLocalizedEventLinksForCountry(countryCode)}
+      currentYear={currentYear}
+      nationalHolidayRows={getCountryReferenceData(countryCode, currentYear)}
+      regionLinks={getRegionsForCountry(countryCode)}
     />
   );
 }

@@ -159,6 +159,7 @@ export const regions: RegionDefinition[] = [
     countryCode: "uk",
     slug: "northern-ireland",
     name: "Northern Ireland",
+    shortName: "NI",
     timezone: "Europe/London",
   },
   {

@@ -11,9 +11,8 @@ import {
 import {
   getRegionTodayLabel,
   getRegionalCountdownPageData,
-  getSecondaryGlobalEventLinksForRegion,
-  getUpcomingLocalizedEventLinksForRegion,
 } from "./localizedCountdowns";
+import { getRegionReferenceData } from "./regionData";
 import {
   getRegionByCountryAndSlug,
   getRegionId,
@@ -54,6 +53,12 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
   const country = getCountryByCode(countryCode);
   const resolvedRegion = resolveRegionByCountryAndSlug(countryCode, regionSlug);
   const region = resolvedRegion?.region ?? null;
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: region?.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
 
   if (!country || !region) {
     notFound();
@@ -68,8 +73,11 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
       country={country}
       region={region}
       todayLabel={getRegionTodayLabel(region, country.locale)}
-      upcomingLinks={getUpcomingLocalizedEventLinksForRegion(countryCode, regionSlug)}
-      secondaryGlobalLinks={getSecondaryGlobalEventLinksForRegion(countryCode)}
+      currentYear={currentYear}
+      referenceData={getRegionReferenceData(getRegionId(region), currentYear)}
+      siblingRegions={getRegionsForCountry(countryCode).filter(
+        (candidateRegion) => candidateRegion.id !== region.id,
+      )}
     />
   );
 }
@@ -90,10 +98,17 @@ export function getRegionHubMetadata(
 
   const regionName = region.seoName ?? region.name;
   const isIndexable = hasIndexableRegionContent(getRegionId(region));
+  const regionQualifier = region.shortName ? `${regionName} (${region.shortName})` : regionName;
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: region.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
 
   return {
-    title: `Days Until Events in ${regionName}, ${country.name} | DaysUntil`,
-    description: `Track how many days until upcoming events and holidays in ${regionName}, ${country.name} with live countdowns.`,
+    title: `Public holidays and school term dates in ${regionQualifier} ${currentYear} | DaysUntil`,
+    description: `Check public holidays and school term dates in ${regionQualifier}, ${country.name} for ${currentYear}.`,
     alternates: {
       canonical: `/${country.code}/${region.slug}`,
     },
