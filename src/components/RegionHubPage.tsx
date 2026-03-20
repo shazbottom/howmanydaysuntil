@@ -31,12 +31,14 @@ export function RegionHubPage({
   const showSchoolTermNotes = schoolTermRows.some((row) => Boolean(row.notes));
 
   function formatShortDate(dateText: string) {
+    const [year, month, day] = dateText.split("-").map(Number);
+
     return new Intl.DateTimeFormat(country.locale, {
-      timeZone: region.timezone,
+      timeZone: "UTC",
       weekday: "long",
       day: "numeric",
       month: "long",
-    }).format(new Date(`${dateText}T00:00:00`));
+    }).format(new Date(Date.UTC(year, month - 1, day)));
   }
 
   function formatDateValue(dateText?: string, label?: string) {

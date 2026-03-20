@@ -4,18 +4,14 @@ import { CountryHubPage } from "../components/CountryHubPage";
 import { LocalizedDateCountdownPage } from "../components/LocalizedDateCountdownPage";
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
-import {
-  getCanonicalUrl,
-  getLocalizedEventsForCountry,
-} from "./events";
+import { getCanonicalUrl, getLocalizedEventsForCountry } from "./events";
+import { getCountryReferenceData } from "./countryData";
 import {
   getCountryTodayLabel,
   getLocalizedCountdownPageData,
   getLocalizedDateCountdownPageData,
   getPopularLocalizedEventLinksForCountry,
 } from "./localizedCountdowns";
-import { getRegionsForCountry } from "./regions";
-import { getCountryReferenceData } from "./countryData";
 
 export function getLocalizedCountryCodes(): CountryCode[] {
   return countries.map((country) => country.code);
@@ -23,16 +19,17 @@ export function getLocalizedCountryCodes(): CountryCode[] {
 
 export function renderCountryHub(countryCode: CountryCode) {
   const country = getCountryByCode(countryCode);
-  const currentYear = Number(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: country?.timezone,
-      year: "numeric",
-    }).format(new Date()),
-  );
 
   if (!country) {
     notFound();
   }
+
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: country.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
 
   return (
     <CountryHubPage
@@ -41,7 +38,6 @@ export function renderCountryHub(countryCode: CountryCode) {
       popularLinks={getPopularLocalizedEventLinksForCountry(countryCode)}
       currentYear={currentYear}
       nationalHolidayRows={getCountryReferenceData(countryCode, currentYear)}
-      regionLinks={getRegionsForCountry(countryCode)}
     />
   );
 }

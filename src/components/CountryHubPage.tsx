@@ -5,7 +5,6 @@ import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
-import type { RegionDefinition } from "../lib/regions";
 import type { CountryPublicHolidayRow } from "../lib/countryData";
 
 export interface CountryHubPageProps {
@@ -14,7 +13,6 @@ export interface CountryHubPageProps {
   popularLinks: LocalizedHubEventLink[];
   currentYear: number;
   nationalHolidayRows: CountryPublicHolidayRow[];
-  regionLinks: RegionDefinition[];
 }
 
 export function CountryHubPage({
@@ -23,27 +21,19 @@ export function CountryHubPage({
   popularLinks,
   currentYear,
   nationalHolidayRows,
-  regionLinks,
 }: CountryHubPageProps) {
-  const regionLabel =
-    country.code === "au"
-      ? "States"
-      : country.code === "ca"
-        ? "Provinces"
-      : country.code === "uk"
-        ? "Countries"
-        : "Regions";
+  const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
 
   function formatShortDate(dateText: string) {
+    const [year, month, day] = dateText.split("-").map(Number);
+
     return new Intl.DateTimeFormat(country.locale, {
-      timeZone: country.timezone,
+      timeZone: "UTC",
       weekday: "long",
       day: "numeric",
       month: "long",
-    }).format(new Date(`${dateText}T00:00:00`));
+    }).format(new Date(Date.UTC(year, month - 1, day)));
   }
-
-  const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -141,28 +131,12 @@ export function CountryHubPage({
               </div>
             </div>
           </div>
-          <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
-            {regionLinks.length > 0 ? (
-              <>
-                <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
-                {regionLinks.map((region) => (
-                  <Link
-                    key={region.id}
-                    href={`/${country.code}/${region.slug}`}
-                    className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
-                  >
-                    {region.shortName ?? region.name}
-                  </Link>
-                ))}
-              </>
-            ) : null}
-            <Link
-              href="/"
-              className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
-            >
-              Home
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="mt-10 text-sm text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
+          >
+            Home
+          </Link>
         </section>
       </div>
     </main>
