@@ -107,8 +107,8 @@ export function getRegionHubMetadata(
   );
 
   return {
-    title: `Public holidays and school term dates in ${regionQualifier} ${currentYear} | DaysUntil`,
-    description: `Check public holidays and school term dates in ${regionQualifier}, ${country.name} for ${currentYear}.`,
+    title: `Public holidays and school holidays in ${regionQualifier} ${currentYear} | DaysUntil`,
+    description: `Check public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${currentYear}.`,
     alternates: {
       canonical: `/${country.code}/${region.slug}`,
     },

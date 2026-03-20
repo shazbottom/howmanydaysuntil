@@ -54,9 +54,16 @@ export function getCountryHubMetadata(countryCode: CountryCode): Metadata {
     };
   }
 
+  const currentYear = Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: country.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
+
   return {
-    title: `Days Until Events in ${country.name} | Countdown Timers`,
-    description: `Track how many days until upcoming events in ${country.name}, including holidays and key dates with live countdowns.`,
+    title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
+    description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
     alternates: {
       canonical: `/${country.code}`,
     },
