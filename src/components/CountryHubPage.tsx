@@ -5,6 +5,7 @@ import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
+import type { RegionDefinition } from "../lib/regions";
 import type { CountryPublicHolidayRow } from "../lib/countryData";
 
 export interface CountryHubPageProps {
@@ -13,6 +14,7 @@ export interface CountryHubPageProps {
   popularLinks: LocalizedHubEventLink[];
   currentYear: number;
   nationalHolidayRows: CountryPublicHolidayRow[];
+  regionLinks: RegionDefinition[];
 }
 
 export function CountryHubPage({
@@ -21,7 +23,16 @@ export function CountryHubPage({
   popularLinks,
   currentYear,
   nationalHolidayRows,
+  regionLinks,
 }: CountryHubPageProps) {
+  const regionLabel =
+    country.code === "au"
+      ? "States"
+      : country.code === "ca"
+        ? "Provinces"
+        : country.code === "uk"
+          ? "Countries"
+          : "Regions";
   const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
 
   function formatShortDate(dateText: string) {
@@ -131,12 +142,28 @@ export function CountryHubPage({
               </div>
             </div>
           </div>
-          <Link
-            href="/"
-            className="mt-10 text-sm text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
-          >
-            Home
-          </Link>
+          <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
+            {regionLinks.length > 0 ? (
+              <>
+                <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
+                {regionLinks.map((region) => (
+                  <Link
+                    key={region.id}
+                    href={`/${country.code}/${region.slug}`}
+                    className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
+                  >
+                    {region.shortName ?? region.name}
+                  </Link>
+                ))}
+              </>
+            ) : null}
+            <Link
+              href="/"
+              className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
+            >
+              Home
+            </Link>
+          </div>
         </section>
       </div>
     </main>
