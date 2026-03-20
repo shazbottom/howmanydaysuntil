@@ -122,6 +122,20 @@ export function RegionHubPage({
           <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-7xl">
             {region.name}
           </h1>
+          {siblingRegions.length > 0 ? (
+            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+              <span className="text-black/42 dark:text-white/44">Other regions</span>
+              {siblingRegions.map((siblingRegion) => (
+                <Link
+                  key={siblingRegion.id}
+                  href={`/${country.code}/${siblingRegion.slug}`}
+                  className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                >
+                  {siblingRegion.shortName ?? siblingRegion.name}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
             Public holidays and key dates in {regionQualifier}, {country.name}. Track{" "}
             {region.name} public holidays and {region.name} events with live countdowns.
@@ -223,20 +237,6 @@ export function RegionHubPage({
               </p>
             )}
           </div>
-          {siblingRegions.length > 0 ? (
-            <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
-              <span className="text-black/42 dark:text-white/44">Other regions</span>
-              {siblingRegions.map((siblingRegion) => (
-                <Link
-                  key={siblingRegion.id}
-                  href={`/${country.code}/${siblingRegion.slug}`}
-                  className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
-                >
-                  {siblingRegion.shortName ?? siblingRegion.name}
-                </Link>
-              ))}
-            </div>
-          ) : null}
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link
               href={`/${country.code}`}

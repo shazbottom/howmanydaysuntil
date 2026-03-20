@@ -74,6 +74,20 @@ export function CountryHubPage({
           <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-7xl">
             {country.name}
           </h1>
+          {regionLinks.length > 0 ? (
+            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+              <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
+              {regionLinks.map((region) => (
+                <Link
+                  key={region.id}
+                  href={`/${country.code}/${region.slug}`}
+                  className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                >
+                  {region.shortName ?? region.name}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
             Find out how many days until important dates in {country.name}, including national
             holidays, celebrations, and key events. Use our live countdowns to track upcoming
@@ -143,20 +157,6 @@ export function CountryHubPage({
             </div>
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
-            {regionLinks.length > 0 ? (
-              <>
-                <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
-                {regionLinks.map((region) => (
-                  <Link
-                    key={region.id}
-                    href={`/${country.code}/${region.slug}`}
-                    className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
-                  >
-                    {region.shortName ?? region.name}
-                  </Link>
-                ))}
-              </>
-            ) : null}
             <Link
               href="/"
               className="text-black/65 underline-offset-4 transition hover:text-black hover:underline dark:text-white/66 dark:hover:text-white"
