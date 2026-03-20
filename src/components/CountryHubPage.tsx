@@ -35,12 +35,14 @@ export function CountryHubPage({
         : "Regions";
 
   function formatShortDate(dateText: string) {
+    const [year, month, day] = dateText.split("-").map(Number);
+
     return new Intl.DateTimeFormat(country.locale, {
-      timeZone: country.timezone,
+      timeZone: "UTC",
       weekday: "long",
       day: "numeric",
       month: "long",
-    }).format(new Date(`${dateText}T00:00:00`));
+    }).format(new Date(Date.UTC(year, month - 1, day)));
   }
 
   const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
