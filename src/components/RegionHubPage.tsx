@@ -137,8 +137,8 @@ export function RegionHubPage({
             </div>
           ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Public holidays and key dates in {regionQualifier}, {country.name}. Track{" "}
-            {region.name} public holidays and {region.name} events with live countdowns.
+            Check public holidays and school term dates in {regionQualifier}, {country.name}. Below
+            is a quick reference for region-wide holiday dates and school calendar periods.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-black/48 dark:text-white/52 sm:text-base">
             Today in {region.name} is {todayLabel}.
@@ -153,6 +153,9 @@ export function RegionHubPage({
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Public holidays in {regionQualifier} {currentYear}
             </h2>
+            <p className="mt-4 text-sm leading-6 text-black/52 dark:text-white/56">
+              These are the main public holidays observed across {region.name} in {currentYear}.
+            </p>
             {publicHolidayRows.length > 0 ? (
               <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
                 <div
@@ -195,6 +198,10 @@ export function RegionHubPage({
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               School term dates in {region.name} {currentYear}
             </h2>
+            <p className="mt-4 text-sm leading-6 text-black/52 dark:text-white/56">
+              These school dates are provided as a region-wide reference for {region.name} in{" "}
+              {currentYear}.
+            </p>
             {schoolTermRows.length > 0 ? (
               <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
                 <div

@@ -89,9 +89,9 @@ export function CountryHubPage({
             </div>
           ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Find out how many days until important dates in {country.name}, including national
-            holidays, celebrations, and key events. Use our live countdowns to track upcoming
-            occasions.
+            Check public holidays in {country.name} and explore region pages for local public
+            holidays, school term dates, and key dates. Use our live countdowns to track upcoming
+            occasions across {country.name}.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-black/48 dark:text-white/52 sm:text-base">
             Today in {country.name} is {todayLabel}.
@@ -122,6 +122,11 @@ export function CountryHubPage({
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               National holidays {currentYear}
             </h2>
+            <p className="mt-4 text-sm leading-6 text-black/52 dark:text-white/56">
+              This table covers national public holidays observed across {country.name} in{" "}
+              {currentYear}. Use the region links above for local public holidays and school
+              dates.
+            </p>
             <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
               <div
                 className={`grid bg-[#f3f2ee] px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-black/48 dark:bg-[#1d1f1e] dark:text-white/50 ${
