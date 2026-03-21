@@ -67,6 +67,17 @@ export function getCountryHubMetadata(countryCode: CountryCode): Metadata {
     alternates: {
       canonical: `/${country.code}`,
     },
+    openGraph: {
+      title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
+      description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
+      url: `https://daysuntil.is/${country.code}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
+      description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
+    },
   };
 }
 

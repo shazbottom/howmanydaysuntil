@@ -106,11 +106,26 @@ export function getRegionHubMetadata(
     }).format(new Date()),
   );
 
+  const title = `Public holidays and school holidays in ${regionQualifier} ${currentYear} | DaysUntil`;
+  const description = `Check public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${currentYear}.`;
+  const canonicalPath = `/${country.code}/${region.slug}`;
+
   return {
-    title: `Public holidays and school holidays in ${regionQualifier} ${currentYear} | DaysUntil`,
-    description: `Check public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${currentYear}.`,
+    title,
+    description,
     alternates: {
-      canonical: `/${country.code}/${region.slug}`,
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://daysuntil.is${canonicalPath}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
     robots: {
       index: isIndexable,
