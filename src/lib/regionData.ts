@@ -404,6 +404,223 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-ca": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Cesar Chavez Day", date: "2026-03-31" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day", date: "2026-07-04" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "California school districts publish their own calendars. Use the official CDE school directory to reach your district calendar.",
+          notesHref: "https://www.cde.ca.gov/schooldirectory/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district's calendar through the California Department of Education directory.",
+          notesHref: "https://www.cde.ca.gov/schooldirectory/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district's calendar through the California Department of Education directory.",
+          notesHref: "https://www.cde.ca.gov/schooldirectory/",
+        },
+      ],
+    },
+  },
+  "us-fl": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+        { name: "New Year's Eve", date: "2026-12-31" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Florida district school boards publish their own calendars. Use the official district data page to reach your district.",
+          notesHref: "https://www.fldoe.org/accountability/data-sys/C329G124/default.stml",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Florida Department of Education district data page.",
+          notesHref: "https://www.fldoe.org/accountability/data-sys/C329G124/default.stml",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Florida Department of Education district data page.",
+          notesHref: "https://www.fldoe.org/accountability/data-sys/C329G124/default.stml",
+        },
+      ],
+    },
+  },
+  "us-il": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Lincoln's Birthday", date: "2026-02-12" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Illinois districts publish their own calendars. Use the official public school district lookup to find your district.",
+          notesHref: "https://www.isbe.net/Pages/Public-School-District-Lookup.aspx",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Illinois public school district lookup.",
+          notesHref: "https://www.isbe.net/Pages/Public-School-District-Lookup.aspx",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Illinois public school district lookup.",
+          notesHref: "https://www.isbe.net/Pages/Public-School-District-Lookup.aspx",
+        },
+      ],
+    },
+  },
+  "us-ny": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Lincoln's Birthday", date: "2026-02-12" },
+        { name: "Washington's Birthday", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "New York school districts publish their own calendars. Use the official district websites directory to reach your district.",
+          notesHref: "https://www.nysed.gov/state-assessment/directory-school-district-websites",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the New York State Education Department district directory.",
+          notesHref: "https://www.nysed.gov/state-assessment/directory-school-district-websites",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the New York State Education Department district directory.",
+          notesHref: "https://www.nysed.gov/state-assessment/directory-school-district-websites",
+        },
+      ],
+    },
+  },
+  "us-tx": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Texas Independence Day", date: "2026-03-02" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Emancipation Day in Texas", date: "2026-06-19" },
+        { name: "Independence Day", date: "2026-07-04" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Texas districts publish their own calendars. Use the official Texas school directory to reach your district.",
+          notesHref: "https://tea.texas.gov/texas-schools/general-information/finding-a-school-for-your-child/texas-school-directory",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Texas school directory.",
+          notesHref: "https://tea.texas.gov/texas-schools/general-information/finding-a-school-for-your-child/texas-school-directory",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Texas school directory.",
+          notesHref: "https://tea.texas.gov/texas-schools/general-information/finding-a-school-for-your-child/texas-school-directory",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [

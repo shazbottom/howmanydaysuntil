@@ -176,6 +176,46 @@ export const regions: RegionDefinition[] = [
     name: "Wales",
     timezone: "Europe/London",
   },
+  {
+    id: "us-ca",
+    countryCode: "us",
+    slug: "california",
+    shortName: "CA",
+    name: "California",
+    timezone: "America/Los_Angeles",
+  },
+  {
+    id: "us-fl",
+    countryCode: "us",
+    slug: "florida",
+    shortName: "FL",
+    name: "Florida",
+    timezone: "America/New_York",
+  },
+  {
+    id: "us-il",
+    countryCode: "us",
+    slug: "illinois",
+    shortName: "IL",
+    name: "Illinois",
+    timezone: "America/Chicago",
+  },
+  {
+    id: "us-ny",
+    countryCode: "us",
+    slug: "new-york",
+    shortName: "NY",
+    name: "New York",
+    timezone: "America/New_York",
+  },
+  {
+    id: "us-tx",
+    countryCode: "us",
+    slug: "texas",
+    shortName: "TX",
+    name: "Texas",
+    timezone: "America/Chicago",
+  },
 ];
 
 export function getRegionId(region: Pick<RegionDefinition, "id">): string {

@@ -38,6 +38,8 @@ export function CountryHubPage({
       ? "States"
       : country.code === "ca"
         ? "Provinces"
+        : country.code === "us"
+          ? "States"
         : country.code === "uk"
           ? "Countries"
           : "Regions";

@@ -189,6 +189,46 @@ test("canadian region reference data is available for 2026", () => {
   assert.equal(quebec.publicHolidays.some((row) => row.name === "National Patriots' Day"), true);
 });
 
+test("us canonical region slugs resolve directly", () => {
+  const california = resolveRegionByCountryAndSlug("us", "california");
+  const florida = resolveRegionByCountryAndSlug("us", "florida");
+  const illinois = resolveRegionByCountryAndSlug("us", "illinois");
+  const newYork = resolveRegionByCountryAndSlug("us", "new-york");
+  const texas = resolveRegionByCountryAndSlug("us", "texas");
+
+  assert.ok(california);
+  assert.ok(florida);
+  assert.ok(illinois);
+  assert.ok(newYork);
+  assert.ok(texas);
+  assert.equal(california.region.id, "us-ca");
+  assert.equal(florida.region.id, "us-fl");
+  assert.equal(illinois.region.id, "us-il");
+  assert.equal(newYork.region.id, "us-ny");
+  assert.equal(texas.region.id, "us-tx");
+});
+
+test("us region reference data is available for 2026", () => {
+  const california = getRegionReferenceData("us-ca", 2026);
+  const florida = getRegionReferenceData("us-fl", 2026);
+  const illinois = getRegionReferenceData("us-il", 2026);
+  const newYork = getRegionReferenceData("us-ny", 2026);
+  const texas = getRegionReferenceData("us-tx", 2026);
+
+  assert.ok(california);
+  assert.ok(florida);
+  assert.ok(illinois);
+  assert.ok(newYork);
+  assert.ok(texas);
+  assert.equal(california.publicHolidays.some((row) => row.name === "Cesar Chavez Day"), true);
+  assert.equal(florida.publicHolidays.some((row) => row.name === "Good Friday"), true);
+  assert.equal(illinois.publicHolidays.some((row) => row.name === "Lincoln's Birthday"), true);
+  assert.equal(newYork.publicHolidays.some((row) => row.name === "Election Day"), true);
+  assert.equal(texas.publicHolidays.some((row) => row.name === "Texas Independence Day"), true);
+  assert.equal(california.schoolTerms.length > 0, true);
+  assert.equal(texas.schoolTerms.length > 0, true);
+});
+
 test("canonical URLs for australian region events use canonical full slugs", () => {
   const victoria = getRegionById("au-vic");
   const act = getRegionById("au-act");
@@ -235,6 +275,11 @@ test("sitemap does not include legacy region slugs", () => {
   assert.equal(urls.includes("https://daysuntil.is/ca/british-columbia"), true);
   assert.equal(urls.includes("https://daysuntil.is/ca/ontario"), true);
   assert.equal(urls.includes("https://daysuntil.is/ca/quebec"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/california"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/florida"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/illinois"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/new-york"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/texas"), true);
   assert.equal(
     urls.includes("https://daysuntil.is/au/victoria/days-until/melbourne-cup"),
     true,
