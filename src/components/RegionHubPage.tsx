@@ -212,8 +212,22 @@ export function RegionHubPage({
             </div>
           ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Check public holidays and school term dates in {regionQualifier}, {country.name}. Below
-            is a quick reference for region-wide holiday dates and school calendar periods.
+            Check{" "}
+            <a
+              href="#public-holidays"
+              className="font-semibold text-black/72 underline underline-offset-4 transition hover:text-black dark:text-white/76 dark:hover:text-white"
+            >
+              public holidays
+            </a>{" "}
+            and{" "}
+            <a
+              href="#school-term-dates"
+              className="font-semibold text-black/72 underline underline-offset-4 transition hover:text-black dark:text-white/76 dark:hover:text-white"
+            >
+              school term dates
+            </a>{" "}
+            in {regionQualifier}, {country.name}. Below is a quick reference for region-wide
+            holiday dates and school calendar periods.
           </p>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-black/48 dark:text-white/52 sm:text-base">
             Today in {region.name} is {todayLabel}.
@@ -224,7 +238,10 @@ export function RegionHubPage({
             </h2>
             <CountryHubDateInput countryCode={country.code} />
           </div>
-          <div className="mt-12 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
+          <div
+            id="public-holidays"
+            className="mt-12 w-full max-w-3xl scroll-mt-24 rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8"
+          >
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Public holidays in {regionQualifier} {currentYear}
             </h2>
@@ -257,7 +274,10 @@ export function RegionHubPage({
               </p>
             )}
           </div>
-          <div className="mt-10 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
+          <div
+            id="school-term-dates"
+            className="mt-10 w-full max-w-3xl scroll-mt-24 rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8"
+          >
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               School term dates in {region.name} {currentYear}
             </h2>
