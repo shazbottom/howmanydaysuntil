@@ -92,6 +92,16 @@ function normalizeInput(input: string): string {
     .replace(/\s+/g, " ");
 }
 
+function stripCountdownQueryWrappers(normalized: string): string {
+  return normalized
+    .replace(/^how many more days (until|till|to) /, "")
+    .replace(/^how many days (until|till|to) /, "")
+    .replace(/^days (until|till|to) /, "")
+    .replace(/^day(s)? (until|till|to) /, "")
+    .replace(/^countdown to /, "")
+    .trim();
+}
+
 function createInvalidResult(
   raw: string,
   normalized: string,
@@ -350,12 +360,13 @@ export function parseInput(input: string): ParseResult {
   const raw = input;
   const collapsedInput = collapseWhitespace(input);
   const normalized = normalizeInput(collapsedInput);
+  const normalizedSubject = stripCountdownQueryWrappers(normalized);
 
   if (!normalized) {
     return createInvalidResult(raw, normalized, "Input is empty.");
   }
 
-  const matchedEvent = resolveKnownEvent(normalized);
+  const matchedEvent = resolveKnownEvent(normalizedSubject);
 
   if (matchedEvent) {
     const weekdayValue = resolveWeekdayEvent(matchedEvent);
@@ -377,7 +388,7 @@ export function parseInput(input: string): ParseResult {
     };
   }
 
-  const parsedYear = parseYear(normalized);
+  const parsedYear = parseYear(normalizedSubject);
 
   if (parsedYear) {
     return {
@@ -420,9 +431,12 @@ export const parseInputExamples: Array<{
 }> = [
   { input: "Christmas", expectedType: "event" },
   { input: "Xmas", expectedType: "event" },
+  { input: "how many days to xmas", expectedType: "event" },
+  { input: "days until xmas", expectedType: "event" },
   { input: "Thanksgiving", expectedType: "event" },
   { input: "Valentines Day", expectedType: "event" },
   { input: "2027", expectedType: "year" },
+  { input: "how many more days until 2027", expectedType: "year" },
   { input: "27", expectedType: "year" },
   { input: "25/12/2026", expectedType: "date" },
   { input: "25/12/26", expectedType: "date" },
