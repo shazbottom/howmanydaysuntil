@@ -39,7 +39,11 @@ export const regionData: Record<string, RegionReferenceData> = {
         { name: "Easter Monday", date: "2026-04-06" },
         { name: "ANZAC Day", date: "2026-04-25" },
         { name: "King's Birthday", date: "2026-06-08" },
-        { name: "Friday before AFL Grand Final", label: "TBD" },
+        {
+          name: "Friday before AFL Grand Final",
+          label: "Date varies each year",
+          notes: "Usually observed on the Friday before the AFL Grand Final.",
+        },
         { name: "Melbourne Cup", date: "2026-11-03" },
         { name: "Christmas Day", date: "2026-12-25" },
         { name: "Boxing Day", date: "2026-12-26" },

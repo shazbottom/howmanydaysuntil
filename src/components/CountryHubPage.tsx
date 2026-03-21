@@ -35,6 +35,43 @@ export function CountryHubPage({
           : "Regions";
   const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
 
+  function formatList(values: string[]): string {
+    if (values.length === 0) {
+      return "";
+    }
+
+    if (values.length === 1) {
+      return values[0];
+    }
+
+    if (values.length === 2) {
+      return `${values[0]} and ${values[1]}`;
+    }
+
+    return `${values.slice(0, -1).join(", ")}, and ${values[values.length - 1]}`;
+  }
+
+  const highlightedHolidayNames = [
+    "New Year's Day",
+    "Australia Day",
+    "Canada Day",
+    "Waitangi Day",
+    "Good Friday",
+    "Easter Monday",
+    "Christmas Day",
+    "Boxing Day",
+    "Boxing Day (observed)",
+  ]
+    .filter((name) => nationalHolidayRows.some((row) => row.name === name))
+    .slice(0, 4);
+
+  const countryHolidaySummary =
+    highlightedHolidayNames.length > 0
+      ? `National public holidays in ${country.name} in ${currentYear} include ${formatList(
+          highlightedHolidayNames,
+        )}. Use the region links above for local public holidays and school dates.`
+      : `This table covers national public holidays observed across ${country.name} in ${currentYear}. Use the region links above for local public holidays and school dates.`;
+
   function formatShortDate(dateText: string) {
     const [year, month, day] = dateText.split("-").map(Number);
 
@@ -123,9 +160,7 @@ export function CountryHubPage({
               National holidays {currentYear}
             </h2>
             <p className="mt-4 text-sm leading-6 text-black/52 dark:text-white/56">
-              This table covers national public holidays observed across {country.name} in{" "}
-              {currentYear}. Use the region links above for local public holidays and school
-              dates.
+              {countryHolidaySummary}
             </p>
             <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
               <div

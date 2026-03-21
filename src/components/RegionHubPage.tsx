@@ -6,6 +6,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import type { CountryDefinition } from "../lib/countries";
 import type { RegionDefinition } from "../lib/regions";
 import type { RegionYearData } from "../lib/regionData";
+import { getCountryReferenceData } from "../lib/countryData";
 
 export interface RegionHubPageProps {
   country: CountryDefinition;
@@ -29,6 +30,59 @@ export function RegionHubPage({
   const schoolTermRows = referenceData?.schoolTerms ?? [];
   const showPublicHolidayNotes = publicHolidayRows.some((row) => Boolean(row.notes));
   const showSchoolTermNotes = schoolTermRows.some((row) => Boolean(row.notes));
+  const countryHolidayNames = new Set(
+    getCountryReferenceData(country.code, currentYear).map((row) => row.name),
+  );
+
+  function formatList(values: string[]): string {
+    if (values.length === 0) {
+      return "";
+    }
+
+    if (values.length === 1) {
+      return values[0];
+    }
+
+    if (values.length === 2) {
+      return `${values[0]} and ${values[1]}`;
+    }
+
+    return `${values.slice(0, -1).join(", ")}, and ${values[values.length - 1]}`;
+  }
+
+  const nationalExamples = publicHolidayRows
+    .map((row) => row.name)
+    .filter((name) =>
+      [
+        "New Year's Day",
+        "Good Friday",
+        "Easter Monday",
+        "ANZAC Day",
+        "Christmas Day",
+      ].includes(name) && countryHolidayNames.has(name),
+    )
+    .slice(0, 2);
+
+  const regionalExamples = publicHolidayRows
+    .map((row) => row.name)
+    .filter(
+      (name) =>
+        !countryHolidayNames.has(name) &&
+        !name.toLowerCase().includes("additional public holiday") &&
+        !name.toLowerCase().includes("substitute day"),
+    )
+    .slice(0, 2);
+
+  const regionHolidaySummary =
+    nationalExamples.length > 0 && regionalExamples.length > 0
+      ? `Public holidays in ${region.name} include national dates such as ${formatList(
+          nationalExamples,
+        )}, along with region-specific holidays such as ${formatList(regionalExamples)}.`
+      : nationalExamples.length > 0
+        ? `Public holidays in ${region.name} include dates such as ${formatList(
+            nationalExamples,
+          )}.`
+        : `These are the main public holidays observed across ${region.name} in ${currentYear}.`;
 
   function formatShortDate(dateText: string) {
     const [year, month, day] = dateText.split("-").map(Number);
@@ -154,7 +208,7 @@ export function RegionHubPage({
               Public holidays in {regionQualifier} {currentYear}
             </h2>
             <p className="mt-4 text-sm leading-6 text-black/52 dark:text-white/56">
-              These are the main public holidays observed across {region.name} in {currentYear}.
+              {regionHolidaySummary}
             </p>
             {publicHolidayRows.length > 0 ? (
               <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
