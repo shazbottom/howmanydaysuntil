@@ -217,3 +217,9 @@ export const countryData: Record<CountryCode, CountryReferenceData> = {
 export function getCountryReferenceData(countryCode: CountryCode, year: number) {
   return countryData[countryCode]?.publicHolidays[year] ?? [];
 }
+
+export function getCountryReferenceYears(countryCode: CountryCode): number[] {
+  return Object.keys(countryData[countryCode]?.publicHolidays ?? {})
+    .map((year) => Number(year))
+    .sort((left, right) => left - right);
+}

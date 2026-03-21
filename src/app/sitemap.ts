@@ -11,6 +11,7 @@ import {
   getEventsForRegion,
   hasIndexableRegionContent,
 } from "../lib/events";
+import { getCountryHubPath, getCountryHubYearStaticParams } from "../lib/localizedPages";
 import { getRegionId, regions } from "../lib/regions";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
 
@@ -38,6 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly",
     priority: 0.7,
   }));
+
+  const localizedCountryYearPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
+    getCountryHubYearStaticParams(country.code).map((params) => ({
+      url: `${SITE_URL}${getCountryHubPath(country.code, Number(params.year))}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.68,
+    })),
+  );
 
   const localizedRegionHubPages: MetadataRoute.Sitemap = regions
     .filter((region) => hasIndexableRegionContent(getRegionId(region)))
@@ -99,6 +108,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...hubPages,
     ...datePages,
     ...localizedCountryPages,
+    ...localizedCountryYearPages,
     ...localizedRegionHubPages,
     ...localizedCountryEventPages,
     ...localizedRegionEventPages,

@@ -8,6 +8,12 @@ import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
 import type { RegionDefinition } from "../lib/regions";
 import type { CountryPublicHolidayRow } from "../lib/countryData";
 
+export interface HubYearLink {
+  label: string;
+  href: string;
+  active: boolean;
+}
+
 export interface CountryHubPageProps {
   country: CountryDefinition;
   todayLabel: string;
@@ -15,6 +21,7 @@ export interface CountryHubPageProps {
   currentYear: number;
   nationalHolidayRows: CountryPublicHolidayRow[];
   regionLinks: RegionDefinition[];
+  yearLinks: HubYearLink[];
 }
 
 export function CountryHubPage({
@@ -24,6 +31,7 @@ export function CountryHubPage({
   currentYear,
   nationalHolidayRows,
   regionLinks,
+  yearLinks,
 }: CountryHubPageProps) {
   const regionLabel =
     country.code === "au"
@@ -111,6 +119,25 @@ export function CountryHubPage({
           <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-7xl">
             {country.name}
           </h1>
+          {yearLinks.length > 1 ? (
+            <div className="mt-5 flex flex-wrap justify-center gap-4 text-sm">
+              <span className="text-black/42 dark:text-white/44">Years</span>
+              {yearLinks.map((yearLink) => (
+                <Link
+                  key={yearLink.href}
+                  href={yearLink.href}
+                  className={
+                    yearLink.active
+                      ? "font-semibold text-black dark:text-white"
+                      : "font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                  }
+                  aria-current={yearLink.active ? "page" : undefined}
+                >
+                  {yearLink.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           {regionLinks.length > 0 ? (
             <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
               <span className="text-black/42 dark:text-white/44">{regionLabel}</span>

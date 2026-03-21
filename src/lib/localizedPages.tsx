@@ -5,7 +5,7 @@ import { LocalizedDateCountdownPage } from "../components/LocalizedDateCountdown
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
 import { getCanonicalUrl, getLocalizedEventsForCountry } from "./events";
-import { getCountryReferenceData } from "./countryData";
+import { getCountryReferenceData, getCountryReferenceYears } from "./countryData";
 import { getRegionsForCountry } from "./regions";
 import {
   getCountryTodayLabel,
@@ -18,33 +18,72 @@ export function getLocalizedCountryCodes(): CountryCode[] {
   return countries.map((country) => country.code);
 }
 
-export function renderCountryHub(countryCode: CountryCode) {
+function getCurrentCountryYear(countryCode: CountryCode): number {
+  const country = getCountryByCode(countryCode);
+
+  if (!country) {
+    return new Date().getFullYear();
+  }
+
+  return Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: country.timezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
+}
+
+export function getCountryHubPath(countryCode: CountryCode, year?: number): string {
+  return year ? `/${countryCode}/${year}` : `/${countryCode}`;
+}
+
+function getCountryYearLinks(countryCode: CountryCode, selectedYear: number) {
+  const currentYear = getCurrentCountryYear(countryCode);
+  return getCountryReferenceYears(countryCode).map((year) => ({
+    label: String(year),
+    href: year === currentYear ? getCountryHubPath(countryCode) : getCountryHubPath(countryCode, year),
+    active: year === selectedYear,
+  }));
+}
+
+export function getCountryHubYearStaticParams(countryCode: CountryCode) {
+  const currentYear = getCurrentCountryYear(countryCode);
+  return getCountryReferenceYears(countryCode)
+    .filter((year) => year > currentYear)
+    .map((year) => ({
+      year: String(year),
+    }));
+}
+
+export function renderCountryHub(countryCode: CountryCode, year?: number) {
   const country = getCountryByCode(countryCode);
 
   if (!country) {
     notFound();
   }
 
-  const currentYear = Number(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: country.timezone,
-      year: "numeric",
-    }).format(new Date()),
-  );
+  const currentYear = getCurrentCountryYear(countryCode);
+  const selectedYear = year ?? currentYear;
+  const holidayRows = getCountryReferenceData(countryCode, selectedYear);
+
+  if (year && holidayRows.length === 0) {
+    notFound();
+  }
 
   return (
     <CountryHubPage
       country={country}
       todayLabel={getCountryTodayLabel(country)}
       popularLinks={getPopularLocalizedEventLinksForCountry(countryCode)}
-      currentYear={currentYear}
-      nationalHolidayRows={getCountryReferenceData(countryCode, currentYear)}
+      currentYear={selectedYear}
+      nationalHolidayRows={holidayRows}
       regionLinks={getRegionsForCountry(countryCode)}
+      yearLinks={getCountryYearLinks(countryCode, selectedYear)}
     />
   );
 }
 
-export function getCountryHubMetadata(countryCode: CountryCode): Metadata {
+export function getCountryHubMetadata(countryCode: CountryCode, year?: number): Metadata {
   const country = getCountryByCode(countryCode);
 
   if (!country) {
@@ -54,29 +93,28 @@ export function getCountryHubMetadata(countryCode: CountryCode): Metadata {
     };
   }
 
-  const currentYear = Number(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: country.timezone,
-      year: "numeric",
-    }).format(new Date()),
-  );
+  const currentYear = getCurrentCountryYear(countryCode);
+  const selectedYear = year ?? currentYear;
+  const canonicalPath = getCountryHubPath(countryCode, year);
+  const title = `Public holidays in ${country.name} ${selectedYear} | DaysUntil`;
+  const description = `Check public holidays in ${country.name} for ${selectedYear}, with regional pages for local holidays and school term dates.`;
 
   return {
-    title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
-    description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
+    title,
+    description,
     alternates: {
-      canonical: `/${country.code}`,
+      canonical: canonicalPath,
     },
     openGraph: {
-      title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
-      description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
-      url: `https://daysuntil.is/${country.code}`,
+      title,
+      description,
+      url: `https://daysuntil.is${canonicalPath}`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: `Public holidays in ${country.name} ${currentYear} | DaysUntil`,
-      description: `Check public holidays in ${country.name} for ${currentYear}, with regional pages for local holidays and school term dates.`,
+      title,
+      description,
     },
   };
 }
