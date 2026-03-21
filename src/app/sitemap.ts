@@ -13,6 +13,7 @@ import {
 } from "../lib/events";
 import { getCountryHubPath, getCountryHubYearStaticParams } from "../lib/localizedPages";
 import { getRegionId, regions } from "../lib/regions";
+import { getRegionHubPath, getRegionHubYearStaticParams } from "../lib/regionPages";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
 
 const SITE_URL = "https://daysuntil.is";
@@ -55,6 +56,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.65,
     }));
+
+  const localizedRegionYearPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
+    getRegionHubYearStaticParams(country.code).map((params) => {
+      const region = regions.find(
+        (candidateRegion) =>
+          candidateRegion.countryCode === country.code && candidateRegion.slug === params.region,
+      );
+
+      if (!region) {
+        return [];
+      }
+
+      return [{
+        url: `${SITE_URL}${getRegionHubPath(region, Number(params.year))}`,
+        changeFrequency: "weekly" as const,
+        priority: 0.63,
+      }];
+    }).flat(),
+  );
 
   const localizedCountryEventPages: MetadataRoute.Sitemap = countries.flatMap((country) =>
     getLocalizedEventsForCountry(country.code)
@@ -110,6 +130,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localizedCountryPages,
     ...localizedCountryYearPages,
     ...localizedRegionHubPages,
+    ...localizedRegionYearPages,
     ...localizedCountryEventPages,
     ...localizedRegionEventPages,
   ];

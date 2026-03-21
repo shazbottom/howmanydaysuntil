@@ -12,7 +12,7 @@ import {
   getRegionTodayLabel,
   getRegionalCountdownPageData,
 } from "./localizedCountdowns";
-import { getRegionReferenceData } from "./regionData";
+import { getRegionReferenceData, getRegionReferenceYears } from "./regionData";
 import {
   getRegionByCountryAndSlug,
   getRegionId,
@@ -22,10 +22,50 @@ import {
   buildRegionEventUrl,
 } from "./regions";
 
+function getCurrentRegionYear(regionTimezone: string): number {
+  return Number(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: regionTimezone,
+      year: "numeric",
+    }).format(new Date()),
+  );
+}
+
+export function getRegionHubPath(
+  region: Pick<typeof import("./regions").regions[number], "countryCode" | "slug">,
+  year?: number,
+): string {
+  return year ? `/${region.countryCode}/${region.slug}/${year}` : `/${region.countryCode}/${region.slug}`;
+}
+
+function getRegionYearLinks(
+  region: Pick<typeof import("./regions").regions[number], "countryCode" | "slug" | "timezone" | "id">,
+  selectedYear: number,
+) {
+  const currentYear = getCurrentRegionYear(region.timezone);
+  return getRegionReferenceYears(region.id).map((year) => ({
+    label: String(year),
+    href: year === currentYear ? getRegionHubPath(region) : getRegionHubPath(region, year),
+    active: year === selectedYear,
+  }));
+}
+
 export function getRegionHubStaticParams(countryCode: CountryCode) {
   return getRegionsForCountry(countryCode).map((region) => ({
     region: region.slug,
   }));
+}
+
+export function getRegionHubYearStaticParams(countryCode: CountryCode) {
+  return getRegionsForCountry(countryCode).flatMap((region) => {
+    const currentYear = getCurrentRegionYear(region.timezone);
+    return getRegionReferenceYears(region.id)
+      .filter((year) => year > currentYear)
+      .map((year) => ({
+        region: region.slug,
+        year: String(year),
+      }));
+  });
 }
 
 export function getRegionEventStaticParams(countryCode: CountryCode, regionSlug: string) {
@@ -49,23 +89,25 @@ export function getAllRegionEventStaticParams(countryCode: CountryCode) {
   );
 }
 
-export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
+export function renderRegionHub(countryCode: CountryCode, regionSlug: string, year?: number) {
   const country = getCountryByCode(countryCode);
   const resolvedRegion = resolveRegionByCountryAndSlug(countryCode, regionSlug);
   const region = resolvedRegion?.region ?? null;
-  const currentYear = Number(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: region?.timezone,
-      year: "numeric",
-    }).format(new Date()),
-  );
 
   if (!country || !region) {
     notFound();
   }
 
+  const currentYear = getCurrentRegionYear(region.timezone);
+  const selectedYear = year ?? currentYear;
+  const referenceData = getRegionReferenceData(getRegionId(region), selectedYear);
+
   if (resolvedRegion?.isLegacyMatch) {
-    permanentRedirect(buildRegionUrl(region));
+    permanentRedirect(getRegionHubPath(region, year));
+  }
+
+  if (year && !referenceData) {
+    notFound();
   }
 
   return (
@@ -73,11 +115,12 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
       country={country}
       region={region}
       todayLabel={getRegionTodayLabel(region, country.locale)}
-      currentYear={currentYear}
-      referenceData={getRegionReferenceData(getRegionId(region), currentYear)}
+      currentYear={selectedYear}
+      referenceData={referenceData}
       siblingRegions={getRegionsForCountry(countryCode).filter(
         (candidateRegion) => candidateRegion.id !== region.id,
       )}
+      yearLinks={getRegionYearLinks(region, selectedYear)}
     />
   );
 }
@@ -85,6 +128,7 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string) {
 export function getRegionHubMetadata(
   countryCode: CountryCode,
   regionSlug: string,
+  year?: number,
 ): Metadata {
   const country = getCountryByCode(countryCode);
   const region = getRegionByCountryAndSlug(countryCode, regionSlug);
@@ -99,16 +143,11 @@ export function getRegionHubMetadata(
   const regionName = region.seoName ?? region.name;
   const isIndexable = hasIndexableRegionContent(getRegionId(region));
   const regionQualifier = region.shortName ? `${regionName} (${region.shortName})` : regionName;
-  const currentYear = Number(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone: region.timezone,
-      year: "numeric",
-    }).format(new Date()),
-  );
-
-  const title = `Public holidays and school holidays in ${regionQualifier} ${currentYear} | DaysUntil`;
-  const description = `Check public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${currentYear}.`;
-  const canonicalPath = `/${country.code}/${region.slug}`;
+  const currentYear = getCurrentRegionYear(region.timezone);
+  const selectedYear = year ?? currentYear;
+  const title = `Public holidays and school holidays in ${regionQualifier} ${selectedYear} | DaysUntil`;
+  const description = `Check public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${selectedYear}.`;
+  const canonicalPath = getRegionHubPath(region, year);
 
   return {
     title,

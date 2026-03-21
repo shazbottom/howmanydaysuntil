@@ -7,6 +7,7 @@ import type { CountryDefinition } from "../lib/countries";
 import type { RegionDefinition } from "../lib/regions";
 import type { RegionYearData } from "../lib/regionData";
 import { getCountryReferenceData } from "../lib/countryData";
+import type { HubYearLink } from "./CountryHubPage";
 
 export interface RegionHubPageProps {
   country: CountryDefinition;
@@ -15,6 +16,7 @@ export interface RegionHubPageProps {
   currentYear: number;
   referenceData: RegionYearData | null;
   siblingRegions: RegionDefinition[];
+  yearLinks: HubYearLink[];
 }
 
 export function RegionHubPage({
@@ -24,11 +26,11 @@ export function RegionHubPage({
   currentYear,
   referenceData,
   siblingRegions,
+  yearLinks,
 }: RegionHubPageProps) {
   const regionQualifier = region.shortName ? `${region.name} (${region.shortName})` : region.name;
   const publicHolidayRows = referenceData?.publicHolidays ?? [];
   const schoolTermRows = referenceData?.schoolTerms ?? [];
-  const showPublicHolidayNotes = publicHolidayRows.some((row) => Boolean(row.notes));
   const showSchoolTermNotes = schoolTermRows.some((row) => Boolean(row.notes));
   const countryHolidayNames = new Set(
     getCountryReferenceData(country.code, currentYear).map((row) => row.name),
@@ -176,6 +178,25 @@ export function RegionHubPage({
           <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-7xl">
             {region.name}
           </h1>
+          {yearLinks.length > 1 ? (
+            <div className="mt-5 flex flex-wrap justify-center gap-4 text-sm">
+              <span className="text-black/42 dark:text-white/44">Years</span>
+              {yearLinks.map((yearLink) => (
+                <Link
+                  key={yearLink.href}
+                  href={yearLink.href}
+                  className={
+                    yearLink.active
+                      ? "font-semibold text-black dark:text-white"
+                      : "font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                  }
+                  aria-current={yearLink.active ? "page" : undefined}
+                >
+                  {yearLink.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           {siblingRegions.length > 0 ? (
             <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
               <span className="text-black/42 dark:text-white/44">Other regions</span>
@@ -212,32 +233,20 @@ export function RegionHubPage({
             </p>
             {publicHolidayRows.length > 0 ? (
               <div className="mt-6 overflow-hidden rounded-[1.25rem] border border-black/6 dark:border-white/10">
-                <div
-                  className={`grid bg-[#f3f2ee] px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-black/48 dark:bg-[#1d1f1e] dark:text-white/50 ${
-                    showPublicHolidayNotes
-                      ? "grid-cols-[minmax(0,1.1fr)_minmax(0,0.85fr)_minmax(0,0.9fr)]"
-                      : "grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
-                  }`}
-                >
+                <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] bg-[#f3f2ee] px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-black/48 dark:bg-[#1d1f1e] dark:text-white/50">
                   <span>Holiday</span>
                   <span>Date</span>
-                  {showPublicHolidayNotes ? <span>Notes</span> : null}
                 </div>
                 <div className="divide-y divide-black/6 dark:divide-white/10">
                   {publicHolidayRows.map((row) => (
                     <div
                       key={`${row.name}-${row.date ?? row.label}`}
-                      className={`grid gap-4 bg-white/55 px-4 py-3 text-sm dark:bg-white/[0.02] ${
-                        showPublicHolidayNotes
-                          ? "grid-cols-[minmax(0,1.1fr)_minmax(0,0.85fr)_minmax(0,0.9fr)]"
-                          : "grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
-                      }`}
+                      className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] gap-4 bg-white/55 px-4 py-3 text-sm dark:bg-white/[0.02]"
                     >
                       <span className="font-medium text-black dark:text-white/88">{row.name}</span>
                       <span className="text-black/62 dark:text-white/62">
                         {formatDateValue(row.date, row.label)}
                       </span>
-                      {showPublicHolidayNotes ? renderNotes(row.notes, row.notesHref) : null}
                     </div>
                   ))}
                 </div>

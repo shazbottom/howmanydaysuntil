@@ -721,3 +721,18 @@ export function getRegionReferenceData(regionId: string, year: number): RegionYe
 export function hasRegionReferenceData(regionId: string, year: number): boolean {
   return getRegionReferenceData(regionId, year) !== null;
 }
+
+export function getRegionReferenceYears(regionId: string): number[] {
+  const data = regionData[regionId];
+
+  if (!data) {
+    return [];
+  }
+
+  return Array.from(
+    new Set([
+      ...Object.keys(data.publicHolidays).map((year) => Number(year)),
+      ...Object.keys(data.schoolTerms).map((year) => Number(year)),
+    ]),
+  ).sort((left, right) => left - right);
+}
