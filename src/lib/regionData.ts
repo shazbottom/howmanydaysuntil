@@ -698,6 +698,492 @@ export const regionData: Record<string, RegionReferenceData> = {
   },
 };
 
+function toUtcDate(year: number, month: number, day: number): Date {
+  return new Date(Date.UTC(year, month - 1, day));
+}
+
+function toIsoDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function addDays(date: Date, days: number): Date {
+  const nextDate = new Date(date);
+  nextDate.setUTCDate(nextDate.getUTCDate() + days);
+  return nextDate;
+}
+
+function nthWeekdayOfMonth(
+  year: number,
+  month: number,
+  weekday: number,
+  occurrence: number,
+): Date {
+  const date = toUtcDate(year, month, 1);
+
+  while (date.getUTCDay() !== weekday) {
+    date.setUTCDate(date.getUTCDate() + 1);
+  }
+
+  date.setUTCDate(date.getUTCDate() + (occurrence - 1) * 7);
+  return date;
+}
+
+function lastWeekdayOfMonth(year: number, month: number, weekday: number): Date {
+  const date = toUtcDate(year, month + 1, 0);
+
+  while (date.getUTCDay() !== weekday) {
+    date.setUTCDate(date.getUTCDate() - 1);
+  }
+
+  return date;
+}
+
+function nearestWeekdayToDate(year: number, month: number, day: number, weekday: number): Date {
+  const target = toUtcDate(year, month, day);
+  let bestMatch = target;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  for (let offset = -6; offset <= 6; offset += 1) {
+    const candidate = addDays(target, offset);
+
+    if (candidate.getUTCDay() !== weekday) {
+      continue;
+    }
+
+    const distance = Math.abs(offset);
+
+    if (distance < bestDistance || (distance === bestDistance && offset < 0)) {
+      bestMatch = candidate;
+      bestDistance = distance;
+    }
+  }
+
+  return bestMatch;
+}
+
+function easterSunday(year: number): Date {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31);
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+  return toUtcDate(year, month, day);
+}
+
+function mondayizeIfWeekend(date: Date): Date {
+  const weekday = date.getUTCDay();
+
+  if (weekday === 6) {
+    return addDays(date, 2);
+  }
+
+  if (weekday === 0) {
+    return addDays(date, 1);
+  }
+
+  return date;
+}
+
+function pushRegionHolidayYear(regionId: string, year: number, rows: RegionPublicHolidayRow[]) {
+  regionData[regionId].publicHolidays[year] = rows;
+}
+
+function buildAustralianRegionHolidays(regionId: string, year: number): RegionPublicHolidayRow[] {
+  const easter = easterSunday(year);
+  const goodFriday = addDays(easter, -2);
+  const easterSaturday = addDays(easter, -1);
+  const easterMonday = addDays(easter, 1);
+  const easterTuesday = addDays(easter, 2);
+  const anzacDay = toUtcDate(year, 4, 25);
+  const christmasDay = toUtcDate(year, 12, 25);
+  const boxingDay = toUtcDate(year, 12, 26);
+  const rows: RegionPublicHolidayRow[] = [
+    { name: "New Year's Day", date: toIsoDate(toUtcDate(year, 1, 1)) },
+    { name: "Australia Day", date: toIsoDate(toUtcDate(year, 1, 26)) },
+  ];
+
+  if (toUtcDate(year, 1, 1).getUTCDay() === 6 || toUtcDate(year, 1, 1).getUTCDay() === 0) {
+    rows.push({
+      name: "New Year's Day additional public holiday",
+      date: toIsoDate(mondayizeIfWeekend(toUtcDate(year, 1, 1))),
+    });
+  }
+
+  switch (regionId) {
+    case "au-vic":
+      rows.push(
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 3, 1, 2)) },
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Saturday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+        {
+          name: "Friday before AFL Grand Final",
+          label: "Date varies each year",
+          notes: "Usually observed on the Friday before the AFL Grand Final.",
+        },
+        { name: "Melbourne Cup", date: toIsoDate(nthWeekdayOfMonth(year, 11, 2, 1)) },
+      );
+      break;
+    case "au-nsw":
+      rows.push(
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Saturday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 10, 1, 1)) },
+      );
+      if (anzacDay.getUTCDay() === 6 || anzacDay.getUTCDay() === 0) {
+        rows.push({
+          name: "ANZAC Day additional public holiday",
+          date: toIsoDate(mondayizeIfWeekend(anzacDay)),
+        });
+      }
+      break;
+    case "au-qld":
+      rows.push(
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Day after Good Friday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 5, 1, 1)) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 10, 1, 1)) },
+        { name: "Christmas Eve (part-day)", date: toIsoDate(toUtcDate(year, 12, 24)) },
+      );
+      break;
+    case "au-sa":
+      rows.push(
+        { name: "Adelaide Cup Day", date: toIsoDate(nthWeekdayOfMonth(year, 3, 1, 2)) },
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Saturday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 10, 1, 1)) },
+        { name: "Christmas Eve (part-day)", date: toIsoDate(toUtcDate(year, 12, 24)) },
+        { name: "Proclamation Day", date: toIsoDate(boxingDay) },
+        { name: "New Year's Eve (part-day)", date: toIsoDate(toUtcDate(year, 12, 31)) },
+      );
+      if (boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0) {
+        rows.push({
+          name: "Proclamation Day additional public holiday",
+          date: toIsoDate(toUtcDate(year, 12, 28)),
+        });
+      }
+      break;
+    case "au-wa":
+      rows.push(
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 3, 1, 1)) },
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "Western Australia Day", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 1)) },
+        { name: "King's Birthday", date: toIsoDate(lastWeekdayOfMonth(year, 9, 1)) },
+      );
+      if (anzacDay.getUTCDay() === 6 || anzacDay.getUTCDay() === 0) {
+        rows.push({
+          name: "ANZAC Day additional public holiday",
+          date: toIsoDate(mondayizeIfWeekend(anzacDay)),
+        });
+      }
+      break;
+    case "au-tas":
+      rows.push(
+        { name: "Eight Hours Day", date: toIsoDate(nthWeekdayOfMonth(year, 3, 1, 2)) },
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "Easter Tuesday", date: toIsoDate(easterTuesday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+      );
+      break;
+    case "au-act":
+      rows.push(
+        { name: "Canberra Day", date: toIsoDate(nthWeekdayOfMonth(year, 3, 1, 2)) },
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Saturday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "Reconciliation Day", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 1)) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+        { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 10, 1, 1)) },
+      );
+      if (anzacDay.getUTCDay() === 6 || anzacDay.getUTCDay() === 0) {
+        rows.push({
+          name: "ANZAC Day additional public holiday",
+          date: toIsoDate(mondayizeIfWeekend(anzacDay)),
+        });
+      }
+      break;
+    case "au-nt":
+      rows.push(
+        { name: "Good Friday", date: toIsoDate(goodFriday) },
+        { name: "Easter Saturday", date: toIsoDate(easterSaturday) },
+        { name: "Easter Sunday", date: toIsoDate(easter) },
+        { name: "Easter Monday", date: toIsoDate(easterMonday) },
+        { name: "ANZAC Day", date: toIsoDate(anzacDay) },
+        { name: "May Day", date: toIsoDate(nthWeekdayOfMonth(year, 5, 1, 1)) },
+        { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 2)) },
+        { name: "Picnic Day", date: toIsoDate(nthWeekdayOfMonth(year, 8, 1, 1)) },
+        { name: "Christmas Eve (part-day)", date: toIsoDate(toUtcDate(year, 12, 24)) },
+        { name: "New Year's Eve (part-day)", date: toIsoDate(toUtcDate(year, 12, 31)) },
+      );
+      break;
+    default:
+      return [];
+  }
+
+  rows.push(
+    { name: "Christmas Day", date: toIsoDate(christmasDay) },
+    { name: "Boxing Day", date: toIsoDate(boxingDay) },
+  );
+
+  if (christmasDay.getUTCDay() === 6 || christmasDay.getUTCDay() === 0) {
+    rows.push({
+      name: "Christmas Day additional public holiday",
+      date: toIsoDate(toUtcDate(year, 12, 27)),
+    });
+  }
+
+  if (boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0) {
+    rows.push({
+      name:
+        regionId === "au-sa" ? "Proclamation Day additional public holiday" : "Boxing Day additional public holiday",
+      date: toIsoDate(toUtcDate(year, 12, 28)),
+    });
+  }
+
+  return rows;
+}
+
+function buildUnitedKingdomRegionHolidays(regionId: string, year: number): RegionPublicHolidayRow[] {
+  const goodFriday = addDays(easterSunday(year), -2);
+  const easterMonday = addDays(easterSunday(year), 1);
+  const newYear = toUtcDate(year, 1, 1);
+  const christmasDay = toUtcDate(year, 12, 25);
+  const boxingDay = toUtcDate(year, 12, 26);
+
+  if (regionId === "uk-england" || regionId === "uk-wales") {
+    return [
+      {
+        name: newYear.getUTCDay() === 6 || newYear.getUTCDay() === 0 ? "New Year's Day (substitute day)" : "New Year's Day",
+        date: toIsoDate(mondayizeIfWeekend(newYear)),
+      },
+      { name: "Good Friday", date: toIsoDate(goodFriday) },
+      { name: "Easter Monday", date: toIsoDate(easterMonday) },
+      { name: "Early May bank holiday", date: toIsoDate(nthWeekdayOfMonth(year, 5, 1, 1)) },
+      { name: "Spring bank holiday", date: toIsoDate(lastWeekdayOfMonth(year, 5, 1)) },
+      { name: "Summer bank holiday", date: toIsoDate(lastWeekdayOfMonth(year, 8, 1)) },
+      {
+        name:
+          christmasDay.getUTCDay() === 6 || christmasDay.getUTCDay() === 0
+            ? "Christmas Day (substitute day)"
+            : "Christmas Day",
+        date: toIsoDate(mondayizeIfWeekend(christmasDay)),
+      },
+      {
+        name:
+          boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0
+            ? "Boxing Day (substitute day)"
+            : "Boxing Day",
+        date: toIsoDate(
+          boxingDay.getUTCDay() === 0 ? toUtcDate(year, 12, 28) : mondayizeIfWeekend(boxingDay),
+        ),
+      },
+    ];
+  }
+
+  if (regionId === "uk-scotland") {
+    return [
+      {
+        name: newYear.getUTCDay() === 6 || newYear.getUTCDay() === 0 ? "New Year's Day (substitute day)" : "New Year's Day",
+        date: toIsoDate(mondayizeIfWeekend(newYear)),
+      },
+      {
+        name: toUtcDate(year, 1, 2).getUTCDay() === 6 || toUtcDate(year, 1, 2).getUTCDay() === 0
+          ? "2nd January (substitute day)"
+          : "2nd January",
+        date: toIsoDate(mondayizeIfWeekend(toUtcDate(year, 1, 2))),
+      },
+      { name: "Good Friday", date: toIsoDate(goodFriday) },
+      { name: "Early May bank holiday", date: toIsoDate(nthWeekdayOfMonth(year, 5, 1, 1)) },
+      { name: "Spring bank holiday", date: toIsoDate(lastWeekdayOfMonth(year, 5, 1)) },
+      { name: "Summer bank holiday", date: toIsoDate(nthWeekdayOfMonth(year, 8, 1, 1)) },
+      {
+        name: "St Andrew's Day" + (toUtcDate(year, 11, 30).getUTCDay() === 6 || toUtcDate(year, 11, 30).getUTCDay() === 0 ? " (substitute day)" : ""),
+        date: toIsoDate(mondayizeIfWeekend(toUtcDate(year, 11, 30))),
+      },
+      {
+        name:
+          christmasDay.getUTCDay() === 6 || christmasDay.getUTCDay() === 0
+            ? "Christmas Day (substitute day)"
+            : "Christmas Day",
+        date: toIsoDate(mondayizeIfWeekend(christmasDay)),
+      },
+      {
+        name:
+          boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0
+            ? "Boxing Day (substitute day)"
+            : "Boxing Day",
+        date: toIsoDate(
+          boxingDay.getUTCDay() === 0 ? toUtcDate(year, 12, 28) : mondayizeIfWeekend(boxingDay),
+        ),
+      },
+    ];
+  }
+
+  return [
+    {
+      name: newYear.getUTCDay() === 6 || newYear.getUTCDay() === 0 ? "New Year's Day (substitute day)" : "New Year's Day",
+      date: toIsoDate(mondayizeIfWeekend(newYear)),
+    },
+    {
+      name: "St Patrick's Day" + (toUtcDate(year, 3, 17).getUTCDay() === 6 || toUtcDate(year, 3, 17).getUTCDay() === 0 ? " (substitute day)" : ""),
+      date: toIsoDate(mondayizeIfWeekend(toUtcDate(year, 3, 17))),
+    },
+    { name: "Good Friday", date: toIsoDate(goodFriday) },
+    { name: "Easter Monday", date: toIsoDate(easterMonday) },
+    { name: "Early May bank holiday", date: toIsoDate(nthWeekdayOfMonth(year, 5, 1, 1)) },
+    { name: "Spring bank holiday", date: toIsoDate(lastWeekdayOfMonth(year, 5, 1)) },
+    {
+      name:
+        "Battle of the Boyne (Orangemen's Day)" +
+        (toUtcDate(year, 7, 12).getUTCDay() === 6 || toUtcDate(year, 7, 12).getUTCDay() === 0
+          ? " substitute day"
+          : ""),
+      date: toIsoDate(mondayizeIfWeekend(toUtcDate(year, 7, 12))),
+    },
+    { name: "Summer bank holiday", date: toIsoDate(lastWeekdayOfMonth(year, 8, 1)) },
+    {
+      name:
+        christmasDay.getUTCDay() === 6 || christmasDay.getUTCDay() === 0
+          ? "Christmas Day (substitute day)"
+          : "Christmas Day",
+      date: toIsoDate(mondayizeIfWeekend(christmasDay)),
+    },
+    {
+      name:
+        boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0
+          ? "Boxing Day (substitute day)"
+          : "Boxing Day",
+      date: toIsoDate(
+        boxingDay.getUTCDay() === 0 ? toUtcDate(year, 12, 28) : mondayizeIfWeekend(boxingDay),
+      ),
+    },
+  ];
+}
+
+function buildNewZealandRegionHolidays(regionId: string, year: number): RegionPublicHolidayRow[] {
+  const newYear = toUtcDate(year, 1, 1);
+  const dayAfterNewYear = toUtcDate(year, 1, 2);
+  const waitangi = toUtcDate(year, 2, 6);
+  const anzacDay = toUtcDate(year, 4, 25);
+  const christmasDay = toUtcDate(year, 12, 25);
+  const boxingDay = toUtcDate(year, 12, 26);
+  const easter = easterSunday(year);
+  const matarikiByYear: Record<number, string> = {
+    2027: "2027-06-25",
+    2028: "2028-07-14",
+  };
+  const rows: RegionPublicHolidayRow[] = [
+    {
+      name: newYear.getUTCDay() === 6 || newYear.getUTCDay() === 0 ? "New Year's Day (observed)" : "New Year's Day",
+      date: toIsoDate(mondayizeIfWeekend(newYear)),
+    },
+    {
+      name:
+        dayAfterNewYear.getUTCDay() === 6 || dayAfterNewYear.getUTCDay() === 0
+          ? "Day after New Year's Day (observed)"
+          : "Day after New Year's Day",
+      date: toIsoDate(
+        dayAfterNewYear.getUTCDay() === 6
+          ? toUtcDate(year, 1, 4)
+          : dayAfterNewYear.getUTCDay() === 0
+            ? toUtcDate(year, 1, 4)
+            : dayAfterNewYear,
+      ),
+    },
+  ];
+
+  if (regionId === "nz-auckland") {
+    rows.push({ name: "Auckland Anniversary Day", date: toIsoDate(nearestWeekdayToDate(year, 1, 29, 1)) });
+  } else if (regionId === "nz-wellington") {
+    rows.push({ name: "Wellington Anniversary Day", date: toIsoDate(nearestWeekdayToDate(year, 1, 22, 1)) });
+  } else if (regionId === "nz-canterbury") {
+    const firstTuesday = nthWeekdayOfMonth(year, 11, 2, 1);
+    rows.push({ name: "Canterbury Anniversary Day", date: toIsoDate(addDays(firstTuesday, 10)) });
+  }
+
+  rows.push(
+    {
+      name: waitangi.getUTCDay() === 6 || waitangi.getUTCDay() === 0 ? "Waitangi Day (observed)" : "Waitangi Day",
+      date: toIsoDate(mondayizeIfWeekend(waitangi)),
+    },
+    { name: "Good Friday", date: toIsoDate(addDays(easter, -2)) },
+    { name: "Easter Monday", date: toIsoDate(addDays(easter, 1)) },
+    {
+      name: anzacDay.getUTCDay() === 6 || anzacDay.getUTCDay() === 0 ? "ANZAC Day (observed)" : "ANZAC Day",
+      date: toIsoDate(mondayizeIfWeekend(anzacDay)),
+    },
+    { name: "King's Birthday", date: toIsoDate(nthWeekdayOfMonth(year, 6, 1, 1)) },
+    { name: "Matariki", date: matarikiByYear[year] },
+    { name: "Labour Day", date: toIsoDate(nthWeekdayOfMonth(year, 10, 1, 4)) },
+    {
+      name: christmasDay.getUTCDay() === 6 || christmasDay.getUTCDay() === 0 ? "Christmas Day (observed)" : "Christmas Day",
+      date: toIsoDate(mondayizeIfWeekend(christmasDay)),
+    },
+    {
+      name: boxingDay.getUTCDay() === 6 || boxingDay.getUTCDay() === 0 ? "Boxing Day (observed)" : "Boxing Day",
+      date: toIsoDate(
+        boxingDay.getUTCDay() === 0 ? toUtcDate(year, 12, 28) : mondayizeIfWeekend(boxingDay),
+      ),
+    },
+  );
+
+  return rows;
+}
+
+for (const year of [2027, 2028]) {
+  for (const regionId of [
+    "au-vic",
+    "au-nsw",
+    "au-qld",
+    "au-sa",
+    "au-wa",
+    "au-tas",
+    "au-act",
+    "au-nt",
+  ]) {
+    pushRegionHolidayYear(regionId, year, buildAustralianRegionHolidays(regionId, year));
+  }
+
+  for (const regionId of ["uk-england", "uk-scotland", "uk-wales", "uk-northern-ireland"]) {
+    pushRegionHolidayYear(regionId, year, buildUnitedKingdomRegionHolidays(regionId, year));
+  }
+
+  for (const regionId of ["nz-auckland", "nz-canterbury", "nz-wellington"]) {
+    pushRegionHolidayYear(regionId, year, buildNewZealandRegionHolidays(regionId, year));
+  }
+}
+
 export function getRegionReferenceData(regionId: string, year: number): RegionYearData | null {
   const data = regionData[regionId];
 
