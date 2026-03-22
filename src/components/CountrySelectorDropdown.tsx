@@ -53,9 +53,6 @@ export function CountrySelectorDropdown() {
       </button>
       {isOpen ? (
         <div className="absolute right-0 top-full z-30 mt-[14px] w-[min(18rem,80vw)] overflow-hidden rounded-[1.5rem] border border-black/8 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.08)] dark:border-white/10 dark:bg-[#171717] dark:shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-          <div className="border-b border-black/6 px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.24em] text-black/42 dark:border-white/10 dark:text-white/44">
-            Country pages
-          </div>
           <div className="p-2">
             {countries.map((country) => (
               <Link

@@ -426,7 +426,7 @@ export default function Home() {
                   <img
                     src={CHRISTMAS_FLYBY_FRAME}
                     alt=""
-                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] sm:w-[17.5rem]"
+                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] dark:invert sm:w-[17.5rem]"
                   />
                 </div>
               </div>
