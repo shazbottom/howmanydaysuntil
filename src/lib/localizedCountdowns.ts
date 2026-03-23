@@ -498,11 +498,29 @@ export function getLocalizedEventLinksForCountry(countryCode: CountryCode): Arra
   }));
 }
 
+const COUNTRY_POPULAR_EVENT_PREFERENCES: Record<CountryCode, string[]> = {
+  au: ["christmas", "new-year", "summer", "australia-day", "anzac-day"],
+  ca: ["christmas", "new-year", "summer", "halloween", "autumn"],
+  nz: ["christmas", "new-year", "summer", "halloween", "autumn"],
+  uk: ["christmas", "new-year", "summer", "halloween", "bonfire-night"],
+  us: ["christmas", "new-year", "summer", "thanksgiving", "fall"],
+};
+
 export function getPopularLocalizedEventLinksForCountry(
   countryCode: CountryCode,
   limit = 5,
 ): LocalizedHubEventLink[] {
-  return getLocalizedEventLinksForCountry(countryCode).slice(0, limit);
+  const allLinks = getLocalizedEventLinksForCountry(countryCode);
+  const preferredSlugs = COUNTRY_POPULAR_EVENT_PREFERENCES[countryCode] ?? [];
+  const preferredLinks = preferredSlugs
+    .map((slug) => allLinks.find((link) => link.href === `/${countryCode}/days-until/${slug}`))
+    .filter((link): link is LocalizedHubEventLink => Boolean(link));
+
+  const remainingLinks = allLinks.filter(
+    (link) => !preferredLinks.some((preferredLink) => preferredLink.href === link.href),
+  );
+
+  return [...preferredLinks, ...remainingLinks].slice(0, limit);
 }
 
 export function getUpcomingLocalizedEventLinksForCountry(

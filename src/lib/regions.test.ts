@@ -4,6 +4,7 @@ import sitemap from "../app/sitemap";
 import {
   getCanonicalUrl,
   getEventsForRegion,
+  getLocalizedEventByCountryAndSlug,
   getRegionEventBySlug,
   type LocalizedEventDefinition,
 } from "./events";
@@ -14,6 +15,22 @@ import {
   resolveRegionByCountryAndSlug,
 } from "./regions";
 import { getRegionReferenceData } from "./regionData";
+
+test("country season events resolve with hemisphere-appropriate slugs", () => {
+  const australiaSummer = getLocalizedEventByCountryAndSlug("au", "summer");
+  const ukSummer = getLocalizedEventByCountryAndSlug("uk", "summer");
+  const usFall = getLocalizedEventByCountryAndSlug("us", "fall");
+  const usAutumnAlias = getLocalizedEventByCountryAndSlug("us", "autumn");
+
+  assert.ok(australiaSummer);
+  assert.ok(ukSummer);
+  assert.ok(usFall);
+  assert.ok(usAutumnAlias);
+  assert.equal(australiaSummer.slug, "summer");
+  assert.equal(ukSummer.slug, "summer");
+  assert.equal(usFall.slug, "fall");
+  assert.equal(usAutumnAlias.slug, "fall");
+});
 
 test("canonical region slug resolves directly", () => {
   const resolved = resolveRegionByCountryAndSlug("au", "victoria");
@@ -280,6 +297,10 @@ test("sitemap does not include legacy region slugs", () => {
   assert.equal(urls.includes("https://daysuntil.is/us/illinois"), true);
   assert.equal(urls.includes("https://daysuntil.is/us/new-york"), true);
   assert.equal(urls.includes("https://daysuntil.is/us/texas"), true);
+  assert.equal(urls.includes("https://daysuntil.is/au/days-until/summer"), true);
+  assert.equal(urls.includes("https://daysuntil.is/uk/days-until/autumn"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/days-until/fall"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/days-until/autumn"), false);
   assert.equal(
     urls.includes("https://daysuntil.is/au/victoria/days-until/melbourne-cup"),
     true,

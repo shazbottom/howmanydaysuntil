@@ -24,6 +24,7 @@ export type LocalizedEventRule =
 export interface LocalizedEventDefinition {
   internalKey: string;
   slug: string;
+  alternativeSlugs?: string[];
   displayName: string;
   scope: "global" | "country" | "region";
   appliesToCountries?: CountryCode[] | "all";
@@ -35,6 +36,43 @@ export interface LocalizedEventDefinition {
   canonicalStrategy: "global" | "country" | "region" | "self";
   indexable: boolean;
 }
+
+const NORTHERN_HEMISPHERE_COUNTRIES: CountryCode[] = ["ca", "uk", "us"];
+const SOUTHERN_HEMISPHERE_COUNTRIES: CountryCode[] = ["au", "nz"];
+
+function createCountrySeasonEvent(
+  internalKey: string,
+  slug: string,
+  displayName: string,
+  countries: CountryCode[],
+  month: number,
+  day: number,
+  alternativeSlugs?: string[],
+): LocalizedEventDefinition {
+  return {
+    internalKey,
+    slug,
+    alternativeSlugs,
+    displayName,
+    scope: "country",
+    appliesToCountries: countries,
+    rule: { type: "fixed-date", month, day },
+    canonicalStrategy: "country",
+    indexable: true,
+  };
+}
+
+const countrySeasonEvents: LocalizedEventDefinition[] = [
+  createCountrySeasonEvent("north-spring", "spring", "Spring", NORTHERN_HEMISPHERE_COUNTRIES, 3, 1),
+  createCountrySeasonEvent("north-summer", "summer", "Summer", NORTHERN_HEMISPHERE_COUNTRIES, 6, 1),
+  createCountrySeasonEvent("north-autumn", "autumn", "Autumn", ["ca", "uk"], 9, 1, ["fall"]),
+  createCountrySeasonEvent("us-fall", "fall", "Fall", ["us"], 9, 1, ["autumn"]),
+  createCountrySeasonEvent("north-winter", "winter", "Winter", NORTHERN_HEMISPHERE_COUNTRIES, 12, 1),
+  createCountrySeasonEvent("south-autumn", "autumn", "Autumn", SOUTHERN_HEMISPHERE_COUNTRIES, 3, 1, ["fall"]),
+  createCountrySeasonEvent("south-winter", "winter", "Winter", SOUTHERN_HEMISPHERE_COUNTRIES, 6, 1),
+  createCountrySeasonEvent("south-spring", "spring", "Spring", SOUTHERN_HEMISPHERE_COUNTRIES, 9, 1),
+  createCountrySeasonEvent("south-summer", "summer", "Summer", SOUTHERN_HEMISPHERE_COUNTRIES, 12, 1),
+];
 
 export const localizedEvents: LocalizedEventDefinition[] = [
   {
@@ -127,6 +165,7 @@ export const localizedEvents: LocalizedEventDefinition[] = [
     canonicalStrategy: "country",
     indexable: true,
   },
+  ...countrySeasonEvents,
   {
     internalKey: "au-vic-melbourne-cup",
     slug: "melbourne-cup",
@@ -329,6 +368,10 @@ function appliesToCountry(event: LocalizedEventDefinition, countryCode: CountryC
   return event.appliesToCountries === "all" || event.appliesToCountries?.includes(countryCode) === true;
 }
 
+function eventMatchesSlug(event: LocalizedEventDefinition, slug: string): boolean {
+  return event.slug === slug || event.alternativeSlugs?.includes(slug) === true;
+}
+
 export function getLocalizedEventsForCountry(countryCode: CountryCode): LocalizedEventDefinition[] {
   return localizedEvents.filter(
     (event) => event.scope !== "region" && appliesToCountry(event, countryCode),
@@ -367,7 +410,7 @@ export function getLocalizedEventByCountryAndSlug(
   slug: string,
 ): LocalizedEventDefinition | null {
   return (
-    getLocalizedEventsForCountry(countryCode).find((event) => event.slug === slug) ?? null
+    getLocalizedEventsForCountry(countryCode).find((event) => eventMatchesSlug(event, slug)) ?? null
   );
 }
 
