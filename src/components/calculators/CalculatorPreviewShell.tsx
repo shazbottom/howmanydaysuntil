@@ -229,7 +229,7 @@ function formatResultDate(dateText: string) {
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: "UTC",
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
   }).format(new Date(Date.UTC(year, month - 1, day)));
 }
