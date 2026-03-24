@@ -9,6 +9,8 @@ export interface CountdownDisplayProps {
   countdown: CountdownResult | null;
   fullHeightWhenEmpty?: boolean;
   headerColorClassName?: string;
+  description?: string;
+  emphasizeLabel?: boolean;
 }
 
 interface LiveTimeParts {
@@ -83,6 +85,8 @@ export function CountdownDisplay({
   countdown,
   fullHeightWhenEmpty = false,
   headerColorClassName = "bg-[#6495ED] dark:bg-[#4b74be]",
+  description,
+  emphasizeLabel = false,
 }: CountdownDisplayProps) {
   const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(countdown);
   useEffect(() => {
@@ -183,7 +187,20 @@ export function CountdownDisplay({
         </div>
       </div>
       <div className="px-5 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
-        <p className="text-xs uppercase tracking-[0.24em] text-black/42 dark:text-white/44">{label}</p>
+        <p
+          className={
+            emphasizeLabel
+              ? "text-[clamp(1.55rem,7vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em] text-black dark:text-white"
+              : "text-xs uppercase tracking-[0.24em] text-black/42 dark:text-white/44"
+          }
+        >
+          {label}
+        </p>
+        {description ? (
+          <p className="mx-auto mt-3 max-w-[24rem] text-[0.98rem] font-medium leading-7 text-black/64 dark:text-white/64 sm:text-[1.03rem]">
+            {description}
+          </p>
+        ) : null}
         <div className="mt-7 border-b border-black/[0.05] pb-8 dark:border-white/8">
           <p
             suppressHydrationWarning

@@ -26,6 +26,7 @@ interface RedisClientLike {
     },
   ): Promise<string | null>;
   exists(key: string): Promise<number>;
+  del(key: string): Promise<number>;
 }
 
 interface UpstashConfig {
@@ -159,6 +160,16 @@ class StandardRedisClient implements RedisClientLike {
 
     if (typeof response !== "number") {
       throw new RedisProtocolError("Unexpected Redis response for EXISTS.");
+    }
+
+    return response;
+  }
+
+  async del(key: string): Promise<number> {
+    const response = await this.sendCommand(["DEL", key]);
+
+    if (typeof response !== "number") {
+      throw new RedisProtocolError("Unexpected Redis response for DEL.");
     }
 
     return response;
@@ -306,6 +317,11 @@ class UpstashRedisClient implements RedisClientLike {
 
   async exists(key: string): Promise<number> {
     const result = await this.client.exists(key);
+    return Number(result);
+  }
+
+  async del(key: string): Promise<number> {
+    const result = await this.client.del(key);
     return Number(result);
   }
 }

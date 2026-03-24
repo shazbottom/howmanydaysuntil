@@ -6,6 +6,8 @@ import { getCustomCountdownPageDataFromRedis } from "../../../lib/customCountdow
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const SITE_URL = "https://daysuntil.is";
+
 interface CustomCountdownPageProps {
   params: Promise<{
     slug: string;
@@ -17,17 +19,18 @@ export async function generateMetadata({
 }: CustomCountdownPageProps): Promise<Metadata> {
   const { slug } = await params;
   const pageData = await getCustomCountdownPageDataFromRedis(slug);
-  const title = pageData ? `${pageData.record.title} | DaysUntil` : `Custom Countdown | DaysUntil`;
+  const title = pageData ? `${pageData.record.title} | DaysUntil` : "Custom Countdown | DaysUntil";
   const description = pageData
     ? pageData.record.note ??
       `A shareable countdown to ${formatCustomCountdownDate(pageData.targetDate, "en-GB")}.`
-    : `A shareable custom countdown.`;
+    : "A shareable custom countdown.";
+  const canonicalUrl = `${SITE_URL}/c/${slug}`;
   const imageQuery = new URLSearchParams({
-    count: pageData?.countdown ? String(pageData.countdown.daysRemaining) : "—",
+    count: pageData?.countdown ? String(pageData.countdown.daysRemaining) : "-",
     label: pageData?.record.title ?? "countdown",
     footer: pageData ? formatCustomCountdownDate(pageData.targetDate, "en-GB") : "DaysUntil",
   });
-  const imageUrl = `/api/og/custom?${imageQuery.toString()}`;
+  const imageUrl = `${SITE_URL}/api/og/custom?${imageQuery.toString()}`;
 
   return {
     title,
@@ -39,7 +42,8 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `/c/${slug}`,
+      url: canonicalUrl,
+      siteName: "DaysUntil",
       type: "website",
       images: [imageUrl],
     },
@@ -50,7 +54,7 @@ export async function generateMetadata({
       images: [imageUrl],
     },
     alternates: {
-      canonical: `/c/${slug}`,
+      canonical: canonicalUrl,
     },
   };
 }

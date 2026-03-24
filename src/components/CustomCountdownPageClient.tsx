@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { AddToCalendarMenu } from "./AddToCalendarMenu";
 import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { CopyCountdownLinkButton } from "./CopyCountdownLinkButton";
 import { CountdownDisplay } from "./CountdownDisplay";
+import { CustomCountdownShareButtons } from "./CustomCountdownShareButtons";
 import { ThemeToggle } from "./ThemeToggle";
 import {
   formatCustomCountdownDate,
@@ -16,6 +21,46 @@ interface CustomCountdownPageClientProps {
 }
 
 export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClientProps) {
+  const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  async function handleDeleteCountdown() {
+    if (!pageData || isDeleting) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete "${pageData.record.title}"? This cannot be undone.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const response = await fetch(`/api/custom-countdowns/${pageData.record.slug}`, {
+        method: "DELETE",
+      });
+      const payload = (await response.json()) as { deleted?: boolean; error?: string };
+
+      if (!response.ok || !payload.deleted) {
+        setDeleteError(payload.error ?? "Unable to delete this countdown right now.");
+        setIsDeleting(false);
+        return;
+      }
+
+      router.push("/create");
+      router.refresh();
+    } catch {
+      setDeleteError("Unable to delete this countdown right now.");
+      setIsDeleting(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center">
@@ -74,7 +119,7 @@ export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClien
                 {pageData.record.title}
               </h1>
               {pageData.record.note ? (
-                <p className="mx-auto mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
+                <p className="mx-auto mt-5 max-w-2xl text-[1.08rem] font-medium leading-8 text-black/72 dark:text-white/72 sm:text-[1.16rem]">
                   {pageData.record.note}
                 </p>
               ) : null}
@@ -84,7 +129,12 @@ export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClien
                 {pageData.record.timezone ? <span>{pageData.record.timezone}</span> : null}
               </div>
               <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
-                <CountdownDisplay label={pageData.record.title} countdown={pageData.countdown} />
+                <CountdownDisplay
+                  label={pageData.record.title}
+                  description={pageData.record.note}
+                  emphasizeLabel
+                  countdown={pageData.countdown}
+                />
               </div>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <AddToCalendarMenu record={pageData.record} />
@@ -96,6 +146,25 @@ export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClien
                   Create another countdown
                 </Link>
               </div>
+              <div className="mt-3">
+                <CustomCountdownShareButtons
+                  title={pageData.record.title}
+                  description={pageData.record.note}
+                />
+              </div>
+              <div className="mt-3 flex justify-center">
+                <button
+                  type="button"
+                  onClick={handleDeleteCountdown}
+                  disabled={isDeleting}
+                  className="rounded-[1.05rem] border border-[#d95c5c]/26 bg-[#fff4f4] px-5 py-3 text-sm font-medium text-[#a63e3e] shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#ffe9e9] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d95c5c]/22 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60 dark:border-[#d47878]/28 dark:bg-[#2a1717] dark:text-[#f0a3a3] dark:hover:bg-[#341c1c] dark:focus-visible:ring-[#d47878]/28 dark:focus-visible:ring-offset-[#0d0d0d]"
+                >
+                  {isDeleting ? "Deleting..." : "Delete countdown"}
+                </button>
+              </div>
+              {deleteError ? (
+                <p className="mt-4 text-sm text-[#b42318] dark:text-[#f0a3a3]">{deleteError}</p>
+              ) : null}
             </>
           )}
         </section>

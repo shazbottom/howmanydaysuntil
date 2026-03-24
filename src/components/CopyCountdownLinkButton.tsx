@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+const SITE_URL = "https://daysuntil.is";
+
 export function CopyCountdownLinkButton() {
   const [copied, setCopied] = useState(false);
 
@@ -9,7 +11,8 @@ export function CopyCountdownLinkButton() {
     <button
       type="button"
       onClick={async () => {
-        await navigator.clipboard.writeText(window.location.href);
+        const canonicalUrl = `${SITE_URL}${window.location.pathname}${window.location.search}${window.location.hash}`;
+        await navigator.clipboard.writeText(canonicalUrl);
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1600);
       }}
