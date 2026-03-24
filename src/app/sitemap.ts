@@ -139,6 +139,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 1,
     },
+    {
+      url: `${SITE_URL}/privacy-policy`,
+      changeFrequency: "monthly",
+      priority: 0.2,
+    },
+    {
+      url: `${SITE_URL}/contact`,
+      changeFrequency: "monthly",
+      priority: 0.2,
+    },
+    {
+      url: `${SITE_URL}/terms`,
+      changeFrequency: "monthly",
+      priority: 0.2,
+    },
     ...hubPages,
     ...datePages,
     ...localizedCountryPages,
