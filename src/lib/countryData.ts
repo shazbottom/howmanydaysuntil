@@ -1,4 +1,5 @@
 import type { CountryCode } from "./countries";
+import referenceAttributions from "../data/referenceAttributions.json";
 
 export interface CountryPublicHolidayRow {
   name: string;
@@ -6,6 +7,16 @@ export interface CountryPublicHolidayRow {
   label?: string;
   notes?: string;
   notesHref?: string;
+}
+
+export interface ReferenceSource {
+  label: string;
+  href?: string;
+}
+
+export interface ReferenceAttribution {
+  sources: ReferenceSource[];
+  lastChecked: string;
 }
 
 export interface CountryReferenceData {
@@ -214,6 +225,9 @@ export const countryData: Record<CountryCode, CountryReferenceData> = {
   },
 };
 
+const countryHolidayAttributions =
+  referenceAttributions.countryHolidayAttributions as Record<CountryCode, ReferenceAttribution>;
+
 export function getCountryReferenceData(countryCode: CountryCode, year: number) {
   return countryData[countryCode]?.publicHolidays[year] ?? [];
 }
@@ -222,4 +236,10 @@ export function getCountryReferenceYears(countryCode: CountryCode): number[] {
   return Object.keys(countryData[countryCode]?.publicHolidays ?? {})
     .map((year) => Number(year))
     .sort((left, right) => left - right);
+}
+
+export function getCountryHolidayAttribution(
+  countryCode: CountryCode,
+): ReferenceAttribution | null {
+  return countryHolidayAttributions[countryCode] ?? null;
 }

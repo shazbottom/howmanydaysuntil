@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Brand } from "../components/Brand";
+import { CalculatorNavButton } from "../components/CalculatorNavButton";
 import type { CountdownLinkItem } from "../components/CountdownLinkList";
 import { CountdownDisplay } from "../components/CountdownDisplay";
 import { CountrySelectorDropdown } from "../components/CountrySelectorDropdown";
@@ -365,6 +366,7 @@ export default function Home() {
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <MyCountdownsDropdown />
           </div>

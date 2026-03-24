@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
+import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import type { CountryDefinition } from "../lib/countries";
 import type { RegionDefinition } from "../lib/regions";
-import type { RegionYearData } from "../lib/regionData";
+import type { RegionReferenceAttributions, RegionYearData } from "../lib/regionData";
 import { getCountryReferenceData } from "../lib/countryData";
 import type { HubYearLink } from "./CountryHubPage";
 
@@ -15,6 +16,7 @@ export interface RegionHubPageProps {
   todayLabel: string;
   currentYear: number;
   referenceData: RegionYearData | null;
+  attributions: RegionReferenceAttributions | null;
   siblingRegions: RegionDefinition[];
   yearLinks: HubYearLink[];
 }
@@ -25,6 +27,7 @@ export function RegionHubPage({
   todayLabel,
   currentYear,
   referenceData,
+  attributions,
   siblingRegions,
   yearLinks,
 }: RegionHubPageProps) {
@@ -150,6 +153,39 @@ export function RegionHubPage({
     );
   }
 
+  function formatDisplayDate(dateText: string) {
+    const [year, month, day] = dateText.split("-").map(Number);
+
+    return new Intl.DateTimeFormat(country.locale, {
+      timeZone: "UTC",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(Date.UTC(year, month - 1, day)));
+  }
+
+  function renderSources(
+    sources: import("../lib/countryData").ReferenceSource[],
+  ) {
+    return sources.map((source, index) => (
+      <span key={source.label}>
+        {index > 0 ? ", " : ""}
+        {source.href ? (
+          <a
+            href={source.href}
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-4 transition hover:text-black dark:hover:text-white"
+          >
+            {source.label}
+          </a>
+        ) : (
+          source.label
+        )}
+      </span>
+    ));
+  }
+
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
@@ -162,6 +198,7 @@ export function RegionHubPage({
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <Link
               href="/"
@@ -273,6 +310,13 @@ export function RegionHubPage({
                 Public holiday dates for {region.name} will be added here.
               </p>
             )}
+            {attributions ? (
+              <p className="mt-4 text-xs leading-6 text-black/48 dark:text-white/50 sm:text-sm">
+                Source{attributions.publicHolidays.sources.length > 1 ? "s" : ""}:{" "}
+                {renderSources(attributions.publicHolidays.sources)}. Last checked:{" "}
+                {formatDisplayDate(attributions.publicHolidays.lastChecked)}.
+              </p>
+            ) : null}
           </div>
           <div
             id="school-term-dates"
@@ -326,6 +370,13 @@ export function RegionHubPage({
                 School term dates for {region.name} will be added here.
               </p>
             )}
+            {attributions ? (
+              <p className="mt-4 text-xs leading-6 text-black/48 dark:text-white/50 sm:text-sm">
+                Source{attributions.schoolTerms.sources.length > 1 ? "s" : ""}:{" "}
+                {renderSources(attributions.schoolTerms.sources)}. Last checked:{" "}
+                {formatDisplayDate(attributions.schoolTerms.lastChecked)}.
+              </p>
+            ) : null}
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link

@@ -5,7 +5,11 @@ import { LocalizedDateCountdownPage } from "../components/LocalizedDateCountdown
 import { LocalizedCountdownPage } from "../components/LocalizedCountdownPage";
 import { countries, getCountryByCode, type CountryCode } from "./countries";
 import { getCanonicalUrl, getLocalizedEventsForCountry } from "./events";
-import { getCountryReferenceData, getCountryReferenceYears } from "./countryData";
+import {
+  getCountryHolidayAttribution,
+  getCountryReferenceData,
+  getCountryReferenceYears,
+} from "./countryData";
 import { getRegionsForCountry } from "./regions";
 import {
   getCountryTodayLabel,
@@ -77,6 +81,7 @@ export function renderCountryHub(countryCode: CountryCode, year?: number) {
       popularLinks={getPopularLocalizedEventLinksForCountry(countryCode)}
       currentYear={selectedYear}
       nationalHolidayRows={holidayRows}
+      holidayAttribution={getCountryHolidayAttribution(countryCode)}
       regionLinks={getRegionsForCountry(countryCode)}
       yearLinks={getCountryYearLinks(countryCode, selectedYear)}
     />

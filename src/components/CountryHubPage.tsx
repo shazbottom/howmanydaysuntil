@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
+import { CalculatorNavButton } from "./CalculatorNavButton";
 import type { CountryDefinition } from "../lib/countries";
 import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
 import type { RegionDefinition } from "../lib/regions";
-import type { CountryPublicHolidayRow } from "../lib/countryData";
+import type { CountryPublicHolidayRow, ReferenceAttribution, ReferenceSource } from "../lib/countryData";
 
 export interface HubYearLink {
   label: string;
@@ -20,6 +21,7 @@ export interface CountryHubPageProps {
   popularLinks: LocalizedHubEventLink[];
   currentYear: number;
   nationalHolidayRows: CountryPublicHolidayRow[];
+  holidayAttribution: ReferenceAttribution | null;
   regionLinks: RegionDefinition[];
   yearLinks: HubYearLink[];
 }
@@ -30,6 +32,7 @@ export function CountryHubPage({
   popularLinks,
   currentYear,
   nationalHolidayRows,
+  holidayAttribution,
   regionLinks,
   yearLinks,
 }: CountryHubPageProps) {
@@ -93,6 +96,37 @@ export function CountryHubPage({
     }).format(new Date(Date.UTC(year, month - 1, day)));
   }
 
+  function formatDisplayDate(dateText: string) {
+    const [year, month, day] = dateText.split("-").map(Number);
+
+    return new Intl.DateTimeFormat(country.locale, {
+      timeZone: "UTC",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(Date.UTC(year, month - 1, day)));
+  }
+
+  function renderSources(sources: ReferenceSource[]) {
+    return sources.map((source, index) => (
+      <span key={source.label}>
+        {index > 0 ? ", " : ""}
+        {source.href ? (
+          <a
+            href={source.href}
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-4 transition hover:text-black dark:hover:text-white"
+          >
+            {source.label}
+          </a>
+        ) : (
+          source.label
+        )}
+      </span>
+    ));
+  }
+
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
@@ -105,6 +139,7 @@ export function CountryHubPage({
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <Link
               href="/"
@@ -177,7 +212,7 @@ export function CountryHubPage({
           </div>
           <div className="mt-12 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
-              Popular in {country.name}
+              Popular dates in {country.name}
             </h2>
             <div className="mt-6 flex flex-wrap gap-3">
               {popularLinks.map((eventLink) => (
@@ -234,6 +269,13 @@ export function CountryHubPage({
                 ))}
               </div>
             </div>
+            {holidayAttribution ? (
+              <p className="mt-4 text-xs leading-6 text-black/48 dark:text-white/50 sm:text-sm">
+                Source{holidayAttribution.sources.length > 1 ? "s" : ""}:{" "}
+                {renderSources(holidayAttribution.sources)}. Last checked:{" "}
+                {formatDisplayDate(holidayAttribution.lastChecked)}.
+              </p>
+            ) : null}
           </div>
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link

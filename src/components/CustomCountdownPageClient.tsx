@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AddToCalendarMenu } from "./AddToCalendarMenu";
 import { Brand } from "./Brand";
+import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { CopyCountdownLinkButton } from "./CopyCountdownLinkButton";
 import { CountdownDisplay } from "./CountdownDisplay";
@@ -27,6 +28,7 @@ export function CustomCountdownPageClient({ pageData }: CustomCountdownPageClien
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <Link
               href="/"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
+import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { ThemeToggle } from "./ThemeToggle";
@@ -24,6 +25,7 @@ export function LocalizedDateCountdownPage({ data }: LocalizedDateCountdownPageP
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <Link
               href="/"

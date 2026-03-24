@@ -12,7 +12,11 @@ import {
   getRegionTodayLabel,
   getRegionalCountdownPageData,
 } from "./localizedCountdowns";
-import { getRegionReferenceData, getRegionReferenceYears } from "./regionData";
+import {
+  getRegionAttributions,
+  getRegionReferenceData,
+  getRegionReferenceYears,
+} from "./regionData";
 import {
   getRegionByCountryAndSlug,
   getRegionId,
@@ -117,6 +121,7 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string, ye
       todayLabel={getRegionTodayLabel(region, country.locale)}
       currentYear={selectedYear}
       referenceData={referenceData}
+      attributions={getRegionAttributions(getRegionId(region))}
       siblingRegions={getRegionsForCountry(countryCode).filter(
         (candidateRegion) => candidateRegion.id !== region.id,
       )}

@@ -1,3 +1,5 @@
+import referenceAttributions from "../data/referenceAttributions.json";
+
 export interface RegionPublicHolidayRow {
   name: string;
   date?: string;
@@ -24,6 +26,11 @@ export interface RegionYearData {
 export interface RegionReferenceData {
   publicHolidays: Record<number, RegionPublicHolidayRow[]>;
   schoolTerms: Record<number, RegionSchoolTermRow[]>;
+}
+
+export interface RegionReferenceAttributions {
+  publicHolidays: import("./countryData").ReferenceAttribution;
+  schoolTerms: import("./countryData").ReferenceAttribution;
 }
 
 export const regionData: Record<string, RegionReferenceData> = {
@@ -915,6 +922,9 @@ export const regionData: Record<string, RegionReferenceData> = {
   },
 };
 
+const regionAttributions =
+  referenceAttributions.regionAttributions as Record<string, RegionReferenceAttributions>;
+
 function toUtcDate(year: number, month: number, day: number): Date {
   return new Date(Date.UTC(year, month - 1, day));
 }
@@ -1438,4 +1448,8 @@ export function getRegionReferenceYears(regionId: string): number[] {
       ...Object.keys(data.schoolTerms).map((year) => Number(year)),
     ]),
   ).sort((left, right) => left - right);
+}
+
+export function getRegionAttributions(regionId: string): RegionReferenceAttributions | null {
+  return regionAttributions[regionId] ?? null;
 }

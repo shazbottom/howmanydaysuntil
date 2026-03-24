@@ -1,0 +1,531 @@
+{
+  "countryHolidayAttributions": {
+    "au": {
+      "sources": [
+        {
+          "label": "Fair Work Ombudsman",
+          "href": "https://www.fairwork.gov.au/employment-conditions/public-holidays/2026-public-holidays"
+        }
+      ],
+      "lastChecked": "2026-03-22"
+    },
+    "ca": {
+      "sources": [
+        {
+          "label": "Canada.ca",
+          "href": "https://www.canada.ca/en/revenue-agency/services/tax/public-holidays.html"
+        }
+      ],
+      "lastChecked": "2026-03-22"
+    },
+    "nz": {
+      "sources": [
+        {
+          "label": "govt.nz",
+          "href": "https://www.govt.nz/browse/work/public-holidays-and-work/public-holidays-and-anniversary-dates/"
+        }
+      ],
+      "lastChecked": "2026-03-22"
+    },
+    "uk": {
+      "sources": [
+        {
+          "label": "GOV.UK",
+          "href": "https://www.gov.uk/bank-holidays"
+        }
+      ],
+      "lastChecked": "2026-03-22"
+    },
+    "us": {
+      "sources": [
+        {
+          "label": "U.S. Office of Personnel Management",
+          "href": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/"
+        }
+      ],
+      "lastChecked": "2026-03-22"
+    }
+  },
+  "regionAttributions": {
+    "au-vic": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Victoria Government",
+            "href": "https://www.vic.gov.au/public-holidays-victoria"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Victoria Government",
+            "href": "https://www.vic.gov.au/school-term-dates-and-holidays-victoria"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-nsw": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "NSW Government",
+            "href": "https://www.nsw.gov.au/about-nsw/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "NSW Department of Education",
+            "href": "https://education.nsw.gov.au/schooling/calendars"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-qld": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Queensland Government",
+            "href": "https://www.qld.gov.au/recreation/travel/holidays/public"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Queensland Government",
+            "href": "https://education.qld.gov.au/about-us/calendar/term-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-sa": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "South Australia Government",
+            "href": "https://www.safework.sa.gov.au/workers/wages-and-conditions/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "South Australia Government",
+            "href": "https://www.education.sa.gov.au/schools-and-educators/calendar-and-events/school-term-dates-and-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-wa": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Western Australia Government",
+            "href": "https://www.wa.gov.au/service/employment/workplace-agreements/public-holidays-western-australia"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "WA Department of Education",
+            "href": "https://www.education.wa.edu.au/future-term-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-tas": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Tasmania Government",
+            "href": "https://worksafe.tas.gov.au/topics/wages-and-conditions/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Tasmania Government",
+            "href": "https://www.decyp.tas.gov.au/learning/find-your-local-school/school-terms/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-act": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "ACT Government",
+            "href": "https://www.cmtedd.act.gov.au/employment-framework/for-employees/conditions-of-service/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "ACT Education Directorate",
+            "href": "https://www.education.act.gov.au/public-school-life/term_dates_and_public_holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "au-nt": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Northern Territory Government",
+            "href": "https://nt.gov.au/employ/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "NT Government",
+            "href": "https://nt.gov.au/learning/primary-and-secondary-students/school-term-dates-in-nt"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "ca-ab": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Alberta Government",
+            "href": "https://www.alberta.ca/alberta-general-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Alberta Government",
+            "href": "https://www.alberta.ca/albertas-school-system"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "ca-bc": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "British Columbia Government",
+            "href": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/statutory-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "British Columbia Government",
+            "href": "https://www2.gov.bc.ca/gov/content/education-training/k-12/administration/legislation-policy/school-calendars"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "ca-on": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Ontario Government",
+            "href": "https://www.ontario.ca/page/public-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Ontario Government",
+            "href": "https://www.ontario.ca/page/school-year-calendars"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "ca-qc": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "CNESST",
+            "href": "https://www.cnesst.gouv.qc.ca/fr/conditions-travail/conges/jours-feries/liste-jours-feries"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Quebec Government",
+            "href": "https://www.quebec.ca/education/trouver-organisme-scolaire"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "nz-auckland": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "govt.nz",
+            "href": "https://www.govt.nz/browse/work/public-holidays-and-work/public-holidays-and-anniversary-dates/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Ministry of Education",
+            "href": "https://www.education.govt.nz/school-terms-and-holidays-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "nz-canterbury": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "govt.nz",
+            "href": "https://www.govt.nz/browse/work/public-holidays-and-work/public-holidays-and-anniversary-dates/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Ministry of Education",
+            "href": "https://www.education.govt.nz/school-terms-and-holidays-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "nz-wellington": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "govt.nz",
+            "href": "https://www.govt.nz/browse/work/public-holidays-and-work/public-holidays-and-anniversary-dates/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Ministry of Education",
+            "href": "https://www.education.govt.nz/school-terms-and-holidays-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "uk-england": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "GOV.UK",
+            "href": "https://www.gov.uk/bank-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "GOV.UK",
+            "href": "https://www.gov.uk/school-term-holiday-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "uk-scotland": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "GOV.UK",
+            "href": "https://www.gov.uk/bank-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "mygov.scot",
+            "href": "https://www.mygov.scot/school-term-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "uk-wales": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "GOV.UK",
+            "href": "https://www.gov.uk/bank-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Welsh Government",
+            "href": "https://www.gov.wales/approved-school-term-dates"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "uk-northern-ireland": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "GOV.UK",
+            "href": "https://www.gov.uk/bank-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "nidirect",
+            "href": "https://www.nidirect.gov.uk/articles/school-holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "us-ca": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "CalHR",
+            "href": "https://www.calhr.ca.gov/about-calhr/divisions-programs/personnel-management/leave-benefits/state-holidays/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "California Department of Education",
+            "href": "https://www.cde.ca.gov/schooldirectory/"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "us-fl": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Florida Department of Management Services",
+            "href": "https://www.dms.myflorida.com/workforce_operations/state_human_resource_management/for_state_personnel_system_hr_practitioners/state_holidays"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Florida Department of Education",
+            "href": "https://www.fldoe.org/accountability/data-sys/C329G124/default.stml"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "us-il": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Illinois CMS",
+            "href": "https://cms.illinois.gov/personnel/employeeresources/stateholidays.html"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Illinois State Board of Education",
+            "href": "https://www.isbe.net/Pages/Public-School-District-Lookup.aspx"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "us-ny": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "New York State Department of Civil Service",
+            "href": "https://www.cs.ny.gov/attendance_leave/2026_legal_holidays.cfm"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "New York State Education Department",
+            "href": "https://www.nysed.gov/state-assessment/directory-school-district-websites"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    },
+    "us-tx": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Texas Comptroller",
+            "href": "https://comptroller.texas.gov/about/holidays.php"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Texas Education Agency",
+            "href": "https://tea.texas.gov/texas-schools/general-information/finding-a-school-for-your-child/texas-school-directory"
+          }
+        ],
+        "lastChecked": "2026-03-22"
+      }
+    }
+  }
+}

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:sources": "node scripts/verify-reference-sources.mjs"
   },
   "dependencies": {
     "@upstash/redis": "^1.37.0",

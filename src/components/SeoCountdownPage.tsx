@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Brand } from "./Brand";
+import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
@@ -43,6 +44,7 @@ export function SeoCountdownPage({
           </Link>
           <div className="flex items-center gap-3">
             <CountrySelectorDropdown />
+            <CalculatorNavButton />
             <ThemeToggle />
             <Link
               href="/"
