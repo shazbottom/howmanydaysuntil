@@ -355,23 +355,23 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+    <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 sm:py-10">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
-        <div className="flex w-full items-center justify-between gap-4">
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <Link
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white"
           >
             <Brand variant="horizontal" height={55} className="h-[55px] w-auto" />
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end sm:gap-3">
             <CountrySelectorDropdown />
             <CalculatorNavButton />
             <ThemeToggle />
             <MyCountdownsDropdown />
           </div>
         </div>
-        <section className="mt-20 flex w-full flex-1 flex-col items-center text-center">
+        <section className="mt-14 flex w-full flex-1 flex-col items-center text-center sm:mt-20">
           <div className="w-full max-w-[46rem]">
             <EventInput
               value={query}
@@ -386,7 +386,7 @@ export default function Home() {
               variant="preview"
             />
           </div>
-          <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-3">
+          <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
             {MILESTONE_BUTTONS.map((milestone) => {
               const isSelected = resolvedState?.label === milestone.label;
 
@@ -398,7 +398,7 @@ export default function Home() {
                     const targetDate = milestone.getTargetDate();
                     submitMilestone(milestone.label, targetDate);
                   }}
-                  className={`rounded-[1.05rem] px-5 py-3 text-sm font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0d0d0d] ${
+                  className={`rounded-[1.05rem] px-4 py-2.5 text-[13px] font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#0d0d0d] sm:px-5 sm:py-3 sm:text-sm ${
                     isSelected
                       ? "border border-[#B0C4DE] bg-[#B0C4DE] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_1px_2px_rgba(16,24,40,0.04)] hover:bg-[#a7bdd8] focus-visible:ring-[#B0C4DE]/34 dark:border-[#7f96b1] dark:bg-[#7f96b1] dark:text-[#0d1117] dark:hover:bg-[#8ca3be] dark:focus-visible:ring-[#B0C4DE]/30"
                       : "border border-black/6 bg-[#f3f2ee] text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:bg-[#eceae4] focus-visible:ring-[#169c76]/20 dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28"
