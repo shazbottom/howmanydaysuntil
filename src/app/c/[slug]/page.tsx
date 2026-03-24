@@ -29,6 +29,7 @@ export async function generateMetadata({
     count: pageData?.countdown ? String(pageData.countdown.daysRemaining) : "-",
     label: pageData?.record.title ?? "countdown",
     footer: pageData ? formatCustomCountdownDate(pageData.targetDate, "en-GB") : "DaysUntil",
+    description,
   });
   const imageUrl = `${SITE_URL}/api/og/custom?${imageQuery.toString()}`;
 
@@ -45,7 +46,14 @@ export async function generateMetadata({
       url: canonicalUrl,
       siteName: "DaysUntil",
       type: "website",
-      images: [imageUrl],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

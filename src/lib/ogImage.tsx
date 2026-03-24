@@ -4,6 +4,7 @@ interface CountdownOgImageOptions {
   count: number | string;
   label: string;
   footer: string;
+  description?: string;
 }
 
 export const ogImageSize = {
@@ -17,6 +18,7 @@ export function createCountdownOgImage({
   count,
   label,
   footer,
+  description,
 }: CountdownOgImageOptions): ImageResponse {
   return new ImageResponse(
     (
@@ -114,6 +116,21 @@ export function createCountdownOgImage({
           >
             {`until ${label}`}
           </div>
+          {description ? (
+            <div
+              style={{
+                marginTop: 22,
+                fontSize: 30,
+                lineHeight: 1.35,
+                fontWeight: 500,
+                maxWidth: 920,
+                color: "rgba(18,18,18,0.68)",
+                display: "flex",
+              }}
+            >
+              {description}
+            </div>
+          ) : null}
         </div>
         <div
           style={{
