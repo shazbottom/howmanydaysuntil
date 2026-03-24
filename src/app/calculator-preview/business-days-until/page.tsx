@@ -1,15 +1,5 @@
-import type { Metadata } from "next";
-import { CalculatorPreviewShell } from "../../../components/calculators/CalculatorPreviewShell";
-
-export const metadata: Metadata = {
-  title: "Business Days Until Calculator | DaysUntil",
-  description: "Calculate the number of business days remaining until a target date.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+import { redirect } from "next/navigation";
 
 export default function BusinessDaysUntilPreviewPage() {
-  return <CalculatorPreviewShell activeCalculator="business-days-until" />;
+  redirect("/business-days-until");
 }

@@ -6,6 +6,7 @@ import { Brand } from "../Brand";
 import { CalculatorNavButton } from "../CalculatorNavButton";
 import { ThemeToggle } from "../ThemeToggle";
 import { countries, type CountryCode } from "../../lib/countries";
+import { calculatorPages, type CalculatorKind } from "../../lib/calculatorPages";
 import { getRegionsForCountry } from "../../lib/regions";
 import {
   calculateAddOrSubtractDate,
@@ -14,57 +15,24 @@ import {
   calculateDaysBetween,
 } from "../../lib/dateCalculators";
 
-type CalculatorKind =
-  | "days-between"
-  | "business-days-between"
-  | "business-days-until"
-  | "add-or-subtract-date";
-
 interface CalculatorPreviewShellProps {
   activeCalculator: CalculatorKind;
 }
 
-const calculatorLinks: Array<{
-  href: string;
-  label: string;
-  kind: CalculatorKind;
-}> = [
-  {
-    href: "/calculator-preview/days-between-dates",
-    label: "Days between dates",
-    kind: "days-between",
-  },
-  {
-    href: "/calculator-preview/business-days-between-dates",
-    label: "Business days between dates",
-    kind: "business-days-between",
-  },
-  {
-    href: "/calculator-preview/business-days-until",
-    label: "Business days until a date",
-    kind: "business-days-until",
-  },
-  {
-    href: "/calculator-preview/add-or-subtract-date",
-    label: "Add or subtract date",
-    kind: "add-or-subtract-date",
-  },
-];
-
 function CalculatorLinkRow({ activeCalculator }: { activeCalculator: CalculatorKind }) {
   return (
     <div className="mt-8 flex flex-wrap justify-center gap-3">
-      {calculatorLinks.map((calculatorLink) => (
+      {calculatorPages.map((calculatorLink) => (
         <Link
-          key={calculatorLink.href}
-          href={calculatorLink.href}
+          key={calculatorLink.path}
+          href={calculatorLink.path}
           className={
             calculatorLink.kind === activeCalculator
               ? "rounded-[1.05rem] border border-black/8 bg-[#eceae4] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] dark:border-white/10 dark:bg-[#232625] dark:text-white"
               : "rounded-[1.05rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]"
           }
         >
-          {calculatorLink.label}
+          {calculatorLink.title.replace(" Calculator | DaysUntil", "")}
         </Link>
       ))}
     </div>

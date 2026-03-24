@@ -11,6 +11,7 @@ import {
   getEventsForRegion,
   hasIndexableRegionContent,
 } from "../lib/events";
+import { calculatorPages } from "../lib/calculatorPages";
 import { getCountryHubPath, getCountryHubYearStaticParams } from "../lib/localizedPages";
 import { getRegionId, regions } from "../lib/regions";
 import { getRegionHubPath, getRegionHubYearStaticParams } from "../lib/regionPages";
@@ -119,6 +120,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }),
   );
 
+  const calculatorPageEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/calculators`,
+      changeFrequency: "weekly",
+      priority: 0.72,
+    },
+    ...calculatorPages.map((page) => ({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.74,
+    })),
+  ];
+
   return [
     {
       url: SITE_URL,
@@ -131,6 +145,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localizedCountryYearPages,
     ...localizedRegionHubPages,
     ...localizedRegionYearPages,
+    ...calculatorPageEntries,
     ...localizedCountryEventPages,
     ...localizedRegionEventPages,
   ];
