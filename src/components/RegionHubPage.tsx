@@ -10,7 +10,7 @@ import type { RegionDefinition } from "../lib/regions";
 import type { RegionReferenceAttributions, RegionYearData } from "../lib/regionData";
 import { getCountryReferenceData } from "../lib/countryData";
 import type { HubYearLink } from "./CountryHubPage";
-import { createBreadcrumbJsonLd } from "../lib/structuredData";
+import { createBreadcrumbJsonLd, createCollectionPageJsonLd } from "../lib/structuredData";
 
 export interface RegionHubPageProps {
   country: CountryDefinition;
@@ -193,11 +193,19 @@ export function RegionHubPage({
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <JsonLd
-        data={createBreadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: country.name, path: `/${country.code}` },
-          { name: region.name, path: currentPath ?? `/${country.code}/${region.slug}` },
-        ])}
+        data={[
+          createBreadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: country.name, path: `/${country.code}` },
+            { name: region.name, path: currentPath ?? `/${country.code}/${region.slug}` },
+          ]),
+          createCollectionPageJsonLd({
+            name: `Public holidays and school holidays in ${regionQualifier} ${currentYear}`,
+            description: `Public holidays, school term dates, and school holiday periods in ${regionQualifier}, ${country.name} for ${currentYear}.`,
+            path: currentPath ?? `/${country.code}/${region.slug}`,
+            about: ["Public holidays", "School term dates", region.name, country.name],
+          }),
+        ]}
       />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">

@@ -47,5 +47,6 @@ Source: review follow-up on 31 March 2026.
 
 ### Next likely structured-data follow-up
 
-- Review whether country and region hub pages should get CollectionPage or Dataset-style schema later.
+- Country and region hub pages now also use CollectionPage schema.
+- Review later whether any table-heavy page truly justifies Dataset-style schema.
 - Consider calculator schema only after the public calculator routes settle.

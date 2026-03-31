@@ -9,7 +9,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
 import type { RegionDefinition } from "../lib/regions";
 import type { CountryPublicHolidayRow, ReferenceAttribution, ReferenceSource } from "../lib/countryData";
-import { createBreadcrumbJsonLd } from "../lib/structuredData";
+import { createBreadcrumbJsonLd, createCollectionPageJsonLd } from "../lib/structuredData";
 
 export interface HubYearLink {
   label: string;
@@ -134,10 +134,18 @@ export function CountryHubPage({
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <JsonLd
-        data={createBreadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: country.name, path: currentPath ?? `/${country.code}` },
-        ])}
+        data={[
+          createBreadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: country.name, path: currentPath ?? `/${country.code}` },
+          ]),
+          createCollectionPageJsonLd({
+            name: `Public holidays in ${country.name} ${currentYear}`,
+            description: `Public holidays in ${country.name} for ${currentYear}, with region pages for local public holidays and school term dates.`,
+            path: currentPath ?? `/${country.code}`,
+            about: ["Public holidays", "School term dates", country.name],
+          }),
+        ]}
       />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">

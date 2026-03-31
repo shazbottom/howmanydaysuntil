@@ -63,6 +63,13 @@ interface EventSchemaOptions {
   path: string;
 }
 
+interface CollectionPageSchemaOptions {
+  name: string;
+  description: string;
+  path: string;
+  about?: string[];
+}
+
 export function createEventJsonLd({
   name,
   description,
@@ -90,5 +97,29 @@ export function createEventJsonLd({
       name: "DaysUntil",
       url: SITE_URL,
     },
+  };
+}
+
+export function createCollectionPageJsonLd({
+  name,
+  description,
+  path,
+  about = [],
+}: CollectionPageSchemaOptions) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: toAbsoluteUrl(path),
+    isPartOf: {
+      "@type": "WebSite",
+      name: "DaysUntil",
+      url: SITE_URL,
+    },
+    about: about.map((topic) => ({
+      "@type": "Thing",
+      name: topic,
+    })),
   };
 }
