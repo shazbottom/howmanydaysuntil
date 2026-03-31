@@ -33,6 +33,7 @@ Source: review follow-up on 31 March 2026.
   - country event countdown pages
   - regional event countdown pages
   - exact-date countdown pages
+  - calculator hub and live calculator pages
 - Add Event schema to countdown pages only where we already have:
   - stable canonical URL
   - event name

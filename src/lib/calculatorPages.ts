@@ -40,6 +40,16 @@ export const calculatorPages = [
   description: string;
 }>;
 
+export function getCalculatorPage(kind: CalculatorKind) {
+  const calculatorPage = calculatorPages.find((page) => page.kind === kind);
+
+  if (!calculatorPage) {
+    throw new Error(`Unknown calculator kind: ${kind}`);
+  }
+
+  return calculatorPage;
+}
+
 export function getCalculatorHubMetadata(): Metadata {
   const title = "Date Calculators | DaysUntil";
   const description =
@@ -67,11 +77,7 @@ export function getCalculatorHubMetadata(): Metadata {
 }
 
 export function getCalculatorMetadata(kind: CalculatorKind): Metadata {
-  const calculatorPage = calculatorPages.find((page) => page.kind === kind);
-
-  if (!calculatorPage) {
-    throw new Error(`Unknown calculator kind: ${kind}`);
-  }
+  const calculatorPage = getCalculatorPage(kind);
 
   const url = `${SITE_URL}${calculatorPage.path}`;
 
