@@ -16,6 +16,7 @@ import {
   resolveExactDateCountdown,
   type ExactDateParams,
 } from "../../../../../../lib/exactDateCountdown";
+import { createBreadcrumbJsonLd, createEventJsonLd } from "../../../../../../lib/structuredData";
 
 interface ExactDatePageProps {
   params: Promise<ExactDateParams>;
@@ -91,6 +92,19 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
   const longDate = formatLongDate(targetDate, "en-GB");
   const nearbyLinks = getExactDateNearbyLinks(targetDate);
   const dateDetails = getExactDateDetails(targetDate, resolvedCountdown.countdown);
+  const currentPath = getExactDateRoutePath(targetDate);
+  const structuredData = [
+    createBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: longDate, path: currentPath },
+    ]),
+    createEventJsonLd({
+      name: longDate,
+      description: `Live countdown to ${longDate}.`,
+      startDate: targetDate,
+      path: currentPath,
+    }),
+  ];
 
   return (
     <SeoCountdownPage
@@ -115,6 +129,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
           <CountdownLinkList title="Nearby dates" links={nearbyLinks} centered />
         </>
       }
+      structuredData={structuredData}
     />
   );
 }

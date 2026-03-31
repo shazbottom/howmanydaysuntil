@@ -9,6 +9,7 @@ import { CountdownDisplay } from "../components/CountdownDisplay";
 import { CountrySelectorDropdown } from "../components/CountrySelectorDropdown";
 import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
+import { JsonLd } from "../components/JsonLd";
 import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { events } from "../data/events";
@@ -20,6 +21,7 @@ import { getExactDateRoutePath } from "../lib/exactDatePages";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
 import { parseInput, type ParseResult } from "../lib/parseInput";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
+import { createOrganizationJsonLd, createWebsiteJsonLd } from "../lib/structuredData";
 
 interface ResolvedCountdownState {
   label: string;
@@ -356,6 +358,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 sm:py-10">
+      <JsonLd data={[createWebsiteJsonLd(), createOrganizationJsonLd()]} />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <Link

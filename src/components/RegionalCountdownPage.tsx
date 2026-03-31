@@ -3,8 +3,10 @@ import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedRegionCountdownPageData } from "../lib/localizedCountdowns";
+import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
 
 export interface RegionalCountdownPageProps {
   data: LocalizedRegionCountdownPageData;
@@ -12,9 +14,25 @@ export interface RegionalCountdownPageProps {
 
 export function RegionalCountdownPage({ data }: RegionalCountdownPageProps) {
   const { country, region, event, countdown, targetDateLabel, todayLabel, occurrenceRows } = data;
+  const currentPath = `/${country.code}/${region.slug}/days-until/${event.slug}`;
+  const structuredData = [
+    createBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: country.name, path: `/${country.code}` },
+      { name: region.name, path: `/${country.code}/${region.slug}` },
+      { name: event.displayName, path: currentPath },
+    ]),
+    createEventJsonLd({
+      name: `${event.displayName} in ${region.name}`,
+      description: `Live countdown to ${event.displayName} in ${region.name}, ${country.name}. The next ${event.displayName} falls on ${targetDateLabel}.`,
+      startDate: data.targetDate,
+      path: currentPath,
+    }),
+  ];
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      <JsonLd data={structuredData} />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link href="/" className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white">

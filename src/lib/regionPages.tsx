@@ -126,6 +126,7 @@ export function renderRegionHub(countryCode: CountryCode, regionSlug: string, ye
         (candidateRegion) => candidateRegion.id !== region.id,
       )}
       yearLinks={getRegionYearLinks(region, selectedYear)}
+      currentPath={getRegionHubPath(region, year)}
     />
   );
 }

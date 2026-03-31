@@ -3,8 +3,10 @@ import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedCountdownPageData } from "../lib/localizedCountdowns";
+import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
 
@@ -15,9 +17,24 @@ export interface LocalizedCountdownPageProps {
 export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
   const { country, event, countdown, targetDateLabel, todayLabel, occurrenceRows } = data;
   const isChristmas = event.slug === "christmas";
+  const currentPath = `/${country.code}/days-until/${event.slug}`;
+  const structuredData = [
+    createBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: country.name, path: `/${country.code}` },
+      { name: event.displayName, path: currentPath },
+    ]),
+    createEventJsonLd({
+      name: `${event.displayName} in ${country.name}`,
+      description: `Live countdown to ${event.displayName} in ${country.name}. The next ${event.displayName} falls on ${targetDateLabel}.`,
+      startDate: data.targetDate,
+      path: currentPath,
+    }),
+  ];
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      <JsonLd data={structuredData} />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link

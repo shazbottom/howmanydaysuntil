@@ -3,8 +3,10 @@ import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedDateCountdownPageData } from "../lib/localizedCountdowns";
+import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
 
 export interface LocalizedDateCountdownPageProps {
   data: LocalizedDateCountdownPageData;
@@ -12,9 +14,24 @@ export interface LocalizedDateCountdownPageProps {
 
 export function LocalizedDateCountdownPage({ data }: LocalizedDateCountdownPageProps) {
   const { country, countdown, targetDateLabel, todayLabel } = data;
+  const currentPath = `/${country.code}/days-until/${data.dateSlug}`;
+  const structuredData = [
+    createBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: country.name, path: `/${country.code}` },
+      { name: targetDateLabel, path: currentPath },
+    ]),
+    createEventJsonLd({
+      name: `${targetDateLabel} in ${country.name}`,
+      description: `Live countdown to ${targetDateLabel} in ${country.name}.`,
+      startDate: data.targetDate,
+      path: currentPath,
+    }),
+  ];
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      <JsonLd data={structuredData} />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link

@@ -4,10 +4,12 @@ import { CalculatorNavButton } from "./CalculatorNavButton";
 import type { CountryDefinition } from "../lib/countries";
 import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedHubEventLink } from "../lib/localizedCountdowns";
 import type { RegionDefinition } from "../lib/regions";
 import type { CountryPublicHolidayRow, ReferenceAttribution, ReferenceSource } from "../lib/countryData";
+import { createBreadcrumbJsonLd } from "../lib/structuredData";
 
 export interface HubYearLink {
   label: string;
@@ -24,6 +26,7 @@ export interface CountryHubPageProps {
   holidayAttribution: ReferenceAttribution | null;
   regionLinks: RegionDefinition[];
   yearLinks: HubYearLink[];
+  currentPath?: string;
 }
 
 export function CountryHubPage({
@@ -35,6 +38,7 @@ export function CountryHubPage({
   holidayAttribution,
   regionLinks,
   yearLinks,
+  currentPath,
 }: CountryHubPageProps) {
   const regionLabel =
     country.code === "au"
@@ -129,6 +133,12 @@ export function CountryHubPage({
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      <JsonLd
+        data={createBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: country.name, path: currentPath ?? `/${country.code}` },
+        ])}
+      />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link

@@ -9,6 +9,7 @@ import {
   getSeoLandingPath,
   seoLandingPages,
 } from "../../lib/seoLandingPages";
+import { createBreadcrumbJsonLd, createEventJsonLd } from "../../lib/structuredData";
 
 interface LandingPageProps {
   params: Promise<{
@@ -93,6 +94,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
 
   const { countdown, targetDate } = resolvedCountdown;
   const relatedEvents = getSeoHubRelatedLinks(event);
+  const currentPath = getSeoLandingPath(event.slug);
   const eyebrow =
     event.category === "year"
       ? "Year countdown"
@@ -100,6 +102,18 @@ export default async function LandingPage({ params }: LandingPageProps) {
         ? "Recurring countdown"
         : "Event countdown";
   const lead = `${event.name} ${targetDate.getFullYear()} falls on ${formatFullDate(targetDate, "en-US")}.`;
+  const structuredData = [
+    createBreadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: event.name, path: currentPath },
+    ]),
+    createEventJsonLd({
+      name: event.name,
+      description: event.seoDescription || lead,
+      startDate: targetDate,
+      path: currentPath,
+    }),
+  ];
 
   return (
     <SeoCountdownPage
@@ -111,6 +125,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
       supportingCopy={event.supportingCopy}
       relatedLinks={relatedEvents}
       showChristmasFlyby={event.slug === "christmas"}
+      structuredData={structuredData}
     />
   );
 }

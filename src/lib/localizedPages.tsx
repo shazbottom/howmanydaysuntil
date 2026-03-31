@@ -84,6 +84,7 @@ export function renderCountryHub(countryCode: CountryCode, year?: number) {
       holidayAttribution={getCountryHolidayAttribution(countryCode)}
       regionLinks={getRegionsForCountry(countryCode)}
       yearLinks={getCountryYearLinks(countryCode, selectedYear)}
+      currentPath={getCountryHubPath(countryCode, year)}
     />
   );
 }

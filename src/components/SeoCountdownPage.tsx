@@ -5,6 +5,7 @@ import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
@@ -19,6 +20,7 @@ export interface SeoCountdownPageProps {
   relatedLinks: CountdownLinkItem[];
   extraSection?: ReactNode;
   showChristmasFlyby?: boolean;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 export function SeoCountdownPage({
@@ -31,9 +33,11 @@ export function SeoCountdownPage({
   relatedLinks,
   extraSection,
   showChristmasFlyby = false,
+  structuredData,
 }: SeoCountdownPageProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      {structuredData ? <JsonLd data={structuredData} /> : null}
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link

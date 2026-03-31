@@ -3,12 +3,14 @@ import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
+import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { CountryDefinition } from "../lib/countries";
 import type { RegionDefinition } from "../lib/regions";
 import type { RegionReferenceAttributions, RegionYearData } from "../lib/regionData";
 import { getCountryReferenceData } from "../lib/countryData";
 import type { HubYearLink } from "./CountryHubPage";
+import { createBreadcrumbJsonLd } from "../lib/structuredData";
 
 export interface RegionHubPageProps {
   country: CountryDefinition;
@@ -19,6 +21,7 @@ export interface RegionHubPageProps {
   attributions: RegionReferenceAttributions | null;
   siblingRegions: RegionDefinition[];
   yearLinks: HubYearLink[];
+  currentPath?: string;
 }
 
 export function RegionHubPage({
@@ -30,6 +33,7 @@ export function RegionHubPage({
   attributions,
   siblingRegions,
   yearLinks,
+  currentPath,
 }: RegionHubPageProps) {
   const regionQualifier = region.shortName ? `${region.name} (${region.shortName})` : region.name;
   const publicHolidayRows = referenceData?.publicHolidays ?? [];
@@ -188,6 +192,13 @@ export function RegionHubPage({
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+      <JsonLd
+        data={createBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: country.name, path: `/${country.code}` },
+          { name: region.name, path: currentPath ?? `/${country.code}/${region.slug}` },
+        ])}
+      />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full items-center justify-between gap-4">
           <Link
