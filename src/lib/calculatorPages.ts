@@ -6,7 +6,8 @@ export type CalculatorKind =
   | "days-between"
   | "business-days-between"
   | "business-days-until"
-  | "add-or-subtract-date";
+  | "add-or-subtract-date"
+  | "days-until-i-retire";
 
 export const calculatorPages = [
   {
@@ -32,6 +33,12 @@ export const calculatorPages = [
     path: "/add-or-subtract-date",
     title: "Add or Subtract Date Calculator | DaysUntil",
     description: "Add to or subtract from a date using days, weeks, months, or years.",
+  },
+  {
+    kind: "days-until-i-retire" as const,
+    path: "/days-until-i-retire",
+    title: "Days Until I Retire Calculator | DaysUntil",
+    description: "Enter your date of birth and target retirement age to calculate your retirement date and countdown.",
   },
 ] satisfies Array<{
   kind: CalculatorKind;

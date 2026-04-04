@@ -155,6 +155,15 @@ export interface AddOrSubtractDateResult {
   dayDifference: number;
 }
 
+export interface RetirementCountdownResult {
+  retirementDate: string;
+  retirementLabel: string;
+  daysRemaining: number;
+  yearsRemaining: number;
+  monthsRemaining: number;
+  extraDaysRemaining: number;
+}
+
 export function calculateDaysBetween(startDateText: string, endDateText: string) {
   const startDate = parseDateOnly(startDateText);
   const endDate = parseDateOnly(endDateText);
@@ -322,5 +331,53 @@ export function calculateAddOrSubtractDate(
       year: "numeric",
     }).format(resultDate),
     dayDifference: differenceInCalendarDays(startDate, resultDate),
+  };
+}
+
+export function calculateRetirementCountdown(
+  dateOfBirthText: string,
+  retirementAge: number,
+): RetirementCountdownResult | null {
+  const dateOfBirth = parseDateOnly(dateOfBirthText);
+
+  if (!dateOfBirth || !Number.isFinite(retirementAge) || retirementAge < 1 || retirementAge > 100) {
+    return null;
+  }
+
+  const retirementDate = addUtcYearsClamped(dateOfBirth, retirementAge);
+  const today = getTodayInTimeZone("Australia/Sydney");
+  const daysRemaining = differenceInCalendarDays(today, retirementDate);
+  const yearsRemaining = Math.trunc(daysRemaining / 365.2425);
+  const afterYears = addUtcYearsClamped(today, yearsRemaining);
+
+  let monthsRemaining = 0;
+  let cursor = afterYears;
+
+  while (monthsRemaining < 12) {
+    const nextMonth = addUtcMonthsClamped(cursor, 1);
+
+    if (nextMonth.getTime() > retirementDate.getTime()) {
+      break;
+    }
+
+    monthsRemaining += 1;
+    cursor = nextMonth;
+  }
+
+  const extraDaysRemaining = differenceInCalendarDays(cursor, retirementDate);
+
+  return {
+    retirementDate: retirementDate.toISOString().slice(0, 10),
+    retirementLabel: new Intl.DateTimeFormat("en-GB", {
+      timeZone: "UTC",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(retirementDate),
+    daysRemaining,
+    yearsRemaining,
+    monthsRemaining,
+    extraDaysRemaining,
   };
 }

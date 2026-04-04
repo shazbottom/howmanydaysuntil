@@ -13,6 +13,7 @@ import {
   calculateBusinessDaysBetweenForCountry,
   calculateBusinessDaysUntilForCountry,
   calculateDaysBetween,
+  calculateRetirementCountdown,
 } from "../../lib/dateCalculators";
 
 interface CalculatorPreviewShellProps {
@@ -500,6 +501,39 @@ function AddOrSubtractDateCalculator() {
   );
 }
 
+function RetirementCountdownCalculator() {
+  const [dateOfBirth, setDateOfBirth] = useState("1990-04-01");
+  const [retirementAge, setRetirementAge] = useState(67);
+  const result = calculateRetirementCountdown(dateOfBirth, retirementAge);
+
+  return (
+    <>
+      <p className="mt-4 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58">
+        Enter your date of birth and the retirement age you want to use. This calculator
+        works out the retirement date based only on the age you enter and shows the time
+        remaining in years, months, days, and a live countdown.
+      </p>
+      <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <DateField label="Date of birth" value={dateOfBirth} onChange={setDateOfBirth} />
+        <NumberField label="Retirement age" value={retirementAge} onChange={setRetirementAge} />
+      </div>
+      {result !== null ? (
+        <ResultCard
+          title="Days until I retire"
+          value={Math.max(result.daysRemaining, 0)}
+          mainDisplay={formatResultDate(result.retirementDate)}
+          outputLabel="Retirement date"
+          outputValue={result.retirementLabel}
+          label="days remaining until retirement"
+          summaryLine={`${result.yearsRemaining} years, ${result.monthsRemaining} months, ${result.extraDaysRemaining} days`}
+          liveTargetDateText={result.retirementDate}
+          note={`Based on the retirement age you entered, your retirement date is ${result.retirementLabel}. This is a personal planning calculator and does not use any official retirement rules.`}
+        />
+      ) : null}
+    </>
+  );
+}
+
 export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewShellProps) {
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
@@ -542,12 +576,15 @@ export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewSh
                   ? "Business days between dates"
                   : activeCalculator === "business-days-until"
                     ? "Business days until a date"
-                    : "Add or subtract date"}
+                    : activeCalculator === "add-or-subtract-date"
+                      ? "Add or subtract date"
+                      : "Days until I retire"}
             </h2>
             {activeCalculator === "days-between" ? <DaysBetweenCalculator /> : null}
             {activeCalculator === "business-days-between" ? <BusinessDaysBetweenCalculator /> : null}
             {activeCalculator === "business-days-until" ? <BusinessDaysUntilCalculator /> : null}
             {activeCalculator === "add-or-subtract-date" ? <AddOrSubtractDateCalculator /> : null}
+            {activeCalculator === "days-until-i-retire" ? <RetirementCountdownCalculator /> : null}
           </div>
         </section>
       </div>
