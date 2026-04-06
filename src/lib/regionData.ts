@@ -496,6 +496,50 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-ga": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr.'s Birthday", date: "2026-01-19" },
+        { name: "State Holiday (Good Friday)", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "State Holiday", date: "2026-11-27" },
+        { name: "Washington's Birthday (observed)", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Georgia school districts publish their own calendars. Use Georgia Department of Education resources and your district website for local term dates.",
+          notesHref: "https://georgiainsights.gadoe.org/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar for winter break dates in Georgia.",
+          notesHref: "https://georgiainsights.gadoe.org/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar for spring break dates in Georgia.",
+          notesHref: "https://georgiainsights.gadoe.org/",
+        },
+      ],
+    },
+  },
   "us-il": {
     publicHolidays: {
       2026: [
@@ -540,6 +584,93 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-nj": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents Day", date: "2026-02-16" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "New Jersey districts publish their own calendars. Use the official NJ school directory to reach your district calendar.",
+          notesHref: "https://www.nj.gov/nj/education/direct",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the official New Jersey school directory.",
+          notesHref: "https://www.nj.gov/nj/education/direct",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the official New Jersey school directory.",
+          notesHref: "https://www.nj.gov/nj/education/direct",
+        },
+      ],
+    },
+  },
+  "us-nc": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Birthday", date: "2026-01-19" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+        { name: "Christmas Day additional holiday", date: "2026-12-28" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "North Carolina public school units publish their own calendars. Use the official NCDPI education directory to find your district.",
+          notesHref: "https://www.dpi.nc.gov/nceddirectory/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the NCDPI education directory.",
+          notesHref: "https://www.dpi.nc.gov/nceddirectory/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the NCDPI education directory.",
+          notesHref: "https://www.dpi.nc.gov/nceddirectory/",
+        },
+      ],
+    },
+  },
   "us-ny": {
     publicHolidays: {
       2026: [
@@ -580,6 +711,91 @@ export const regionData: Record<string, RegionReferenceData> = {
           endLabel: "Varies by district",
           notes: "Check your district calendar through the New York State Education Department district directory.",
           notesHref: "https://www.nysed.gov/state-assessment/directory-school-district-websites",
+        },
+      ],
+    },
+  },
+  "us-oh": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Ohio districts publish their own calendars. Use the official ODEW organization search to find your district website.",
+          notesHref: "https://oeds.education.ohio.gov/searchorg",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Ohio organization search.",
+          notesHref: "https://oeds.education.ohio.gov/searchorg",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through the Ohio organization search.",
+          notesHref: "https://oeds.education.ohio.gov/searchorg",
+        },
+      ],
+    },
+  },
+  "us-pa": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth National Freedom Day", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Indigenous Peoples' Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Pennsylvania districts publish their own calendars. Use the official EdNA search to reach your district details and website.",
+          notesHref: "https://www.edna.pa.gov/Screens/wfSearchEntity.aspx",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Pennsylvania's official EdNA search.",
+          notesHref: "https://www.edna.pa.gov/Screens/wfSearchEntity.aspx",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Pennsylvania's official EdNA search.",
+          notesHref: "https://www.edna.pa.gov/Screens/wfSearchEntity.aspx",
         },
       ],
     },

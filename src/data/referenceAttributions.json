@@ -467,6 +467,26 @@
         "lastChecked": "2026-03-22"
       }
     },
+    "us-ga": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Georgia.gov",
+            "href": "https://georgia.gov/georgia-state-holidays-2026"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Georgia Department of Education",
+            "href": "https://georgiainsights.gadoe.org/"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      }
+    },
     "us-il": {
       "publicHolidays": {
         "sources": [
@@ -487,6 +507,46 @@
         "lastChecked": "2026-03-22"
       }
     },
+    "us-nj": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "NJ.gov",
+            "href": "https://www.nj.gov/nj/about/facts/holidays.shtml"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "New Jersey Department of Education",
+            "href": "https://www.nj.gov/nj/education/direct"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      }
+    },
+    "us-nc": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "NC Office of State Human Resources",
+            "href": "https://oshr.nc.gov/state-employee-resources/benefits/leave/holidays"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "North Carolina Department of Public Instruction",
+            "href": "https://www.dpi.nc.gov/nceddirectory/"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      }
+    },
     "us-ny": {
       "publicHolidays": {
         "sources": [
@@ -505,6 +565,46 @@
           }
         ],
         "lastChecked": "2026-03-22"
+      }
+    },
+    "us-oh": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Supreme Court of Ohio",
+            "href": "https://www.supremecourt.ohio.gov/opinions-cases/clerk-of-court/office/holiday-filing-rule/"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Ohio Department of Education and Workforce",
+            "href": "https://oeds.education.ohio.gov/searchorg"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      }
+    },
+    "us-pa": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Commonwealth of Pennsylvania",
+            "href": "https://www.pa.gov/content/dam/copapwp-pagov/en/oa/documents/policies/ac/25-13.pdf"
+          }
+        ],
+        "lastChecked": "2026-04-07"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Pennsylvania Department of Education",
+            "href": "https://www.edna.pa.gov/Screens/wfSearchEntity.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-07"
       }
     },
     "us-tx": {
