@@ -185,6 +185,14 @@ export const regions: RegionDefinition[] = [
     timezone: "America/Los_Angeles",
   },
   {
+    id: "us-az",
+    countryCode: "us",
+    slug: "arizona",
+    shortName: "AZ",
+    name: "Arizona",
+    timezone: "America/Phoenix",
+  },
+  {
     id: "us-fl",
     countryCode: "us",
     slug: "florida",
@@ -207,6 +215,22 @@ export const regions: RegionDefinition[] = [
     shortName: "IL",
     name: "Illinois",
     timezone: "America/Chicago",
+  },
+  {
+    id: "us-ma",
+    countryCode: "us",
+    slug: "massachusetts",
+    shortName: "MA",
+    name: "Massachusetts",
+    timezone: "America/New_York",
+  },
+  {
+    id: "us-mi",
+    countryCode: "us",
+    slug: "michigan",
+    shortName: "MI",
+    name: "Michigan",
+    timezone: "America/Detroit",
   },
   {
     id: "us-nj",
@@ -255,6 +279,22 @@ export const regions: RegionDefinition[] = [
     shortName: "TX",
     name: "Texas",
     timezone: "America/Chicago",
+  },
+  {
+    id: "us-va",
+    countryCode: "us",
+    slug: "virginia",
+    shortName: "VA",
+    name: "Virginia",
+    timezone: "America/New_York",
+  },
+  {
+    id: "us-wa",
+    countryCode: "us",
+    slug: "washington",
+    shortName: "WA",
+    name: "Washington",
+    timezone: "America/Los_Angeles",
   },
 ];
 

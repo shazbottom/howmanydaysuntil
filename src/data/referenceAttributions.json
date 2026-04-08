@@ -467,6 +467,26 @@
         "lastChecked": "2026-03-22"
       }
     },
+    "us-az": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Arizona Department of Administration Human Resources",
+            "href": "https://hr.az.gov/2026-holiday-calendar"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Arizona Department of Education",
+            "href": "https://azreportcards.azed.gov/districts/"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      }
+    },
     "us-ga": {
       "publicHolidays": {
         "sources": [
@@ -505,6 +525,46 @@
           }
         ],
         "lastChecked": "2026-03-22"
+      }
+    },
+    "us-ma": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Massachusetts Secretary of the Commonwealth",
+            "href": "https://www.sec.state.ma.us/divisions/cis/holiday-info.htm"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Massachusetts Department of Elementary and Secondary Education",
+            "href": "https://profiles.doe.mass.edu/"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      }
+    },
+    "us-mi": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Michigan",
+            "href": "https://www.michigan.gov/som/government/state-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Michigan Department of Education",
+            "href": "https://www.michigan.gov/mde/contact-us"
+          }
+        ],
+        "lastChecked": "2026-04-08"
       }
     },
     "us-nj": {
@@ -625,6 +685,46 @@
           }
         ],
         "lastChecked": "2026-03-22"
+      }
+    },
+    "us-va": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Virginia Department of Health Professions",
+            "href": "https://www.dhp.virginia.gov/AboutDHP/ContactUs/HolidaysandClosings/"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Virginia Department of Education",
+            "href": "https://www.doe.virginia.gov/about-vdoe/virginia-school-directories"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      }
+    },
+    "us-wa": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Washington Department of Revenue",
+            "href": "https://dor.wa.gov/contact/state-holiday-schedule"
+          }
+        ],
+        "lastChecked": "2026-04-08"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Office of Superintendent of Public Instruction",
+            "href": "https://ospi.k12.wa.us/about-ospi/about-school-districts/websites-and-contact-info"
+          }
+        ],
+        "lastChecked": "2026-04-08"
       }
     }
   }
