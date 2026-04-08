@@ -726,6 +726,106 @@
         ],
         "lastChecked": "2026-04-08"
       }
+    },
+    "us-tn": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "TN.gov",
+            "href": "https://www.tn.gov/about-tn/state-holidays.html"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Tennessee Department of Education",
+            "href": "https://www.tn.gov/education/districts/lea-operations/school-resources/school-directory.html"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-in": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Indiana State Personnel Department",
+            "href": "https://www.in.gov/spd/benefits/state-holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Indiana Department of Education",
+            "href": "https://www.in.gov/doe/it/data-center-and-reports/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-mo": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Missouri Office of Administration",
+            "href": "https://oa.mo.gov/commissioner/state-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Missouri Department of Elementary and Secondary Education",
+            "href": "https://dese.mo.gov/directory"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-md": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Maryland State Archives",
+            "href": "https://msa.maryland.gov/msa/mdmanual/01glance/html/holidaye.html"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Maryland State Department of Education",
+            "href": "https://www.marylandpublicschools.org/about/Pages/School-Systems/OpenClosingDates20242025.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-wi": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Wisconsin Division of Personnel Management",
+            "href": "https://dpm.wi.gov/Pages/How_Do_I/seeStateHolidays.aspx?mod=article_inline"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Wisconsin Department of Public Instruction",
+            "href": "https://apps6.dpi.wi.gov/reportcards/home"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
     }
   }
 }

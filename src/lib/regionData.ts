@@ -1060,6 +1060,223 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-tn": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "New Year's Day additional closure", date: "2026-01-02" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+        { name: "New Year's Eve", date: "2026-12-31" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Tennessee school districts publish their own calendars. Use the official TDOE school directory to find your district and local calendar.",
+          notesHref: "https://www.tn.gov/education/districts/lea-operations/school-resources/school-directory.html",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Tennessee's official school directory.",
+          notesHref: "https://www.tn.gov/education/districts/lea-operations/school-resources/school-directory.html",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Tennessee's official school directory.",
+          notesHref: "https://www.tn.gov/education/districts/lea-operations/school-resources/school-directory.html",
+        },
+      ],
+    },
+  },
+  "us-in": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr. Day", date: "2026-01-19" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Primary Election Day", date: "2026-05-05" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "General Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Lincoln's Birthday", date: "2026-11-27" },
+        { name: "Washington's Birthday", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Indiana school corporations publish their own calendars. Use the official IDOE data center and school directory resources to locate your district.",
+          notesHref: "https://www.in.gov/doe/it/data-center-and-reports/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Indiana's official school directory resources.",
+          notesHref: "https://www.in.gov/doe/it/data-center-and-reports/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Indiana's official school directory resources.",
+          notesHref: "https://www.in.gov/doe/it/data-center-and-reports/",
+        },
+      ],
+    },
+  },
+  "us-mo": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr.'s Birthday", date: "2026-01-19" },
+        { name: "Lincoln's Birthday", date: "2026-02-12" },
+        { name: "Washington's Birthday", date: "2026-02-16" },
+        { name: "Truman Day", date: "2026-05-08" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Missouri districts publish their own calendars. Use the official Missouri School Directory to locate your district and local calendar.",
+          notesHref: "https://dese.mo.gov/directory",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Missouri's official school directory.",
+          notesHref: "https://dese.mo.gov/directory",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Missouri's official school directory.",
+          notesHref: "https://dese.mo.gov/directory",
+        },
+      ],
+    },
+  },
+  "us-md": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Dr. Martin Luther King, Jr. Birthday", date: "2026-01-19" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "General Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by school system",
+          endLabel: "Varies by school system",
+          notes: "Maryland school systems publish local calendars. Use the official opening and closing dates page to compare district schedules.",
+          notesHref: "https://www.marylandpublicschools.org/about/Pages/School-Systems/OpenClosingDates20242025.aspx",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by school system",
+          endLabel: "Varies by school system",
+          notes: "Check your local school system calendar through Maryland's official opening and closing dates page.",
+          notesHref: "https://www.marylandpublicschools.org/about/Pages/School-Systems/OpenClosingDates20242025.aspx",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by school system",
+          endLabel: "Varies by school system",
+          notes: "Check your local school system calendar through Maryland's official opening and closing dates page.",
+          notesHref: "https://www.marylandpublicschools.org/about/Pages/School-Systems/OpenClosingDates20242025.aspx",
+        },
+      ],
+    },
+  },
+  "us-wi": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr.'s Birthday", date: "2026-01-19" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day", date: "2026-07-04" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Eve Day", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+        { name: "New Year's Eve Day", date: "2026-12-31" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Wisconsin districts publish their own calendars. Use the official DPI district report card portal to find district information.",
+          notesHref: "https://apps6.dpi.wi.gov/reportcards/home",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Wisconsin's official district resources.",
+          notesHref: "https://apps6.dpi.wi.gov/reportcards/home",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Wisconsin's official district resources.",
+          notesHref: "https://apps6.dpi.wi.gov/reportcards/home",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [
