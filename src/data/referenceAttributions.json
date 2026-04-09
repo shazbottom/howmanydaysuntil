@@ -826,6 +826,106 @@
         ],
         "lastChecked": "2026-04-09"
       }
+    },
+    "us-co": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Colorado Department of Revenue",
+            "href": "https://cdor.colorado.gov/holidays"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Colorado Department of Education",
+            "href": "https://cde.state.co.us/cdegen/educationdirectory"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-mn": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Minnesota",
+            "href": "https://mn.gov/uimn/employers/employer-account/news-updates/legal-holiday.jsp"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Minnesota Department of Education",
+            "href": "https://education.mn.gov/MDE/fam/schools/directory/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-al": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Alabama Personnel Department",
+            "href": "https://personnel.alabama.gov/Downloads/StateHolidays2026.pdf"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Alabama State Department of Education",
+            "href": "https://eddir.alsde.edu/siteinfo/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-sc": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "South Carolina Department of Administration",
+            "href": "https://www.admin.sc.gov/services/state-human-resources/benefits-and-leave/holiday-leave"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "South Carolina Department of Education",
+            "href": "https://ed.sc.gov/districts-schools/schools/school-directory/district-information/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
+    },
+    "us-la": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Louisiana Division of Administration",
+            "href": "https://doa.louisiana.gov/doa/hr/state-holiday-calendar/"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Louisiana Department of Education",
+            "href": "https://www.louisianabelieves.com/data/sps/Default_tst.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-09"
+      }
     }
   }
 }

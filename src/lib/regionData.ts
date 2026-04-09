@@ -1277,6 +1277,221 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-co": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "President's Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Frances Xavier Cabrini Day", date: "2026-10-05" },
+        { name: "Veteran's Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Colorado districts publish their own calendars. Use the official Colorado education directory to find district websites and opening and closing day resources.",
+          notesHref: "https://cde.state.co.us/cdegen/educationdirectory",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Colorado's official education directory.",
+          notesHref: "https://cde.state.co.us/cdegen/educationdirectory",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Colorado's official education directory.",
+          notesHref: "https://cde.state.co.us/cdegen/educationdirectory",
+        },
+      ],
+    },
+  },
+  "us-mn": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Thanksgiving Friday", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Minnesota districts publish their own calendars. Use the official Minnesota School Directory to find district websites and local term dates.",
+          notesHref: "https://education.mn.gov/MDE/fam/schools/directory/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Minnesota's official school directory.",
+          notesHref: "https://education.mn.gov/MDE/fam/schools/directory/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Minnesota's official school directory.",
+          notesHref: "https://education.mn.gov/MDE/fam/schools/directory/",
+        },
+      ],
+    },
+  },
+  "us-al": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr. & Robert E. Lee's Birthday", date: "2026-01-19" },
+        { name: "George Washington & Thomas Jefferson's Birthday", date: "2026-02-16" },
+        { name: "Mardi Gras", date: "2026-02-17", notes: "Observed only in Baldwin and Mobile Counties." },
+        { name: "Confederate Memorial Day", date: "2026-04-27" },
+        { name: "National Memorial Day", date: "2026-05-25" },
+        { name: "Jefferson Davis' Birthday", date: "2026-06-01" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day, Fraternal Day & American Indian Heritage Day", date: "2026-10-12" },
+        { name: "Veterans' Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Alabama systems publish their own calendars. Use the official ALSDE education directory to find your local system and school websites.",
+          notesHref: "https://eddir.alsde.edu/siteinfo/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your local system calendar through Alabama's official education directory.",
+          notesHref: "https://eddir.alsde.edu/siteinfo/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your local system calendar through Alabama's official education directory.",
+          notesHref: "https://eddir.alsde.edu/siteinfo/",
+        },
+      ],
+    },
+  },
+  "us-sc": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr. Day", date: "2026-01-19" },
+        { name: "George Washington's Birthday / Presidents Day", date: "2026-02-16" },
+        { name: "Confederate Memorial Day", date: "2026-05-11" },
+        { name: "National Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+        { name: "Day after Christmas", date: "2026-12-28" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "South Carolina districts publish their own calendars. Use the official SCDE district information pages to find local calendars and websites.",
+          notesHref: "https://ed.sc.gov/districts-schools/schools/school-directory/district-information/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through South Carolina's official district directory.",
+          notesHref: "https://ed.sc.gov/districts-schools/schools/school-directory/district-information/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through South Carolina's official district directory.",
+          notesHref: "https://ed.sc.gov/districts-schools/schools/school-directory/district-information/",
+        },
+      ],
+    },
+  },
+  "us-la": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Day After New Year's", date: "2026-01-02" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Mardi Gras", date: "2026-02-17" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Louisiana school systems publish their own calendars. Use official Louisiana school performance and system resources to reach your local district.",
+          notesHref: "https://www.louisianabelieves.com/data/sps/Default_tst.aspx",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your local system calendar through Louisiana's official school resources.",
+          notesHref: "https://www.louisianabelieves.com/data/sps/Default_tst.aspx",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your local system calendar through Louisiana's official school resources.",
+          notesHref: "https://www.louisianabelieves.com/data/sps/Default_tst.aspx",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [
