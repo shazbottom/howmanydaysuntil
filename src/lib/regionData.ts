@@ -1705,6 +1705,216 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-ut": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Dr. Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Washington and Lincoln Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Pioneer Day", date: "2026-07-24" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Utah districts publish their own calendars. Use official Utah school-finder resources to locate your district and local calendar.",
+          notesHref: "https://www.schools.utah.gov/findaschool",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Utah's official school-finder resources.",
+          notesHref: "https://www.schools.utah.gov/findaschool",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Utah's official school-finder resources.",
+          notesHref: "https://www.schools.utah.gov/findaschool",
+        },
+      ],
+    },
+  },
+  "us-ia": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Dr. Martin Luther King, Jr.'s Birthday", date: "2026-01-19" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Iowa districts publish their own calendars. Use official Iowa district maps and directories to reach local school calendars.",
+          notesHref: "https://educate.iowa.gov/pk-12/data/school-district-maps-and-directories",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Iowa's official district directory resources.",
+          notesHref: "https://educate.iowa.gov/pk-12/data/school-district-maps-and-directories",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Iowa's official district directory resources.",
+          notesHref: "https://educate.iowa.gov/pk-12/data/school-district-maps-and-directories",
+        },
+      ],
+    },
+  },
+  "us-ks": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Kansas districts publish their own calendars. Use official KSDE district resources to find local school calendars and websites.",
+          notesHref: "https://www.ksde.gov/Agency/Fiscal-and-Administrative-Services/School-Finance/School-Finance-Data/School-Districts",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Kansas's official district directory resources.",
+          notesHref: "https://www.ksde.gov/Agency/Fiscal-and-Administrative-Services/School-Finance/School-Finance-Data/School-Districts",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Kansas's official district directory resources.",
+          notesHref: "https://www.ksde.gov/Agency/Fiscal-and-Administrative-Services/School-Finance/School-Finance-Data/School-Districts",
+        },
+      ],
+    },
+  },
+  "us-ms": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. and Robert E. Lee's Birthday", date: "2026-01-19" },
+        { name: "Washington's Birthday", date: "2026-02-16" },
+        { name: "Confederate Memorial Day", date: "2026-04-27" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Mississippi districts publish their own calendars. Use official MDE district and school resources to reach local calendars.",
+          notesHref: "https://www.mdek12.org/DD",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Mississippi's official school directory resources.",
+          notesHref: "https://www.mdek12.org/DD",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Mississippi's official school directory resources.",
+          notesHref: "https://www.mdek12.org/DD",
+        },
+      ],
+    },
+  },
+  "us-ne": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Arbor Day", date: "2026-04-24" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Nebraska districts publish their own calendars. Use official NDE district and school contact resources to find local calendars.",
+          notesHref: "https://www.education.ne.gov/dataservices/directory/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Nebraska's official district directory resources.",
+          notesHref: "https://www.education.ne.gov/dataservices/directory/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Nebraska's official district directory resources.",
+          notesHref: "https://www.education.ne.gov/dataservices/directory/",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [

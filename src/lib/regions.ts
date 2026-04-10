@@ -416,6 +416,46 @@ export const regions: RegionDefinition[] = [
     name: "Arkansas",
     timezone: "America/Chicago",
   },
+  {
+    id: "us-ut",
+    countryCode: "us",
+    slug: "utah",
+    shortName: "UT",
+    name: "Utah",
+    timezone: "America/Denver",
+  },
+  {
+    id: "us-ia",
+    countryCode: "us",
+    slug: "iowa",
+    shortName: "IA",
+    name: "Iowa",
+    timezone: "America/Chicago",
+  },
+  {
+    id: "us-ks",
+    countryCode: "us",
+    slug: "kansas",
+    shortName: "KS",
+    name: "Kansas",
+    timezone: "America/Chicago",
+  },
+  {
+    id: "us-ms",
+    countryCode: "us",
+    slug: "mississippi",
+    shortName: "MS",
+    name: "Mississippi",
+    timezone: "America/Chicago",
+  },
+  {
+    id: "us-ne",
+    countryCode: "us",
+    slug: "nebraska",
+    shortName: "NE",
+    name: "Nebraska",
+    timezone: "America/Chicago",
+  },
 ];
 
 export function getRegionId(region: Pick<RegionDefinition, "id">): string {

@@ -1026,6 +1026,106 @@
         ],
         "lastChecked": "2026-04-10"
       }
+    },
+    "us-ut": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Utah Department of Human Resource Management",
+            "href": "https://dhrm.utah.gov/benefits/paid-time-off/holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Utah State Board of Education",
+            "href": "https://www.schools.utah.gov/findaschool"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ia": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Iowa Department of Administrative Services",
+            "href": "https://das.iowa.gov/state-employees/state-accounting/centralized-payroll/state-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Iowa Department of Education",
+            "href": "https://educate.iowa.gov/pk-12/data/school-district-maps-and-directories"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ks": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Kansas Department of Administration",
+            "href": "https://admin.ks.gov/offices/personnel-services/state-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Kansas State Department of Education",
+            "href": "https://www.ksde.gov/Agency/Fiscal-and-Administrative-Services/School-Finance/School-Finance-Data/School-Districts"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ms": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Mississippi State Personnel Board",
+            "href": "https://www.spb.ms.gov/holiday-schedule"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Mississippi Department of Education",
+            "href": "https://www.mdek12.org/DD"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ne": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Nebraska Department of Administrative Services",
+            "href": "https://das.nebraska.gov/personnel/benefits/2026holidaycalendar.html"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Nebraska Department of Education",
+            "href": "https://www.education.ne.gov/dataservices/directory/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
     }
   }
 }
