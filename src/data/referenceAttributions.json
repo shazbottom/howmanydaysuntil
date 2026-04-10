@@ -926,6 +926,106 @@
         ],
         "lastChecked": "2026-04-09"
       }
+    },
+    "us-or": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Oregon Department of Revenue",
+            "href": "https://www.oregon.gov/dor/programs/businesses/Pages/holidays.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Oregon Department of Education",
+            "href": "https://www.ode.state.or.us/data/Directory/dir.txt"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-nv": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Nevada",
+            "href": "https://nvapps.state.nv.us/NEATS/Payroll/2026_Holidays.pdf"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Nevada Department of Education",
+            "href": "https://doe.nv.gov/Schools/District_Websites/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ky": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Kentucky Personnel Cabinet",
+            "href": "https://personnel.ky.gov/Pages/Holidays.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Kentucky Department of Education",
+            "href": "https://www.education.ky.gov/Open-House/Pages/default.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ok": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Oklahoma Office of Management and Enterprise Services",
+            "href": "https://oklahoma.gov/omes/services/state-payroll/holiday-schedule.html"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Oklahoma State Department of Education",
+            "href": "https://oklahoma.gov/education/about.html"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ar": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Arkansas Department of Finance and Administration",
+            "href": "https://www.dfa.arkansas.gov/office/personnel-management/holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Arkansas Department of Education",
+            "href": "https://adedata.arkansas.gov/spd/Home/schools"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
     }
   }
 }

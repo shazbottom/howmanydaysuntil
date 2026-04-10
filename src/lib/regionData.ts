@@ -1492,6 +1492,219 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-or": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day", date: "2026-07-04" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Oregon districts publish their own calendars. Use the official Oregon school and district directory to find local websites and term dates.",
+          notesHref: "https://www.ode.state.or.us/data/Directory/dir.txt",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Oregon's official school and district directory.",
+          notesHref: "https://www.ode.state.or.us/data/Directory/dir.txt",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Oregon's official school and district directory.",
+          notesHref: "https://www.ode.state.or.us/data/Directory/dir.txt",
+        },
+      ],
+    },
+  },
+  "us-nv": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Nevada Day", date: "2026-10-30" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Family Day", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Nevada districts publish their own calendars. Use official Nevada Department of Education district resources to reach your local calendar.",
+          notesHref: "https://doe.nv.gov/Schools/District_Websites/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Nevada's official district resources.",
+          notesHref: "https://doe.nv.gov/Schools/District_Websites/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Nevada's official district resources.",
+          notesHref: "https://doe.nv.gov/Schools/District_Websites/",
+        },
+      ],
+    },
+  },
+  "us-ky": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Kentucky districts publish their own calendars. Use KDE Open House district resources to find local school calendars and websites.",
+          notesHref: "https://www.education.ky.gov/Open-House/Pages/default.aspx",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Kentucky's official district resources.",
+          notesHref: "https://www.education.ky.gov/Open-House/Pages/default.aspx",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Kentucky's official district resources.",
+          notesHref: "https://www.education.ky.gov/Open-House/Pages/default.aspx",
+        },
+      ],
+    },
+  },
+  "us-ok": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Presidents Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Oklahoma districts publish their own calendars. Use official OSDE district resources to reach local school systems and calendars.",
+          notesHref: "https://oklahoma.gov/education/about.html",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Oklahoma's official education resources.",
+          notesHref: "https://oklahoma.gov/education/about.html",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Oklahoma's official education resources.",
+          notesHref: "https://oklahoma.gov/education/about.html",
+        },
+      ],
+    },
+  },
+  "us-ar": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "George Washington's Birthday and Daisy Gatson Bates Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Eve", date: "2026-12-24" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Arkansas districts publish their own calendars. Use the official Arkansas education directory to locate your local district and school sites.",
+          notesHref: "https://adedata.arkansas.gov/spd/Home/schools",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Arkansas's official education directory.",
+          notesHref: "https://adedata.arkansas.gov/spd/Home/schools",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Arkansas's official education directory.",
+          notesHref: "https://adedata.arkansas.gov/spd/Home/schools",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [
