@@ -1226,6 +1226,206 @@
         ],
         "lastChecked": "2026-04-10"
       }
+    },
+    "us-ak": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Alaska",
+            "href": "https://doa.alaska.gov/calendar/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Alaska Department of Education and Early Development",
+            "href": "https://education.alaska.gov/districts"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-hi": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Hawaii Department of Human Resources Development",
+            "href": "https://dhrd.hawaii.gov/state-observed-holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Hawaii State Department of Education",
+            "href": "https://www.hawaiipublicschools.org/Calendars/SchoolCalendar/Pages/home.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-mt": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Montana State Human Resources",
+            "href": "https://montana.servicenowservices.com/hr?id=kb_article_view&sysparm_article=KB0013297"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Montana Office of Public Instruction",
+            "href": "https://opi.mt.gov/Leadership/Management-Operations/Montana-Schools-Directory"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-nd": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "North Dakota Human Resource Management Services",
+            "href": "https://www.nd.gov/hrms/benefits/holiday-policy"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "North Dakota Department of Public Instruction",
+            "href": "https://www.nd.gov/dpi/districtsschools/school-calendars"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-sd": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "South Dakota Bureau of Human Resources",
+            "href": "https://bhr.sd.gov/job-seekers/work-for-state-government/employee-benefits/state-holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "South Dakota Department of Education",
+            "href": "https://doe.sd.gov/ofm/edudir.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-wy": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Wyoming",
+            "href": "https://ai.wyo.gov/divisions/human-resources/state-employee-benefits/holiday-schedule"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Wyoming Department of Education",
+            "href": "https://portals.edu.wyoming.gov/wyedpro/Pages/OnlineDirectory/OnlineDirectoryIndex.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-me": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Maine Bureau of Human Resources",
+            "href": "https://www.maine.gov/bhr/state-employees/maine-state-government-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Maine Department of Education",
+            "href": "https://www.maine.gov/doe/schools/directory"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ri": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Rhode Island General Assembly",
+            "href": "https://webserver.rilegislature.gov/Statutes/TITLE25/25-1/25-1-1.htm"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Rhode Island Department of Education",
+            "href": "https://ride.ri.gov/district-charter-directory"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-vt": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Vermont General Assembly",
+            "href": "https://legislature.vermont.gov/statutes/section/01/005/00371"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Vermont Agency of Education",
+            "href": "https://education.vermont.gov/vermont-schools/schools-directory"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-nh": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "New Hampshire Department of Administrative Services",
+            "href": "https://das.nh.gov/hr/holiday-schedule"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "New Hampshire Department of Education",
+            "href": "https://my.doe.nh.gov/profiles/sau.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
     }
   }
 }
