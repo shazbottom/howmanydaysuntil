@@ -39,6 +39,10 @@ export function RegionHubPage({
   const publicHolidayRows = referenceData?.publicHolidays ?? [];
   const schoolTermRows = referenceData?.schoolTerms ?? [];
   const showSchoolTermNotes = schoolTermRows.some((row) => Boolean(row.notes));
+  const sortedSiblingRegions = [...siblingRegions].sort((left, right) =>
+    left.name.localeCompare(right.name),
+  );
+  const useSiblingRegionGrid = country.code === "us" && sortedSiblingRegions.length > 12;
   const countryHolidayNames = new Set(
     getCountryReferenceData(country.code, currentYear).map((row) => row.name),
   );
@@ -253,19 +257,43 @@ export function RegionHubPage({
               ))}
             </div>
           ) : null}
-          {siblingRegions.length > 0 ? (
-            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
-              <span className="text-black/42 dark:text-white/44">Other regions</span>
-              {siblingRegions.map((siblingRegion) => (
-                <Link
-                  key={siblingRegion.id}
-                  href={`/${country.code}/${siblingRegion.slug}`}
-                  className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
-                >
-                  {siblingRegion.shortName ?? siblingRegion.name}
-                </Link>
-              ))}
-            </div>
+          {sortedSiblingRegions.length > 0 ? (
+            useSiblingRegionGrid ? (
+              <section className="mt-7 w-full max-w-3xl text-center">
+                <div className="flex items-center justify-center gap-3 text-sm">
+                  <h2 className="text-black/42 dark:text-white/44">Other regions</h2>
+                  <span className="text-xs text-black/36 dark:text-white/38">
+                    {sortedSiblingRegions.length} total
+                  </span>
+                </div>
+                <div className="mt-4 grid grid-cols-8 justify-items-center gap-x-3 gap-y-3 text-sm sm:grid-cols-10 md:grid-cols-10">
+                  {sortedSiblingRegions.map((siblingRegion) => (
+                    <Link
+                      key={siblingRegion.id}
+                      href={`/${country.code}/${siblingRegion.slug}`}
+                      className="min-w-[1.9rem] text-center font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                      title={siblingRegion.name}
+                      aria-label={siblingRegion.name}
+                    >
+                      {siblingRegion.shortName ?? siblingRegion.name}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+                <span className="text-black/42 dark:text-white/44">Other regions</span>
+                {sortedSiblingRegions.map((siblingRegion) => (
+                  <Link
+                    key={siblingRegion.id}
+                    href={`/${country.code}/${siblingRegion.slug}`}
+                    className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                  >
+                    {siblingRegion.shortName ?? siblingRegion.name}
+                  </Link>
+                ))}
+              </div>
+            )
           ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
             Check{" "}

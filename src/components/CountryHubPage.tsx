@@ -51,6 +51,10 @@ export function CountryHubPage({
           ? "Countries"
           : "Regions";
   const showHolidayNotes = nationalHolidayRows.some((row) => Boolean(row.notes));
+  const sortedRegionLinks = [...regionLinks].sort((left, right) =>
+    left.name.localeCompare(right.name),
+  );
+  const useRegionGrid = country.code === "us" && regionLinks.length > 12;
 
   function formatList(values: string[]): string {
     if (values.length === 0) {
@@ -193,19 +197,43 @@ export function CountryHubPage({
               ))}
             </div>
           ) : null}
-          {regionLinks.length > 0 ? (
-            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
-              <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
-              {regionLinks.map((region) => (
-                <Link
-                  key={region.id}
-                  href={`/${country.code}/${region.slug}`}
-                  className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
-                >
-                  {region.shortName ?? region.name}
-                </Link>
-              ))}
-            </div>
+          {sortedRegionLinks.length > 0 ? (
+            useRegionGrid ? (
+              <section className="mt-7 w-full max-w-3xl text-center">
+                <div className="flex items-center justify-center gap-3 text-sm">
+                  <h2 className="text-black/42 dark:text-white/44">{regionLabel}</h2>
+                  <span className="text-xs text-black/36 dark:text-white/38">
+                    {sortedRegionLinks.length} total
+                  </span>
+                </div>
+                <div className="mt-4 grid grid-cols-8 justify-items-center gap-x-3 gap-y-3 text-sm sm:grid-cols-10 md:grid-cols-10">
+                  {sortedRegionLinks.map((region) => (
+                    <Link
+                      key={region.id}
+                      href={`/${country.code}/${region.slug}`}
+                      className="min-w-[1.9rem] text-center font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                      title={region.name}
+                      aria-label={region.name}
+                    >
+                      {region.shortName ?? region.name}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+                <span className="text-black/42 dark:text-white/44">{regionLabel}</span>
+                {sortedRegionLinks.map((region) => (
+                  <Link
+                    key={region.id}
+                    href={`/${country.code}/${region.slug}`}
+                    className="font-semibold text-black/72 underline-offset-4 transition hover:text-black hover:underline dark:text-white/76 dark:hover:text-white"
+                  >
+                    {region.shortName ?? region.name}
+                  </Link>
+                ))}
+              </div>
+            )
           ) : null}
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
             Check{" "}
