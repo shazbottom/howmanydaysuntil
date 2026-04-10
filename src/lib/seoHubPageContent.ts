@@ -67,7 +67,7 @@ function getOccurrenceForYear(
 export function getSeoHubOccurrenceRows(
   event: SeoHubEventDefinition,
   now: Date,
-  rowCount = 4,
+  rowCount = 5,
 ): SeoHubOccurrenceRow[] {
   if (event.recurrence.recurrenceType === "weekday-recurring") {
     return [];

@@ -4,8 +4,10 @@ import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
+import { SeoHubFactsSection } from "./SeoHubFactsSection";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedCountdownPageData } from "../lib/localizedCountdowns";
+import { getSeoHubFacts } from "../lib/seoHubFacts";
 import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
@@ -17,6 +19,7 @@ export interface LocalizedCountdownPageProps {
 export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
   const { country, event, countdown, targetDateLabel, todayLabel, occurrenceRows } = data;
   const isChristmas = event.slug === "christmas";
+  const factSet = getSeoHubFacts(event.slug);
   const currentPath = `/${country.code}/days-until/${event.slug}`;
   const structuredData = [
     createBreadcrumbJsonLd([
@@ -113,6 +116,7 @@ export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
               </table>
             </div>
           </div>
+          {factSet ? <SeoHubFactsSection factSet={factSet} /> : null}
           <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm">
             <Link
               href={`/${country.code}`}

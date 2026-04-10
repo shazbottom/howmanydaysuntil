@@ -11,6 +11,7 @@ import { EventChipList, type EventChip } from "../components/EventChipList";
 import { EventInput } from "../components/EventInput";
 import { JsonLd } from "../components/JsonLd";
 import { MyCountdownsDropdown } from "../components/MyCountdownsDropdown";
+import { SeoHubFactsSection } from "../components/SeoHubFactsSection";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
@@ -21,6 +22,7 @@ import { getExactDateRoutePath } from "../lib/exactDatePages";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
 import { parseInput, type ParseResult } from "../lib/parseInput";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
+import { getSeoHubFacts } from "../lib/seoHubFacts";
 import { createOrganizationJsonLd, createWebsiteJsonLd } from "../lib/structuredData";
 
 interface ResolvedCountdownState {
@@ -36,6 +38,7 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
   { slug: "new-year", label: "New Year" },
   { slug: "valentines-day", label: "Valentine's Day" },
   { slug: "thanksgiving", label: "Thanksgiving" },
+  { slug: "black-friday", label: "Black Friday" },
   { slug: "easter", label: "Easter" },
 ];
 
@@ -45,6 +48,7 @@ const POPULAR_COUNTDOWN_LINKS = [
   { href: "/days-until-new-year", label: "Days until New Year" },
   { href: "/days-until-valentines-day", label: "Days until Valentine's Day" },
   { href: "/days-until-thanksgiving", label: "Days until Thanksgiving" },
+  { href: "/days-until-black-friday", label: "Days until Black Friday" },
 ];
 
 const MILESTONE_BUTTONS = [
@@ -326,6 +330,10 @@ export default function Home() {
   const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(homepageNow), [homepageNow]);
   const exploreByMonthLinks = useMemo(() => getExploreByMonthLinks(homepageNow), [homepageNow]);
   const showChristmasFlyby = resolvedState?.selectedSlug === "christmas";
+  const selectedFactSet = useMemo(
+    () => getSeoHubFacts(resolvedState?.selectedSlug ?? ""),
+    [resolvedState?.selectedSlug],
+  );
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
@@ -447,6 +455,7 @@ export default function Home() {
               }
             />
           </div>
+          {selectedFactSet ? <SeoHubFactsSection factSet={selectedFactSet} /> : null}
         </section>
         <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />
         <HomepageChipLinks title="Coming up soon" links={comingUpSoonLinks} />
