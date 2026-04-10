@@ -242,6 +242,11 @@ test("us canonical region slugs resolve directly", () => {
   const kansas = resolveRegionByCountryAndSlug("us", "kansas");
   const mississippi = resolveRegionByCountryAndSlug("us", "mississippi");
   const nebraska = resolveRegionByCountryAndSlug("us", "nebraska");
+  const newMexico = resolveRegionByCountryAndSlug("us", "new-mexico");
+  const idaho = resolveRegionByCountryAndSlug("us", "idaho");
+  const westVirginia = resolveRegionByCountryAndSlug("us", "west-virginia");
+  const connecticut = resolveRegionByCountryAndSlug("us", "connecticut");
+  const delaware = resolveRegionByCountryAndSlug("us", "delaware");
 
   assert.ok(arizona);
   assert.ok(california);
@@ -278,6 +283,11 @@ test("us canonical region slugs resolve directly", () => {
   assert.ok(kansas);
   assert.ok(mississippi);
   assert.ok(nebraska);
+  assert.ok(newMexico);
+  assert.ok(idaho);
+  assert.ok(westVirginia);
+  assert.ok(connecticut);
+  assert.ok(delaware);
   assert.equal(arizona.region.id, "us-az");
   assert.equal(california.region.id, "us-ca");
   assert.equal(florida.region.id, "us-fl");
@@ -313,6 +323,11 @@ test("us canonical region slugs resolve directly", () => {
   assert.equal(kansas.region.id, "us-ks");
   assert.equal(mississippi.region.id, "us-ms");
   assert.equal(nebraska.region.id, "us-ne");
+  assert.equal(newMexico.region.id, "us-nm");
+  assert.equal(idaho.region.id, "us-id");
+  assert.equal(westVirginia.region.id, "us-wv");
+  assert.equal(connecticut.region.id, "us-ct");
+  assert.equal(delaware.region.id, "us-de");
 });
 
 test("us region reference data is available for 2026", () => {
@@ -351,6 +366,11 @@ test("us region reference data is available for 2026", () => {
   const kansas = getRegionReferenceData("us-ks", 2026);
   const mississippi = getRegionReferenceData("us-ms", 2026);
   const nebraska = getRegionReferenceData("us-ne", 2026);
+  const newMexico = getRegionReferenceData("us-nm", 2026);
+  const idaho = getRegionReferenceData("us-id", 2026);
+  const westVirginia = getRegionReferenceData("us-wv", 2026);
+  const connecticut = getRegionReferenceData("us-ct", 2026);
+  const delaware = getRegionReferenceData("us-de", 2026);
 
   assert.ok(arizona);
   assert.ok(california);
@@ -387,6 +407,11 @@ test("us region reference data is available for 2026", () => {
   assert.ok(kansas);
   assert.ok(mississippi);
   assert.ok(nebraska);
+  assert.ok(newMexico);
+  assert.ok(idaho);
+  assert.ok(westVirginia);
+  assert.ok(connecticut);
+  assert.ok(delaware);
   assert.equal(arizona.publicHolidays.some((row) => row.name === "Martin Luther King Jr. / Civil Rights Day"), true);
   assert.equal(california.publicHolidays.some((row) => row.name === "Cesar Chavez Day"), true);
   assert.equal(florida.publicHolidays.some((row) => row.name === "Good Friday"), true);
@@ -422,6 +447,11 @@ test("us region reference data is available for 2026", () => {
   assert.equal(kansas.publicHolidays.some((row) => row.name === "Juneteenth"), true);
   assert.equal(mississippi.publicHolidays.some((row) => row.name === "Confederate Memorial Day"), true);
   assert.equal(nebraska.publicHolidays.some((row) => row.name === "Arbor Day"), true);
+  assert.equal(newMexico.publicHolidays.some((row) => row.name === "Indigenous Peoples' Day"), true);
+  assert.equal(idaho.publicHolidays.some((row) => row.name === "Martin Luther King Jr. Day / Idaho Human Rights Day"), true);
+  assert.equal(westVirginia.publicHolidays.some((row) => row.name === "West Virginia Day"), true);
+  assert.equal(connecticut.publicHolidays.some((row) => row.name === "Good Friday"), true);
+  assert.equal(delaware.publicHolidays.some((row) => row.name === "Return Day"), true);
   assert.equal(arizona.schoolTerms.length > 0, true);
   assert.equal(california.schoolTerms.length > 0, true);
   assert.equal(georgia.schoolTerms.length > 0, true);
@@ -447,6 +477,11 @@ test("us region reference data is available for 2026", () => {
   assert.equal(kansas.schoolTerms.length > 0, true);
   assert.equal(mississippi.schoolTerms.length > 0, true);
   assert.equal(nebraska.schoolTerms.length > 0, true);
+  assert.equal(newMexico.schoolTerms.length > 0, true);
+  assert.equal(idaho.schoolTerms.length > 0, true);
+  assert.equal(westVirginia.schoolTerms.length > 0, true);
+  assert.equal(connecticut.schoolTerms.length > 0, true);
+  assert.equal(delaware.schoolTerms.length > 0, true);
   assert.equal(texas.schoolTerms.length > 0, true);
 });
 
@@ -531,6 +566,11 @@ test("sitemap does not include legacy region slugs", () => {
   assert.equal(urls.includes("https://daysuntil.is/us/kansas"), true);
   assert.equal(urls.includes("https://daysuntil.is/us/mississippi"), true);
   assert.equal(urls.includes("https://daysuntil.is/us/nebraska"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/new-mexico"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/idaho"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/west-virginia"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/connecticut"), true);
+  assert.equal(urls.includes("https://daysuntil.is/us/delaware"), true);
   assert.equal(urls.includes("https://daysuntil.is/au/days-until/summer"), true);
   assert.equal(urls.includes("https://daysuntil.is/uk/days-until/autumn"), true);
   assert.equal(urls.includes("https://daysuntil.is/us/days-until/fall"), true);

@@ -1126,6 +1126,106 @@
         ],
         "lastChecked": "2026-04-10"
       }
+    },
+    "us-nm": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "New Mexico Motor Vehicle Division",
+            "href": "https://www.mvd.newmexico.gov/location-events-and-closings/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "New Mexico Public Education Department",
+            "href": "https://webnew.ped.state.nm.us/bureaus/data-management-analytics/reporting/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-id": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Idaho.gov",
+            "href": "https://idaho.gov/about-idaho/state-holidays/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Idaho Department of Education",
+            "href": "https://www.sde.idaho.gov/ed-directory.html"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-wv": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "West Virginia Division of Personnel",
+            "href": "https://personnel.wv.gov/employees/benefits/Pages/Holidays.aspx"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "West Virginia Department of Education",
+            "href": "https://wvde.us/county-directory/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-ct": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "State of Connecticut",
+            "href": "https://portal.ct.gov/dob/administration/administration/2026-state-holidays"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Connecticut State Department of Education",
+            "href": "https://portal.ct.gov/SDE"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
+    },
+    "us-de": {
+      "publicHolidays": {
+        "sources": [
+          {
+            "label": "Delaware Department of Human Resources",
+            "href": "https://dhr.delaware.gov/holidays/2026.shtml"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      },
+      "schoolTerms": {
+        "sources": [
+          {
+            "label": "Delaware Department of Education",
+            "href": "https://education.delaware.gov/families/district-and-charter-school-websites/"
+          }
+        ],
+        "lastChecked": "2026-04-10"
+      }
     }
   }
 }

@@ -1915,6 +1915,222 @@ export const regionData: Record<string, RegionReferenceData> = {
       ],
     },
   },
+  "us-nm": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King, Jr. Birthday", date: "2026-01-19" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Indigenous Peoples' Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Presidents' Day (observed)", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "New Mexico districts publish their own calendars. Use the official PED district resources to find local calendars and websites.",
+          notesHref: "https://webnew.ped.state.nm.us/bureaus/data-management-analytics/reporting/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through New Mexico's official district resources.",
+          notesHref: "https://webnew.ped.state.nm.us/bureaus/data-management-analytics/reporting/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through New Mexico's official district resources.",
+          notesHref: "https://webnew.ped.state.nm.us/bureaus/data-management-analytics/reporting/",
+        },
+      ],
+    },
+  },
+  "us-id": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day / Idaho Human Rights Day", date: "2026-01-19" },
+        { name: "Presidents' Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Idaho districts publish their own calendars. Use the official Idaho educational directory to find local school district websites.",
+          notesHref: "https://www.sde.idaho.gov/ed-directory.html",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Idaho's official educational directory.",
+          notesHref: "https://www.sde.idaho.gov/ed-directory.html",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Idaho's official educational directory.",
+          notesHref: "https://www.sde.idaho.gov/ed-directory.html",
+        },
+      ],
+    },
+  },
+  "us-wv": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Day", date: "2026-01-19" },
+        { name: "President's Day", date: "2026-02-16" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "West Virginia Day", date: "2026-06-20" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "General Election Day", date: "2026-11-03" },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day after Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by county",
+          endLabel: "Varies by county",
+          notes: "West Virginia county school systems publish their own calendars. Use the official WVDE county directory to find local calendars.",
+          notesHref: "https://wvde.us/county-directory/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by county",
+          endLabel: "Varies by county",
+          notes: "Check your county school calendar through the West Virginia county directory.",
+          notesHref: "https://wvde.us/county-directory/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by county",
+          endLabel: "Varies by county",
+          notes: "Check your county school calendar through the West Virginia county directory.",
+          notesHref: "https://wvde.us/county-directory/",
+        },
+      ],
+    },
+  },
+  "us-ct": {
+    publicHolidays: {
+      2026: [
+        { name: "New Year's Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Lincoln's Birthday", date: "2026-02-12" },
+        { name: "Washington's Birthday", date: "2026-02-16" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth Day", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Columbus Day", date: "2026-10-12" },
+        { name: "Veterans' Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Connecticut districts publish their own calendars. Use CSDE school and district finding tools to reach local calendars and websites.",
+          notesHref: "https://portal.ct.gov/SDE",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Connecticut's official education resources.",
+          notesHref: "https://portal.ct.gov/SDE",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Connecticut's official education resources.",
+          notesHref: "https://portal.ct.gov/SDE",
+        },
+      ],
+    },
+  },
+  "us-de": {
+    publicHolidays: {
+      2026: [
+        { name: "New Years' Day", date: "2026-01-01" },
+        { name: "Martin Luther King Jr. Day", date: "2026-01-19" },
+        { name: "Good Friday", date: "2026-04-03" },
+        { name: "Memorial Day", date: "2026-05-25" },
+        { name: "Juneteenth", date: "2026-06-19" },
+        { name: "Independence Day (observed)", date: "2026-07-03" },
+        { name: "Labor Day", date: "2026-09-07" },
+        { name: "Election Day", date: "2026-11-03" },
+        { name: "Return Day", date: "2026-11-05", notes: "After 12 noon for state employees in Sussex County." },
+        { name: "Veterans Day", date: "2026-11-11" },
+        { name: "Thanksgiving Day", date: "2026-11-26" },
+        { name: "Day After Thanksgiving", date: "2026-11-27" },
+        { name: "Christmas Day", date: "2026-12-25" },
+      ],
+    },
+    schoolTerms: {
+      2026: [
+        {
+          term: "School calendar",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Delaware districts publish their own calendars. Use official Delaware education resources to reach district and charter calendars.",
+          notesHref: "https://education.delaware.gov/families/district-and-charter-school-websites/",
+        },
+        {
+          term: "Winter break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Delaware's official district and charter directory.",
+          notesHref: "https://education.delaware.gov/families/district-and-charter-school-websites/",
+        },
+        {
+          term: "Spring break",
+          startLabel: "Varies by district",
+          endLabel: "Varies by district",
+          notes: "Check your district calendar through Delaware's official district and charter directory.",
+          notesHref: "https://education.delaware.gov/families/district-and-charter-school-websites/",
+        },
+      ],
+    },
+  },
   "nz-auckland": {
     publicHolidays: {
       2026: [
