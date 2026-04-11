@@ -8,9 +8,9 @@ export interface SeoHubOccurrenceRow {
   dayOfWeek: string;
 }
 
-export interface SeoHubFaqItem {
-  question: string;
-  answer: string;
+export interface SeoHubOccurrenceTarget {
+  year: number;
+  date: Date;
 }
 
 function getOccurrenceForYear(
@@ -64,11 +64,11 @@ function getOccurrenceForYear(
   }
 }
 
-export function getSeoHubOccurrenceRows(
+export function getSeoHubOccurrenceTargets(
   event: SeoHubEventDefinition,
   now: Date,
   rowCount = 5,
-): SeoHubOccurrenceRow[] {
+): SeoHubOccurrenceTarget[] {
   if (event.recurrence.recurrenceType === "weekday-recurring") {
     return [];
   }
@@ -83,8 +83,7 @@ export function getSeoHubOccurrenceRows(
     return [
       {
         year: targetDate.getFullYear(),
-        dateLabel: formatFullDate(targetDate, "en-US"),
-        dayOfWeek: new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(targetDate),
+        date: targetDate,
       },
     ];
   }
@@ -95,7 +94,7 @@ export function getSeoHubOccurrenceRows(
     return [];
   }
 
-  const rows: SeoHubOccurrenceRow[] = [];
+  const rows: SeoHubOccurrenceTarget[] = [];
   let year = firstOccurrence.getFullYear();
 
   while (rows.length < rowCount) {
@@ -104,8 +103,7 @@ export function getSeoHubOccurrenceRows(
     if (occurrence) {
       rows.push({
         year,
-        dateLabel: formatFullDate(occurrence, "en-US"),
-        dayOfWeek: new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(occurrence),
+        date: occurrence,
       });
     }
 
@@ -115,64 +113,14 @@ export function getSeoHubOccurrenceRows(
   return rows;
 }
 
-export function getSeoHubFaqs(
+export function getSeoHubOccurrenceRows(
   event: SeoHubEventDefinition,
-  targetDate: Date,
-): SeoHubFaqItem[] {
-  const fullTargetDate = formatFullDate(targetDate, "en-US");
-
-  if (event.category === "year") {
-    return [
-      {
-        question: `When does ${event.name} begin?`,
-        answer: `${event.name} begins on ${fullTargetDate}. This countdown tracks the start of that calendar year.`,
-      },
-      {
-        question: `Why would someone count down to ${event.name}?`,
-        answer: `${event.name} countdowns are useful for long-range planning, deadlines, travel planning, and milestone events tied to that year.`,
-      },
-      {
-        question: `Is ${event.name} a recurring annual page?`,
-        answer: `No. ${event.name} points to one fixed date rather than a recurring holiday or weekday rule.`,
-      },
-    ];
-  }
-
-  if (event.recurrence.recurrenceType === "weekday-recurring") {
-    return [
-      {
-        question: `When is the next ${event.name}?`,
-        answer: `The next ${event.name} shown on this page falls on ${fullTargetDate}. Because ${event.name} recurs weekly, the countdown always updates to the next upcoming occurrence.`,
-      },
-      {
-        question: `Does ${event.name} happen on the same calendar date every year?`,
-        answer: `No. ${event.name} is a recurring weekday, so the exact calendar date changes every week rather than being fixed to one annual date.`,
-      },
-      {
-        question: `What is this ${event.name} countdown useful for?`,
-        answer: `People often use a ${event.name} countdown for work schedules, weekly routines, travel planning, and social plans.`,
-      },
-    ];
-  }
-
-  const recurrenceAnswer =
-    event.recurrence.recurrenceType === "fixed-annual-date" ||
-    event.recurrence.recurrenceType === "season-approximate"
-      ? `${event.name} falls on the same calendar date each year, so the next occurrence shown here is ${fullTargetDate}.`
-      : `${event.name} does not fall on the same calendar date every year. The next occurrence shown here is ${fullTargetDate}.`;
-
-  return [
-    {
-      question: `When is ${event.name}?`,
-      answer: `The next ${event.name} falls on ${fullTargetDate}.`,
-    },
-    {
-      question: `Does ${event.name} fall on the same date every year?`,
-      answer: recurrenceAnswer,
-    },
-    {
-      question: `Why use a live countdown for ${event.name}?`,
-      answer: `A live countdown gives a quick answer in days, hours, and minutes so you can plan travel, celebrations, deadlines, and reminders around ${event.name}.`,
-    },
-  ];
+  now: Date,
+  rowCount = 5,
+): SeoHubOccurrenceRow[] {
+  return getSeoHubOccurrenceTargets(event, now, rowCount).map((row) => ({
+    year: row.year,
+    dateLabel: formatFullDate(row.date, "en-US"),
+    dayOfWeek: new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(row.date),
+  }));
 }
