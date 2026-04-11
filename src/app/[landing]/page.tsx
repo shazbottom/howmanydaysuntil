@@ -4,6 +4,7 @@ import { CountdownLinkList } from "../../components/CountdownLinkList";
 import { SeoHubFactsSection } from "../../components/SeoHubFactsSection";
 import { SeoCountdownPage } from "../../components/SeoCountdownPage";
 import { formatFullDate } from "../../lib/dateFormat";
+import { getCountdownClusterButtonsForEvent } from "../../lib/countdownClusters";
 import { getSeoHubFacts } from "../../lib/seoHubFacts";
 import { getSeoHubOccurrenceRows } from "../../lib/seoHubPageContent";
 import { resolveSeoHubEventCountdown } from "../../lib/seoHubEventResolver";
@@ -13,7 +14,10 @@ import {
   getSeoLandingPath,
   seoLandingPages,
 } from "../../lib/seoLandingPages";
-import { createBreadcrumbJsonLd, createEventJsonLd } from "../../lib/structuredData";
+import {
+  createBreadcrumbJsonLd,
+  createEventJsonLd,
+} from "../../lib/structuredData";
 
 interface LandingPageProps {
   params: Promise<{
@@ -101,6 +105,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
   const currentPath = getSeoLandingPath(event.slug);
   const occurrenceRows = getSeoHubOccurrenceRows(event, new Date());
   const factSet = getSeoHubFacts(event.slug);
+  const clusterButtons = getCountdownClusterButtonsForEvent(event.slug);
   const eyebrow =
     event.category === "year"
       ? "Year countdown"
@@ -128,6 +133,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
       lead={event.seoDescription || lead}
       countdownLabel={event.name}
       countdown={countdown}
+      cardActionLinks={clusterButtons}
       supportingCopy={[]}
       relatedLinks={relatedEvents}
       showChristmasFlyby={event.slug === "christmas"}

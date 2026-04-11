@@ -11,6 +11,9 @@ export interface CountdownDisplayProps {
   headerColorClassName?: string;
   description?: string;
   emphasizeLabel?: boolean;
+  primaryValue?: number | string;
+  primaryUnitLabel?: string;
+  detailLine?: string;
 }
 
 interface LiveTimeParts {
@@ -87,6 +90,9 @@ export function CountdownDisplay({
   headerColorClassName = "bg-[#6495ED] dark:bg-[#4b74be]",
   description,
   emphasizeLabel = false,
+  primaryValue,
+  primaryUnitLabel,
+  detailLine,
 }: CountdownDisplayProps) {
   const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(countdown);
   useEffect(() => {
@@ -164,6 +170,14 @@ export function CountdownDisplay({
     liveCountdown.weeksRemaining.weeks,
     liveCountdown.weeksRemaining.days,
   );
+  const displayPrimaryValue =
+    typeof primaryValue === "number"
+      ? formatTotalUnit(primaryValue)
+      : primaryValue ?? liveCountdown.daysRemaining;
+  const displayPrimaryUnitLabel =
+    primaryUnitLabel ??
+    `${liveCountdown.daysRemaining === 1 ? "day" : "days"} remaining`;
+  const displayDetailLine = detailLine ?? weeksSummary;
 
   return (
     <section
@@ -206,14 +220,16 @@ export function CountdownDisplay({
             suppressHydrationWarning
             className="text-[clamp(4.35rem,22vw,5.5rem)] font-semibold leading-none tracking-[-0.08em] text-black dark:text-white sm:text-[7.3rem]"
           >
-            {liveCountdown.daysRemaining}
+            {displayPrimaryValue}
           </p>
           <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.34em] text-black/42 dark:text-white/42">
-            {liveCountdown.daysRemaining === 1 ? "day" : "days"} remaining
+            {displayPrimaryUnitLabel}
           </p>
-          <p className="mt-5 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
-            {weeksSummary}
-          </p>
+          {displayDetailLine ? (
+            <p className="mt-5 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
+              {displayDetailLine}
+            </p>
+          ) : null}
         </div>
         <div className="mt-6 flex justify-center">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:grid-cols-3 sm:gap-10">

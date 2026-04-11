@@ -12,6 +12,7 @@ import {
   hasIndexableRegionContent,
 } from "../lib/events";
 import { calculatorPages } from "../lib/calculatorPages";
+import { getCountdownClusterDefinitions } from "../lib/countdownClusters";
 import { getCountryHubPath, getCountryHubYearStaticParams } from "../lib/localizedPages";
 import { getRegionId, regions } from "../lib/regions";
 import { getRegionHubPath, getRegionHubYearStaticParams } from "../lib/regionPages";
@@ -133,6 +134,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
+  const countdownClusterEntries: MetadataRoute.Sitemap = getCountdownClusterDefinitions().map(
+    (definition) => ({
+      url: `${SITE_URL}/${definition.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.73,
+    }),
+  );
+
   return [
     {
       url: SITE_URL,
@@ -161,6 +170,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localizedRegionHubPages,
     ...localizedRegionYearPages,
     ...calculatorPageEntries,
+    ...countdownClusterEntries,
     ...localizedCountryEventPages,
     ...localizedRegionEventPages,
   ];

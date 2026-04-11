@@ -7,6 +7,7 @@ import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
+import type { CountdownClusterLink } from "../lib/countdownClusters";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
 
@@ -16,6 +17,11 @@ export interface SeoCountdownPageProps {
   lead?: string;
   countdownLabel: string;
   countdown: Parameters<typeof CountdownDisplay>[0]["countdown"];
+  countdownDescription?: string;
+  countdownPrimaryValue?: number | string;
+  countdownPrimaryUnitLabel?: string;
+  countdownDetailLine?: string;
+  cardActionLinks?: CountdownClusterLink[];
   supportingCopy: string[];
   relatedLinks: CountdownLinkItem[];
   extraSection?: ReactNode;
@@ -29,6 +35,11 @@ export function SeoCountdownPage({
   lead,
   countdownLabel,
   countdown,
+  countdownDescription,
+  countdownPrimaryValue,
+  countdownPrimaryUnitLabel,
+  countdownDetailLine,
+  cardActionLinks = [],
   supportingCopy,
   relatedLinks,
   extraSection,
@@ -88,6 +99,10 @@ export function SeoCountdownPage({
             <CountdownDisplay
               label={countdownLabel}
               countdown={countdown}
+              description={countdownDescription}
+              primaryValue={countdownPrimaryValue}
+              primaryUnitLabel={countdownPrimaryUnitLabel}
+              detailLine={countdownDetailLine}
               headerColorClassName={
                 showChristmasFlyby
                   ? CHRISTMAS_HEADER_COLOR_CLASS_NAME
@@ -95,6 +110,19 @@ export function SeoCountdownPage({
               }
             />
           </div>
+          {cardActionLinks.length > 0 ? (
+            <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
+              {cardActionLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-[13px] font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#169c76]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28 dark:focus-visible:ring-offset-[#0d0d0d] sm:px-5 sm:py-3 sm:text-sm"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          ) : null}
           {supportingCopy.length > 0 ? (
             <div className="mt-8 max-w-2xl space-y-4 text-left text-sm leading-6 text-black/65 dark:text-white/66 sm:text-base">
               {supportingCopy.map((paragraph) => (
