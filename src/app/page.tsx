@@ -39,6 +39,7 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
   { slug: "valentines-day", label: "Valentine's Day" },
   { slug: "thanksgiving", label: "Thanksgiving" },
   { slug: "black-friday", label: "Black Friday" },
+  { slug: "world-cup-final", label: "World Cup Final" },
   { slug: "easter", label: "Easter" },
 ];
 
@@ -214,6 +215,27 @@ function buildStateFromTargetDate(
   };
 }
 
+function getDefaultHomepageState(now: Date = new Date()): ResolvedCountdownState {
+  const christmasEvent = events.find((event) => event.slug === "christmas");
+
+  if (!christmasEvent) {
+    throw new Error("Default homepage event is missing.");
+  }
+
+  const targetDate = resolveEventDate(christmasEvent, now);
+
+  if (!targetDate) {
+    throw new Error("Unable to resolve the default homepage event date.");
+  }
+
+  return {
+    label: christmasEvent.name,
+    inputValue: christmasEvent.name,
+    countdown: getCountdown(targetDate, now),
+    selectedSlug: christmasEvent.slug,
+  };
+}
+
 function getNearestMajorEventLink(now: Date): CountdownLinkItem | null {
   const candidates = MAJOR_EVENT_SLUGS.map((slug) => {
     const event = events.find((candidate) => candidate.slug === slug);
@@ -322,9 +344,32 @@ function HomepageChipLinks({
   );
 }
 
+function HomepageEditorialSection() {
+  return (
+    <section className="mt-4 mb-8 w-full rounded-[2rem] border border-[#d9d2c3] bg-[linear-gradient(180deg,#fffdf8_0%,#f6f1e6_100%)] px-6 py-7 text-left shadow-[0_12px_30px_rgba(109,94,61,0.08)] dark:border-[#403a33] dark:bg-[linear-gradient(180deg,#1f1c19_0%,#181614_100%)] dark:shadow-[0_12px_30px_rgba(0,0,0,0.2)] sm:px-8">
+      <h2 className="text-[clamp(1rem,2.1vw,1.15rem)] font-semibold tracking-[0.08em] text-[#5c5a73] dark:text-[#c8c5e6]">
+        What you can do here
+      </h2>
+      <div className="mt-4 space-y-4 text-sm leading-6 text-black/62 dark:text-white/64 sm:text-base">
+        <p>
+          Track major annual events, exact future dates, and recurring milestones like next month
+          or next year in one place.
+        </p>
+        <p>
+          The site also includes calculators for date differences, business-day planning, and
+          personal countdowns such as retirement.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
-  const [query, setQuery] = useState("");
-  const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(null);
+  const defaultHomepageState = useMemo(() => getDefaultHomepageState(), []);
+  const [query, setQuery] = useState(defaultHomepageState.inputValue);
+  const [resolvedState, setResolvedState] = useState<ResolvedCountdownState | null>(
+    defaultHomepageState,
+  );
   const [error, setError] = useState<string | null>(null);
   const homepageNow = useMemo(() => new Date(), []);
   const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(homepageNow), [homepageNow]);
@@ -352,6 +397,19 @@ export default function Home() {
   }
 
   function submitQuickChip(event: EventChip) {
+    if (event.slug === "world-cup-final") {
+      const result = buildStateFromTargetDate(
+        event.label,
+        new Date(2026, 6, 19),
+        event.slug,
+      );
+
+      setQuery(event.label);
+      setResolvedState(result.state);
+      setError(result.error);
+      return;
+    }
+
     if (event.slug === "easter") {
       const result = buildStateFromTargetDate(event.label, getNextEasterDate(), event.slug);
 
@@ -382,7 +440,8 @@ export default function Home() {
             <MyCountdownsDropdown />
           </div>
         </div>
-        <section className="mt-14 flex w-full flex-1 flex-col items-center text-center sm:mt-20">
+        <section className="mt-4 flex w-full flex-1 flex-col items-center text-center sm:mt-6">
+          <HomepageEditorialSection />
           <div className="w-full max-w-[46rem]">
             <EventInput
               value={query}

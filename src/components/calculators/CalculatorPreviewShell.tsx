@@ -6,7 +6,12 @@ import { Brand } from "../Brand";
 import { CalculatorNavButton } from "../CalculatorNavButton";
 import { ThemeToggle } from "../ThemeToggle";
 import { countries, type CountryCode } from "../../lib/countries";
-import { calculatorPages, type CalculatorKind } from "../../lib/calculatorPages";
+import {
+  calculatorPages,
+  getCalculatorPage,
+  type CalculatorKind,
+  type CalculatorPageContent,
+} from "../../lib/calculatorPages";
 import { getRegionsForCountry } from "../../lib/regions";
 import {
   calculateAddOrSubtractDate,
@@ -37,6 +42,59 @@ function CalculatorLinkRow({ activeCalculator }: { activeCalculator: CalculatorK
         </Link>
       ))}
     </div>
+  );
+}
+
+function CalculatorContentSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="mt-10 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-7 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
+      <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
+        {title}
+      </h2>
+      <div className="mt-4 text-sm leading-6 text-black/62 dark:text-white/64 sm:text-base">
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function CalculatorEditorialSections({ page }: { page: CalculatorPageContent }) {
+  return (
+    <>
+      <CalculatorContentSection title="What this calculator does">
+        <p>{page.summary}</p>
+      </CalculatorContentSection>
+      <CalculatorContentSection title="How it works">
+        <ul className="space-y-3">
+          {page.howItWorks.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </CalculatorContentSection>
+      <CalculatorContentSection title="When to use it">
+        <ul className="space-y-3">
+          {page.useCases.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </CalculatorContentSection>
+      <CalculatorContentSection title={page.example.title}>
+        <p>{page.example.body}</p>
+      </CalculatorContentSection>
+      <CalculatorContentSection title="Things to watch for">
+        <ul className="space-y-3">
+          {page.watchFor.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </CalculatorContentSection>
+    </>
   );
 }
 
@@ -535,6 +593,8 @@ function RetirementCountdownCalculator() {
 }
 
 export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewShellProps) {
+  const activeCalculatorPage = getCalculatorPage(activeCalculator);
+
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
@@ -586,6 +646,7 @@ export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewSh
             {activeCalculator === "add-or-subtract-date" ? <AddOrSubtractDateCalculator /> : null}
             {activeCalculator === "days-until-i-retire" ? <RetirementCountdownCalculator /> : null}
           </div>
+          <CalculatorEditorialSections page={activeCalculatorPage} />
         </section>
       </div>
     </main>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from '@vercel/analytics/react';
 import { THEME_STORAGE_KEY } from "../lib/theme";
@@ -12,6 +12,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
 });
 
@@ -74,7 +79,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} bg-background text-foreground antialiased`}
       >
         {children}
         <SiteFooter />
