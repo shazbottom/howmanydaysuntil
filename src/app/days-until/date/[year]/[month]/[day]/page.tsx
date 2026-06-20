@@ -5,6 +5,7 @@ import { SeoCountdownPage } from "../../../../../../components/SeoCountdownPage"
 import { formatLongDate } from "../../../../../../lib/dateFormat";
 import {
   getExactDateDetails,
+  getExactDateFactSections,
   getExactDateNearbyLinks,
   getExactDateRelatedLinks,
   getExactDateRoutePath,
@@ -92,6 +93,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
   const longDate = formatLongDate(targetDate, "en-GB");
   const nearbyLinks = getExactDateNearbyLinks(targetDate);
   const dateDetails = getExactDateDetails(targetDate, resolvedCountdown.countdown);
+  const factSections = getExactDateFactSections(targetDate, resolvedCountdown.countdown);
   const currentPath = getExactDateRoutePath(targetDate);
   const structuredData = [
     createBreadcrumbJsonLd([
@@ -126,6 +128,23 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
               ))}
             </div>
           </section>
+          <div className="mt-12 grid w-full max-w-[31.9rem] gap-5 sm:max-w-[34rem]">
+            {factSections.map((section) => (
+              <section
+                key={section.title}
+                className="rounded-[1.6rem] bg-[#fdfcf9] px-6 py-6 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-7"
+              >
+                <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
+                  {section.title}
+                </h2>
+                <div className="mt-4 space-y-3 text-sm leading-6 text-black/62 dark:text-white/66 sm:text-base">
+                  {section.lines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
           <CountdownLinkList title="Nearby dates" links={nearbyLinks} centered />
         </>
       }

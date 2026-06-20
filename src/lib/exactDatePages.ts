@@ -18,6 +18,11 @@ export const EXACT_DATE_ROLLOUT_END = {
   day: 31,
 } as const;
 
+export interface ExactDateFactSection {
+  title: string;
+  lines: string[];
+}
+
 function addDays(date: Date, days: number): Date {
   const nextDate = new Date(date);
   nextDate.setDate(nextDate.getDate() + days);
@@ -40,6 +45,47 @@ function formatWeekday(date: Date): string {
   return new Intl.DateTimeFormat("en-GB", { weekday: "long" }).format(date);
 }
 
+function formatMonth(date: Date): string {
+  return new Intl.DateTimeFormat("en-GB", { month: "long" }).format(date);
+}
+
+function formatMonthShort(date: Date): string {
+  return new Intl.DateTimeFormat("en-GB", { month: "short" }).format(date);
+}
+
+function getQuarter(date: Date): number {
+  return Math.floor(date.getMonth() / 3) + 1;
+}
+
+function isLeapYear(year: number): boolean {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
+function getDayOfYear(date: Date): number {
+  const startOfYear = new Date(date.getFullYear(), 0, 1);
+  return Math.floor((startOfLocalDay(date).getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+}
+
+function getDaysInYear(date: Date): number {
+  return isLeapYear(date.getFullYear()) ? 366 : 365;
+}
+
+function getDaysUntilMonthEnd(date: Date): number {
+  const nextMonthStart = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+  return Math.round(
+    (startOfLocalDay(nextMonthStart).getTime() - startOfLocalDay(date).getTime()) /
+      (1000 * 60 * 60 * 24),
+  ) - 1;
+}
+
+function getWeekOfYear(date: Date): number {
+  const target = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNumber = target.getUTCDay() || 7;
+  target.setUTCDate(target.getUTCDate() + 4 - dayNumber);
+  const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
+  return Math.ceil((((target.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+}
+
 function getAustralianSeasonName(date: Date): string {
   const monthDay = (date.getMonth() + 1) * 100 + date.getDate();
 
@@ -56,6 +102,24 @@ function getAustralianSeasonName(date: Date): string {
   }
 
   return "Summer";
+}
+
+function getNorthernSeasonName(date: Date): string {
+  const month = date.getMonth() + 1;
+
+  if (month >= 3 && month <= 5) {
+    return "Spring";
+  }
+
+  if (month >= 6 && month <= 8) {
+    return "Summer";
+  }
+
+  if (month >= 9 && month <= 11) {
+    return "Autumn";
+  }
+
+  return "Winter";
 }
 
 function getYearSlug(date: Date): string | null {
@@ -142,6 +206,7 @@ export function getExactDateDetails(date: Date, countdown: CountdownResult): str
   const longDate = formatLongDate(date, "en-GB");
   const weekday = formatWeekday(date);
   const australianSeason = getAustralianSeasonName(date);
+  const northernSeason = getNorthernSeasonName(date);
   const matchingEvents = findSeoHubEventsForDate(date);
   const matchingHoliday = matchingEvents.find((event) => event.category === "holiday");
   const detailLines: string[] = [`${longDate} falls on a ${weekday}.`];
@@ -166,9 +231,62 @@ export function getExactDateDetails(date: Date, countdown: CountdownResult): str
     detailLines.push("This is a standard calendar date.");
   }
 
-  detailLines.push(`This date is in the ${australianSeason} season in Australia.`);
+  detailLines.push(
+    `${australianSeason} in Australia, ${northernSeason} in the US and Europe.`,
+  );
 
   return detailLines.slice(0, 4);
+}
+
+export function getExactDateFactSections(
+  date: Date,
+  countdown: CountdownResult,
+): ExactDateFactSection[] {
+  const weekday = formatWeekday(date);
+  const month = formatMonth(date);
+  const monthShort = formatMonthShort(date);
+  const quarter = getQuarter(date);
+  const dayOfYear = getDayOfYear(date);
+  const daysInYear = getDaysInYear(date);
+  const weekOfYear = getWeekOfYear(date);
+  const daysUntilMonthEnd = getDaysUntilMonthEnd(date);
+  const fallsOnWeekend = date.getDay() === 0 || date.getDay() === 6;
+  const matchingEvents = findSeoHubEventsForDate(date).filter((event) => event.category === "holiday");
+  const { weeks, days } = countdown.weeksRemaining;
+  const matchingEventNames = matchingEvents.map((event) => event.name);
+
+  const aboutDateLines = [
+    `${weekday}, ${month} ${date.getDate()} ${date.getFullYear()} sits in quarter ${quarter} of ${date.getFullYear()}.`,
+    `It is day ${dayOfYear} of ${daysInYear} in the year and falls in ISO week ${weekOfYear}.`,
+    daysUntilMonthEnd === 0
+      ? `${month} ${date.getDate()} is the final day of ${month}.`
+      : `${daysUntilMonthEnd} ${daysUntilMonthEnd === 1 ? "day remains" : "days remain"} in ${monthShort} after this date.`,
+  ];
+
+  const planningLines = [
+    days === 0
+      ? `There are ${weeks} ${weeks === 1 ? "week" : "weeks"} remaining until this date.`
+      : `There are ${weeks} ${weeks === 1 ? "week" : "weeks"} and ${days} ${days === 1 ? "day" : "days"} remaining until this date.`,
+    fallsOnWeekend
+      ? `This date falls on a weekend, which can matter for travel, event planning, and office deadlines.`
+      : `This date falls on a weekday, which can matter if you are planning around work, school, or business deadlines.`,
+    matchingEventNames.length > 0
+      ? `This date lines up with ${matchingEventNames.join(", ")}.`
+      : "This date does not match one of the site's major recurring holidays, so it works as a pure calendar planning page.",
+  ];
+
+  const contextLines = [
+    `Nearby navigation is useful here because people often compare this date with the next day, next week, or the start of the following month.`,
+    fallsOnWeekend
+      ? "If you are using this page for a deadline, check whether your organisation shifts weekend deadlines to the next working day."
+      : "If you are using this page for a deadline, remember that a calendar countdown and a business-day countdown can produce different answers.",
+  ];
+
+  return [
+    { title: "About this date", lines: aboutDateLines },
+    { title: "Planning around it", lines: planningLines },
+    { title: "Useful context", lines: contextLines },
+  ];
 }
 
 export function getExactDateRelatedLinks(date: Date): CountdownLinkItem[] {
