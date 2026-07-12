@@ -16,7 +16,7 @@ import {
 } from "../../lib/seoLandingPages";
 import {
   createBreadcrumbJsonLd,
-  createEventJsonLd,
+  createWebPageJsonLd,
 } from "../../lib/structuredData";
 
 interface LandingPageProps {
@@ -118,11 +118,11 @@ export default async function LandingPage({ params }: LandingPageProps) {
       { name: "Home", path: "/" },
       { name: event.name, path: currentPath },
     ]),
-    createEventJsonLd({
+    createWebPageJsonLd({
       name: event.name,
       description: event.seoDescription || lead,
-      startDate: targetDate,
       path: currentPath,
+      about: event.name,
     }),
   ];
 

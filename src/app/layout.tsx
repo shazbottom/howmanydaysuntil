@@ -72,11 +72,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4081600101447895"
-          crossOrigin="anonymous"
-        />
+        <meta name="google-adsense-account" content="ca-pub-4081600101447895" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} bg-background text-foreground antialiased`}

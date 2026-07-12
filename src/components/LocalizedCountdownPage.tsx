@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
 import { CalculatorNavButton } from "./CalculatorNavButton";
-import { CountdownLinkList } from "./CountdownLinkList";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
@@ -10,7 +9,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { getCountdownClusterButtonsForEvent } from "../lib/countdownClusters";
 import type { LocalizedCountdownPageData } from "../lib/localizedCountdowns";
 import { getSeoHubFacts } from "../lib/seoHubFacts";
-import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
+import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
 
@@ -30,11 +29,11 @@ export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
       { name: country.name, path: `/${country.code}` },
       { name: event.displayName, path: currentPath },
     ]),
-    createEventJsonLd({
+    createWebPageJsonLd({
       name: `${event.displayName} in ${country.name}`,
       description: `Live countdown to ${event.displayName} in ${country.name}. The next ${event.displayName} falls on ${targetDateLabel}.`,
-      startDate: data.targetDate,
       path: currentPath,
+      about: event.displayName,
     }),
   ];
 

@@ -45,7 +45,7 @@ export function createOrganizationJsonLd() {
     "@type": "Organization",
     name: "DaysUntil",
     url: SITE_URL,
-    logo: toAbsoluteUrl("/icon-512.png"),
+    logo: toAbsoluteUrl("/logo/logo-large-no-text.svg"),
     contactPoint: [
       {
         "@type": "ContactPoint",
@@ -56,11 +56,11 @@ export function createOrganizationJsonLd() {
   };
 }
 
-interface EventSchemaOptions {
+interface WebPageSchemaOptions {
   name: string;
   description: string;
-  startDate: Date | string;
   path: string;
+  about?: string;
 }
 
 interface CollectionPageSchemaOptions {
@@ -70,33 +70,31 @@ interface CollectionPageSchemaOptions {
   about?: string[];
 }
 
-export function createEventJsonLd({
+export function createWebPageJsonLd({
   name,
   description,
-  startDate,
   path,
-}: EventSchemaOptions) {
-  const formattedStartDate =
-    typeof startDate === "string" ? startDate : startDate.toISOString();
-
+  about,
+}: WebPageSchemaOptions) {
   return {
     "@context": "https://schema.org",
-    "@type": "Event",
+    "@type": "WebPage",
     name,
     description,
-    startDate: formattedStartDate,
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
-    location: {
-      "@type": "VirtualLocation",
-      url: toAbsoluteUrl(path),
-    },
     url: toAbsoluteUrl(path),
-    organizer: {
-      "@type": "Organization",
+    isPartOf: {
+      "@type": "WebSite",
       name: "DaysUntil",
       url: SITE_URL,
     },
+    ...(about
+      ? {
+          about: {
+            "@type": "Thing",
+            name: about,
+          },
+        }
+      : {}),
   };
 }
 

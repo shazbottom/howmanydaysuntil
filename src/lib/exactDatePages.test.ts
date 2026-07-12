@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { getCountdown } from "./countdown";
-import { getExactDateDetails } from "./exactDatePages";
+import {
+  getExactDateDetails,
+  getExactDateStaticParams,
+  isExactDateIndexable,
+} from "./exactDatePages";
 
 function buildDetailsForDate(targetDateText: string, nowText: string) {
   const targetDate = new Date(`${targetDateText}T00:00:00`);
@@ -45,4 +49,22 @@ test("October dates show spring in Australia and autumn in the US and Europe", (
     details.includes("Spring in Australia, Autumn in the US and Europe."),
     true,
   );
+});
+
+test("only curated exact dates are indexable", () => {
+  const now = new Date("2026-07-13T12:00:00");
+
+  assert.equal(isExactDateIndexable(new Date("2026-12-17T00:00:00"), now), true);
+  assert.equal(isExactDateIndexable(new Date("2026-12-19T00:00:00"), now), false);
+});
+
+test("static exact-date params exclude arbitrary future dates", () => {
+  const params = getExactDateStaticParams(new Date("2026-07-13T12:00:00"));
+  const routeKeys = new Set(
+    params.map(({ year, month, day }) => `${year}-${month}-${day}`),
+  );
+
+  assert.equal(routeKeys.has("2026-12-17"), true);
+  assert.equal(routeKeys.has("2026-12-19"), false);
+  assert.equal(params.length < 150, true);
 });

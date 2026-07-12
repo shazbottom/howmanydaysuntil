@@ -154,6 +154,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.2,
     },
     {
+      url: `${SITE_URL}/about`,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${SITE_URL}/how-it-works`,
+      changeFrequency: "monthly",
+      priority: 0.55,
+    },
+    {
       url: `${SITE_URL}/contact`,
       changeFrequency: "monthly",
       priority: 0.2,

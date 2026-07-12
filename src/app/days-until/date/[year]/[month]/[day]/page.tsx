@@ -10,6 +10,7 @@ import {
   getExactDateRelatedLinks,
   getExactDateRoutePath,
   getExactDateStaticParams,
+  isExactDateIndexable,
   isExactDateInRolloutRange,
 } from "../../../../../../lib/exactDatePages";
 import {
@@ -17,7 +18,7 @@ import {
   resolveExactDateCountdown,
   type ExactDateParams,
 } from "../../../../../../lib/exactDateCountdown";
-import { createBreadcrumbJsonLd, createEventJsonLd } from "../../../../../../lib/structuredData";
+import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../../../../../../lib/structuredData";
 
 interface ExactDatePageProps {
   params: Promise<ExactDateParams>;
@@ -53,10 +54,15 @@ export async function generateMetadata({
   const title = `How Many Days Until ${longDate}? (Live Countdown)`;
   const description = `There are ${resolvedCountdown.countdown.daysRemaining} days until ${longDate}. See a live countdown including weeks, hours, and minutes remaining.`;
   const imageUrl = `${getExactDateRoutePath(targetDate)}/opengraph-image`;
+  const indexable = isExactDateIndexable(targetDate);
 
   return {
     title,
     description,
+    robots: {
+      index: indexable,
+      follow: indexable,
+    },
     alternates: {
       canonical: getExactDateRoutePath(targetDate),
     },
@@ -100,11 +106,11 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       { name: "Home", path: "/" },
       { name: longDate, path: currentPath },
     ]),
-    createEventJsonLd({
+    createWebPageJsonLd({
       name: longDate,
       description: `Live countdown to ${longDate}.`,
-      startDate: targetDate,
       path: currentPath,
+      about: longDate,
     }),
   ];
 

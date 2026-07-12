@@ -11,6 +11,7 @@ import {
   resolveSeoHubEventDate,
 } from "./seoHubEventResolver";
 import { getSeoLandingPath } from "./seoLandingPages";
+import { indexableExactDateKeys } from "../data/indexableExactDates";
 
 export const EXACT_DATE_ROLLOUT_END = {
   year: 2030,
@@ -32,6 +33,12 @@ function addDays(date: Date, days: number): Date {
 function padDatePart(value: number): string {
   return String(value).padStart(2, "0");
 }
+
+function getExactDateKey(date: Date): string {
+  return `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`;
+}
+
+const indexableExactDateKeySet = new Set<string>(indexableExactDateKeys);
 
 function getExactDateRolloutEndDate(): Date {
   return new Date(
@@ -171,27 +178,18 @@ export function getExactDateStaticParams(now: Date = new Date()): Array<{
   month: string;
   day: string;
 }> {
-  const today = startOfLocalDay(now);
-  const lastDate = getExactDateRolloutEndDate();
-  const params: Array<{
-    year: string;
-    month: string;
-    day: string;
-  }> = [];
-
-  for (
-    let date = new Date(today);
-    date <= lastDate;
-    date = addDays(date, 1)
-  ) {
-    params.push({
+  return indexableExactDateKeys
+    .map((key) => {
+      const [year, month, day] = key.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    })
+    .filter((date) => isExactDateInRolloutRange(date, now))
+    .sort((left, right) => left.getTime() - right.getTime())
+    .map((date) => ({
       year: String(date.getFullYear()),
       month: padDatePart(date.getMonth() + 1),
       day: padDatePart(date.getDate()),
-    });
-  }
-
-  return params;
+    }));
 }
 
 export function isExactDateInRolloutRange(date: Date, now: Date = new Date()): boolean {
@@ -200,6 +198,10 @@ export function isExactDateInRolloutRange(date: Date, now: Date = new Date()): b
   const targetDate = startOfLocalDay(date);
 
   return targetDate >= today && targetDate <= lastDate;
+}
+
+export function isExactDateIndexable(date: Date, now: Date = new Date()): boolean {
+  return isExactDateInRolloutRange(date, now) && indexableExactDateKeySet.has(getExactDateKey(date));
 }
 
 export function getExactDateDetails(date: Date, countdown: CountdownResult): string[] {
@@ -365,7 +367,7 @@ export function getExactDateNearbyLinks(date: Date): CountdownLinkItem[] {
     .map(({ offset, prefix }) => {
       const targetDate = addDays(date, offset);
 
-      if (!isExactDateInRolloutRange(targetDate)) {
+      if (!isExactDateIndexable(targetDate)) {
         return null;
       }
 

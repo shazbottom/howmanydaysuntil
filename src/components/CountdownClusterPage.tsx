@@ -5,7 +5,7 @@ import {
   buildCountdownClusterMetadata,
   getCountdownClusterPageData,
 } from "../lib/countdownClusters";
-import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
+import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
 
 export function generateCountdownClusterMetadata(slug: string) {
   return buildCountdownClusterMetadata(slug);
@@ -23,7 +23,6 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
     event,
     title,
     lead,
-    targetDate,
     countdown,
     count,
     clusterLabel,
@@ -43,11 +42,11 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
       { name: "Home", path: "/" },
       { name: title, path: canonicalPath },
     ]),
-    createEventJsonLd({
+    createWebPageJsonLd({
       name: title,
       description: lead,
-      startDate: targetDate,
       path: canonicalPath,
+      about: event.name,
     }),
   ];
 

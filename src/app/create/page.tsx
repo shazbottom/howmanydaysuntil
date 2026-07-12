@@ -8,6 +8,10 @@ import { ThemeToggle } from "../../components/ThemeToggle";
 export const metadata: Metadata = {
   title: "Create your own countdown | DaysUntil",
   description: "Create a shareable personal countdown page for birthdays, weddings, trips, and more.",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function CreatePage() {

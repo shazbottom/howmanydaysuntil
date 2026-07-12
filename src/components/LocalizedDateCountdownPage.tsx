@@ -6,7 +6,7 @@ import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { LocalizedDateCountdownPageData } from "../lib/localizedCountdowns";
-import { createBreadcrumbJsonLd, createEventJsonLd } from "../lib/structuredData";
+import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
 
 export interface LocalizedDateCountdownPageProps {
   data: LocalizedDateCountdownPageData;
@@ -21,11 +21,11 @@ export function LocalizedDateCountdownPage({ data }: LocalizedDateCountdownPageP
       { name: country.name, path: `/${country.code}` },
       { name: targetDateLabel, path: currentPath },
     ]),
-    createEventJsonLd({
+    createWebPageJsonLd({
       name: `${targetDateLabel} in ${country.name}`,
       description: `Live countdown to ${targetDateLabel} in ${country.name}.`,
-      startDate: data.targetDate,
       path: currentPath,
+      about: targetDateLabel,
     }),
   ];
 
