@@ -15,10 +15,9 @@ import { SeoHubFactsSection } from "../components/SeoHubFactsSection";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
-import { formatLongDate, formatShortDate } from "../lib/dateFormat";
+import { formatShortDate } from "../lib/dateFormat";
 import { resolveEventDate } from "../lib/eventCountdown";
 import { getNextEasterDate } from "../lib/easterDate";
-import { getExactDateRoutePath } from "../lib/exactDatePages";
 import { getNextDecadeDate, getNextMonthDate, getNextYearDate } from "../lib/milestoneDates";
 import { parseInput, type ParseResult } from "../lib/parseInput";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
@@ -50,6 +49,14 @@ const POPULAR_COUNTDOWN_LINKS = [
   { href: "/days-until-valentines-day", label: "Days until Valentine's Day" },
   { href: "/days-until-thanksgiving", label: "Days until Thanksgiving" },
   { href: "/days-until-black-friday", label: "Days until Black Friday" },
+];
+
+const PLANNING_TOOL_LINKS: CountdownLinkItem[] = [
+  { href: "/year-planner", label: "Plan the rest of the year" },
+  { href: "/fridays-left-this-year", label: "Fridays left this year" },
+  { href: "/weekends-left-this-year", label: "Weekends left this year" },
+  { href: "/working-days-left-this-year", label: "Working days left this year" },
+  { href: "/countdown-widget", label: "Build a countdown widget" },
 ];
 
 const MILESTONE_BUTTONS = [
@@ -265,7 +272,6 @@ function getNearestMajorEventLink(now: Date): CountdownLinkItem | null {
 }
 
 function getComingUpSoonLinks(now: Date): CountdownLinkItem[] {
-  const nextMonth = getNextMonthDate();
   const nextYear = getNextYearDate();
   const nearestMajorEvent = getNearestMajorEventLink(now);
 
@@ -273,11 +279,7 @@ function getComingUpSoonLinks(now: Date): CountdownLinkItem[] {
     { href: "/days-until-friday", label: "Days until Friday" },
     { href: "/days-until-weekend", label: "Days until the weekend" },
     {
-      href: getExactDateRoutePath(nextMonth),
-      label: `Next month (${new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric" }).format(nextMonth)})`,
-    },
-    {
-      href: getExactDateRoutePath(nextYear),
+      href: `/days-until-${nextYear.getFullYear()}`,
       label: `Next year (${nextYear.getFullYear()})`,
     },
   ];
@@ -287,19 +289,6 @@ function getComingUpSoonLinks(now: Date): CountdownLinkItem[] {
   }
 
   return links;
-}
-
-function getExploreByMonthLinks(now: Date): CountdownLinkItem[] {
-  return Array.from({ length: 4 }, (_, index) => {
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth() + index + 1, 1);
-    return {
-      href: getExactDateRoutePath(firstDayOfMonth),
-      label: new Intl.DateTimeFormat("en-GB", {
-        month: "long",
-        year: "numeric",
-      }).format(firstDayOfMonth),
-    };
-  });
 }
 
 function HomepageChipLinks({
@@ -373,7 +362,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const homepageNow = useMemo(() => new Date(), []);
   const comingUpSoonLinks = useMemo(() => getComingUpSoonLinks(homepageNow), [homepageNow]);
-  const exploreByMonthLinks = useMemo(() => getExploreByMonthLinks(homepageNow), [homepageNow]);
   const showChristmasFlyby = resolvedState?.selectedSlug === "christmas";
   const selectedFactSet = useMemo(
     () => getSeoHubFacts(resolvedState?.selectedSlug ?? ""),
@@ -518,7 +506,7 @@ export default function Home() {
         </section>
         <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />
         <HomepageChipLinks title="Coming up soon" links={comingUpSoonLinks} />
-        <HomepageChipLinks title="Explore by month" links={exploreByMonthLinks} emphasis="muted" />
+        <HomepageChipLinks title="Planning tools" links={PLANNING_TOOL_LINKS} emphasis="muted" />
       </div>
     </main>
   );

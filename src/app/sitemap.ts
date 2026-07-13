@@ -25,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((event) => event.indexable)
     .map((event) => ({
       url: `${SITE_URL}${getSeoLandingPath(event.slug)}`,
-    changeFrequency: "daily",
+      changeFrequency: "daily",
       priority: event.category === "holiday" ? 0.9 : 0.8,
     }));
 
@@ -162,6 +162,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/how-it-works`,
       changeFrequency: "monthly",
       priority: 0.55,
+    },
+    {
+      url: `${SITE_URL}/countdown-widget`,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/year-planner`,
+      changeFrequency: "daily",
+      priority: 0.76,
+    },
+    {
+      url: `${SITE_URL}/fridays-left-this-year`,
+      changeFrequency: "daily",
+      priority: 0.74,
+    },
+    {
+      url: `${SITE_URL}/weekends-left-this-year`,
+      changeFrequency: "daily",
+      priority: 0.74,
+    },
+    {
+      url: `${SITE_URL}/working-days-left-this-year`,
+      changeFrequency: "daily",
+      priority: 0.74,
     },
     {
       url: `${SITE_URL}/contact`,

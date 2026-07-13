@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CountdownLinkList } from "../../../../../../components/CountdownLinkList";
+import { ExactDatePlanner } from "../../../../../../components/ExactDatePlanner";
 import { SeoCountdownPage } from "../../../../../../components/SeoCountdownPage";
 import { formatLongDate } from "../../../../../../lib/dateFormat";
 import {
@@ -19,10 +20,13 @@ import {
   type ExactDateParams,
 } from "../../../../../../lib/exactDateCountdown";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../../../../../../lib/structuredData";
+import { getExactDatePlanningData } from "../../../../../../lib/datePlanning";
 
 interface ExactDatePageProps {
   params: Promise<ExactDateParams>;
 }
+
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return getExactDateStaticParams();
@@ -100,6 +104,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
   const nearbyLinks = getExactDateNearbyLinks(targetDate);
   const dateDetails = getExactDateDetails(targetDate, resolvedCountdown.countdown);
   const factSections = getExactDateFactSections(targetDate, resolvedCountdown.countdown);
+  const planningData = getExactDatePlanningData(targetDate);
   const currentPath = getExactDateRoutePath(targetDate);
   const structuredData = [
     createBreadcrumbJsonLd([
@@ -124,6 +129,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       relatedLinks={getExactDateRelatedLinks(targetDate)}
       extraSection={
         <>
+          <ExactDatePlanner data={planningData} />
           <section className="mt-12 w-full max-w-[31.9rem] px-5 text-left sm:max-w-[34rem]">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Date details
