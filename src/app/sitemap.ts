@@ -189,6 +189,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.74,
     },
     {
+      url: `${SITE_URL}/calendar-days-vs-business-days`,
+      changeFrequency: "monthly",
+      priority: 0.68,
+    },
+    {
+      url: `${SITE_URL}/how-leap-years-affect-date-calculations`,
+      changeFrequency: "monthly",
+      priority: 0.64,
+    },
+    {
       url: `${SITE_URL}/contact`,
       changeFrequency: "monthly",
       priority: 0.2,

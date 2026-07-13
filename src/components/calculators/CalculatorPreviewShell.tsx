@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Brand } from "../Brand";
 import { CalculatorNavButton } from "../CalculatorNavButton";
+import { CountdownLinkList, type CountdownLinkItem } from "../CountdownLinkList";
 import { ThemeToggle } from "../ThemeToggle";
 import { countries, type CountryCode } from "../../lib/countries";
 import {
@@ -24,6 +25,62 @@ import {
 interface CalculatorPreviewShellProps {
   activeCalculator: CalculatorKind;
 }
+
+const calculatorNextSteps: Record<
+  CalculatorKind,
+  { description: string; links: CountdownLinkItem[] }
+> = {
+  "days-between": {
+    description:
+      "Use the calendar-day result in a working-day comparison, an annual plan, or a live event countdown.",
+    links: [
+      { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
+      { href: "/business-days-between-dates", label: "Compare the same dates in business days" },
+      { href: "/year-planner", label: "Plan the rest of the year" },
+      { href: "/days-until-christmas", label: "See the live Christmas countdown" },
+    ],
+  },
+  "business-days-between": {
+    description:
+      "Compare the working-day result with calendar days or use the remaining year as a planning baseline.",
+    links: [
+      { href: "/calendar-days-vs-business-days", label: "Understand calendar and business days" },
+      { href: "/days-between-dates", label: "Compare the same dates in calendar days" },
+      { href: "/working-days-left-this-year", label: "Working days left this year" },
+      { href: "/year-planner", label: "Open the year planner" },
+    ],
+  },
+  "business-days-until": {
+    description:
+      "Put the result into a broader year plan or compare it with the larger calendar-day countdown.",
+    links: [
+      { href: "/working-days-left-this-year", label: "Working days left this year" },
+      { href: "/calendar-days-vs-business-days", label: "Why the two day counts differ" },
+      { href: "/days-between-dates", label: "Calculate the calendar-day difference" },
+      { href: "/fridays-left-this-year", label: "Fridays left this year" },
+    ],
+  },
+  "add-or-subtract-date": {
+    description:
+      "Check the resulting date against another milestone, or learn how month ends and leap years affect date movement.",
+    links: [
+      { href: "/days-between-dates", label: "Compare the resulting date" },
+      { href: "/how-leap-years-affect-date-calculations", label: "How leap years affect date calculations" },
+      { href: "/countdown-widget", label: "Build a countdown for the resulting date" },
+      { href: "/year-planner", label: "Open the year planner" },
+    ],
+  },
+  "days-until-i-retire": {
+    description:
+      "Use the estimated retirement date in another calculator or turn it into a countdown you can revisit.",
+    links: [
+      { href: "/days-between-dates", label: "Compare your retirement date" },
+      { href: "/countdown-widget", label: "Build a retirement countdown widget" },
+      { href: "/year-planner", label: "Open the year planner" },
+      { href: "/add-or-subtract-date", label: "Test a different milestone date" },
+    ],
+  },
+};
 
 function CalculatorLinkRow({ activeCalculator }: { activeCalculator: CalculatorKind }) {
   return (
@@ -146,18 +203,21 @@ function ResultCard({
   ];
   const resolvedMainDisplay = mainDisplay ?? String(value);
   const resolvedSummaryLine = summaryLine ?? weeksSummary;
-  const [liveDetailBlocks, setLiveDetailBlocks] = useState<Array<{ label: string; value: string }> | null>(null);
+  const [liveDetailState, setLiveDetailState] = useState<{
+    targetDateText: string;
+    blocks: Array<{ label: string; value: string }> | null;
+  } | null>(null);
 
   useEffect(() => {
     if (!liveTargetDateText) {
-      setLiveDetailBlocks(null);
       return;
     }
 
-    const match = liveTargetDateText.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const resolvedTargetDateText = liveTargetDateText;
+
+    const match = resolvedTargetDateText.match(/^(\d{4})-(\d{2})-(\d{2})$/);
 
     if (!match) {
-      setLiveDetailBlocks(null);
       return;
     }
 
@@ -168,7 +228,7 @@ function ResultCard({
       const diffMs = targetDate.getTime() - Date.now();
 
       if (diffMs <= 0) {
-        setLiveDetailBlocks(null);
+        setLiveDetailState({ targetDateText: resolvedTargetDateText, blocks: null });
         return;
       }
 
@@ -176,19 +236,25 @@ function ResultCard({
       const totalMinutes = Math.floor(diffMs / (60 * 1000));
       const totalHours = Math.floor(diffMs / (60 * 60 * 1000));
 
-      setLiveDetailBlocks([
-        { label: "hrs", value: totalHours.toLocaleString("en-GB") },
-        { label: "min", value: totalMinutes.toLocaleString("en-GB") },
-        { label: "sec", value: totalSeconds.toLocaleString("en-GB") },
-      ]);
+      setLiveDetailState({
+        targetDateText: resolvedTargetDateText,
+        blocks: [
+          { label: "hrs", value: totalHours.toLocaleString("en-GB") },
+          { label: "min", value: totalMinutes.toLocaleString("en-GB") },
+          { label: "sec", value: totalSeconds.toLocaleString("en-GB") },
+        ],
+      });
     }
 
-    updateLiveBlocks();
     const intervalId = window.setInterval(updateLiveBlocks, 1000);
 
     return () => window.clearInterval(intervalId);
   }, [liveTargetDateText]);
 
+  const liveDetailBlocks =
+    liveDetailState && liveDetailState.targetDateText === liveTargetDateText
+      ? liveDetailState.blocks
+      : null;
   const resolvedDetailBlocks = detailBlocks ?? liveDetailBlocks ?? defaultDetailBlocks;
 
   return (
@@ -647,6 +713,12 @@ export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewSh
             {activeCalculator === "days-until-i-retire" ? <RetirementCountdownCalculator /> : null}
           </div>
           <CalculatorEditorialSections page={activeCalculatorPage} />
+          <CountdownLinkList
+            title="Continue planning"
+            description={calculatorNextSteps[activeCalculator].description}
+            links={calculatorNextSteps[activeCalculator].links}
+            centered
+          />
         </section>
       </div>
     </main>

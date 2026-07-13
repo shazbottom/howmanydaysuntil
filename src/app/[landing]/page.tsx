@@ -167,11 +167,13 @@ export default async function LandingPage({ params }: LandingPageProps) {
           {factSet ? <SeoHubFactsSection factSet={factSet} /> : null}
           <CountdownLinkList
             title="Planning tools"
-            description="Use our calculators to work out exact date differences, business days, or add and subtract dates around this event."
+            description={`Turn the ${event.name} countdown into a practical plan or add a live version to another website.`}
             links={[
-              { href: "/days-between-dates", label: "Days between dates" },
-              { href: "/business-days-between-dates", label: "Business days between dates" },
-              { href: "/add-or-subtract-date", label: "Add or subtract date" },
+              { href: "/business-days-until", label: `Count business days until ${event.name}` },
+              { href: "/days-between-dates", label: "Compare this date with another date" },
+              { href: "/add-or-subtract-date", label: `Plan before or after ${event.name}` },
+              { href: "/countdown-widget", label: "Add a countdown to your website" },
+              { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
             ]}
             centered
           />

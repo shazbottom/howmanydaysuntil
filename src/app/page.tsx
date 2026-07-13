@@ -56,7 +56,17 @@ const PLANNING_TOOL_LINKS: CountdownLinkItem[] = [
   { href: "/fridays-left-this-year", label: "Fridays left this year" },
   { href: "/weekends-left-this-year", label: "Weekends left this year" },
   { href: "/working-days-left-this-year", label: "Working days left this year" },
+  { href: "/fridays-until-summer", label: "How many Fridays until summer?" },
   { href: "/countdown-widget", label: "Build a countdown widget" },
+  { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
+  { href: "/how-leap-years-affect-date-calculations", label: "How leap years affect dates" },
+];
+
+const CALCULATOR_TOOL_LINKS: CountdownLinkItem[] = [
+  { href: "/days-between-dates", label: "Calculate days between two dates" },
+  { href: "/business-days-until", label: "Count business days until a date" },
+  { href: "/add-or-subtract-date", label: "Add or subtract time from a date" },
+  { href: "/days-until-i-retire", label: "Calculate days until retirement" },
 ];
 
 const MILESTONE_BUTTONS = [
@@ -506,6 +516,7 @@ export default function Home() {
         </section>
         <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />
         <HomepageChipLinks title="Coming up soon" links={comingUpSoonLinks} />
+        <HomepageChipLinks title="Useful calculators" links={CALCULATOR_TOOL_LINKS} />
         <HomepageChipLinks title="Planning tools" links={PLANNING_TOOL_LINKS} emphasis="muted" />
       </div>
     </main>

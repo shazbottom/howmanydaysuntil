@@ -157,6 +157,18 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
               </section>
             ))}
           </div>
+          <CountdownLinkList
+            title="Use this date"
+            description="Compare the target with another date, switch to a regional working-day count, or use it in an embedded countdown."
+            links={[
+              { href: "/days-between-dates", label: "Compare with another date" },
+              { href: "/business-days-until", label: "Count business days until this date" },
+              { href: "/add-or-subtract-date", label: "Add or subtract time from this date" },
+              { href: "/countdown-widget", label: "Create an embeddable countdown" },
+              { href: "/calendar-days-vs-business-days", label: "Understand the different day counts" },
+            ]}
+            centered
+          />
           <CountdownLinkList title="Nearby dates" links={nearbyLinks} centered />
         </>
       }

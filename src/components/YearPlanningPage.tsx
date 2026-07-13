@@ -88,6 +88,9 @@ export function YearPlanningPage({ kind }: { kind: YearPlanningKind }) {
               { href: "/year-planner", label: "Year planner overview" },
               { href: "/business-days-until", label: "Business days until a date" },
               { href: "/days-between-dates", label: "Days between dates" },
+              { href: "/fridays-until-summer", label: "Fridays until summer" },
+              { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
+              { href: "/how-leap-years-affect-date-calculations", label: "How leap years change date counts" },
             ]}
             centered
           />

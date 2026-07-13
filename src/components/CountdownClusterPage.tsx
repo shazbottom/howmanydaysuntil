@@ -105,11 +105,12 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
 
           <CountdownLinkList
             title="Planning tools"
-            description={`Use our calculators to compare dates and plan around ${event.name}.`}
+            description={`Use the ${event.name} count in a wider calendar or working-day plan.`}
             links={[
-              { href: "/days-between-dates", label: "Days between dates" },
-              { href: "/business-days-between-dates", label: "Business days between dates" },
-              { href: "/add-or-subtract-date", label: "Add or subtract date" },
+              { href: "/days-between-dates", label: `Compare ${event.name} with another date` },
+              { href: "/business-days-until", label: `Count business days until ${event.name}` },
+              { href: "/year-planner", label: "Plan the rest of the year" },
+              { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
             ]}
             centered
           />
