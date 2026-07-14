@@ -36,6 +36,8 @@ export function YearPlanningPage({ kind }: { kind: YearPlanningKind }) {
       countdownPrimaryValue={data.count}
       countdownPrimaryUnitLabel={data.countLabel}
       countdownDetailLine={data.detailLine}
+      calendarPath={currentPath}
+      calendarTitle={data.title}
       supportingCopy={[]}
       relatedLinks={data.relatedLinks}
       structuredData={structuredData}

@@ -61,6 +61,7 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
       countdownPrimaryUnitLabel={unitLabel}
       countdownDetailLine={detailLine}
       cardActionLinks={cardActionLinks}
+      calendarPath={canonicalPath}
       supportingCopy={[]}
       relatedLinks={relatedLinks}
       structuredData={structuredData}

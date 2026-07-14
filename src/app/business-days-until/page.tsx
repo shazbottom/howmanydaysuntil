@@ -1,12 +1,23 @@
 import { JsonLd } from "../../components/JsonLd";
 import { CalculatorPreviewShell } from "../../components/calculators/CalculatorPreviewShell";
 import { getCalculatorMetadata, getCalculatorPage } from "../../lib/calculatorPages";
+import {
+  applyCalculatorShareRobots,
+  parseCalculatorSearchParams,
+  type CalculatorSearchPageProps,
+} from "../../lib/calculatorShare";
 import { createBreadcrumbJsonLd } from "../../lib/structuredData";
 
-export const metadata = getCalculatorMetadata("business-days-until");
+export async function generateMetadata({ searchParams }: CalculatorSearchPageProps) {
+  return applyCalculatorShareRobots(
+    getCalculatorMetadata("business-days-until"),
+    await searchParams,
+  );
+}
 
-export default function BusinessDaysUntilPage() {
+export default async function BusinessDaysUntilPage({ searchParams }: CalculatorSearchPageProps) {
   const calculatorPage = getCalculatorPage("business-days-until");
+  const initialValues = parseCalculatorSearchParams(await searchParams);
 
   return (
     <>
@@ -17,7 +28,10 @@ export default function BusinessDaysUntilPage() {
           { name: "Business Days Until", path: calculatorPage.path },
         ])}
       />
-      <CalculatorPreviewShell activeCalculator="business-days-until" />
+      <CalculatorPreviewShell
+        activeCalculator="business-days-until"
+        initialValues={initialValues}
+      />
     </>
   );
 }

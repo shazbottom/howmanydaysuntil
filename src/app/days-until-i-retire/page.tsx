@@ -1,12 +1,23 @@
 import { JsonLd } from "../../components/JsonLd";
 import { CalculatorPreviewShell } from "../../components/calculators/CalculatorPreviewShell";
 import { getCalculatorMetadata, getCalculatorPage } from "../../lib/calculatorPages";
+import {
+  applyCalculatorShareRobots,
+  parseCalculatorSearchParams,
+  type CalculatorSearchPageProps,
+} from "../../lib/calculatorShare";
 import { createBreadcrumbJsonLd } from "../../lib/structuredData";
 
-export const metadata = getCalculatorMetadata("days-until-i-retire");
+export async function generateMetadata({ searchParams }: CalculatorSearchPageProps) {
+  return applyCalculatorShareRobots(
+    getCalculatorMetadata("days-until-i-retire"),
+    await searchParams,
+  );
+}
 
-export default function DaysUntilIRetirePage() {
+export default async function DaysUntilIRetirePage({ searchParams }: CalculatorSearchPageProps) {
   const calculatorPage = getCalculatorPage("days-until-i-retire");
+  const initialValues = parseCalculatorSearchParams(await searchParams);
 
   return (
     <>
@@ -17,7 +28,10 @@ export default function DaysUntilIRetirePage() {
           { name: "Days Until I Retire", path: calculatorPage.path },
         ])}
       />
-      <CalculatorPreviewShell activeCalculator="days-until-i-retire" />
+      <CalculatorPreviewShell
+        activeCalculator="days-until-i-retire"
+        initialValues={initialValues}
+      />
     </>
   );
 }

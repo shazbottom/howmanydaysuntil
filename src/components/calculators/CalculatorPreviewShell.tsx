@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Brand } from "../Brand";
+import { CalendarExportMenu } from "../CalendarExportMenu";
 import { CalculatorNavButton } from "../CalculatorNavButton";
+import { CopyResultLinkButton } from "../CopyResultLinkButton";
 import { CountdownLinkList, type CountdownLinkItem } from "../CountdownLinkList";
 import { ThemeToggle } from "../ThemeToggle";
 import { countries, type CountryCode } from "../../lib/countries";
@@ -21,9 +23,34 @@ import {
   calculateDaysBetween,
   calculateRetirementCountdown,
 } from "../../lib/dateCalculators";
+import {
+  buildCalculatorSharePath,
+  getDefaultCalculatorRegionId,
+  type CalculatorInitialValues,
+} from "../../lib/calculatorShare";
+import type { AllDayCalendarEvent } from "../../lib/calendarEvent";
 
 interface CalculatorPreviewShellProps {
   activeCalculator: CalculatorKind;
+  initialValues: CalculatorInitialValues;
+}
+
+const SITE_URL = "https://daysuntil.is";
+
+function createResultCalendarEvent(
+  title: string,
+  date: string,
+  description: string,
+  sharePath: string,
+  fileName: string,
+): AllDayCalendarEvent {
+  return {
+    title,
+    date,
+    description,
+    url: `${SITE_URL}${sharePath}`,
+    fileName,
+  };
 }
 
 const calculatorNextSteps: Record<
@@ -166,6 +193,8 @@ function ResultCard({
   summaryLine,
   detailBlocks,
   liveTargetDateText,
+  sharePath,
+  calendarEvent,
 }: {
   title: string;
   label: string;
@@ -177,6 +206,8 @@ function ResultCard({
   summaryLine?: string;
   detailBlocks?: Array<{ label: string; value: string }>;
   liveTargetDateText?: string;
+  sharePath: string;
+  calendarEvent?: AllDayCalendarEvent;
 }) {
   const absoluteDays = Math.abs(value);
   const weeks = Math.floor(absoluteDays / 7);
@@ -311,6 +342,10 @@ function ResultCard({
           </div>
         </div>
         <p className="mt-6 text-sm leading-6 text-black/54 dark:text-white/56">{note}</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3 border-t border-black/7 pt-6 dark:border-white/9">
+          <CopyResultLinkButton path={sharePath} />
+          {calendarEvent ? <CalendarExportMenu event={calendarEvent} /> : null}
+        </div>
       </div>
     </section>
   );
@@ -438,10 +473,6 @@ function CountryField({
   );
 }
 
-function getDefaultRegionId(countryCode: CountryCode) {
-  return getRegionsForCountry(countryCode)[0]?.id ?? "";
-}
-
 function RegionField({
   countryCode,
   value,
@@ -471,10 +502,15 @@ function RegionField({
   );
 }
 
-function DaysBetweenCalculator() {
-  const [startDate, setStartDate] = useState("2026-03-23");
-  const [endDate, setEndDate] = useState("2026-12-31");
+function DaysBetweenCalculator({ initialValues }: { initialValues: CalculatorInitialValues }) {
+  const [startDate, setStartDate] = useState(initialValues.startDate);
+  const [endDate, setEndDate] = useState(initialValues.endDate);
   const result = calculateDaysBetween(startDate, endDate);
+  const sharePath = buildCalculatorSharePath("days-between", {
+    ...initialValues,
+    startDate,
+    endDate,
+  });
 
   return (
     <>
@@ -492,6 +528,14 @@ function DaysBetweenCalculator() {
           value={result}
           label="calendar days between the selected dates"
           liveTargetDateText={endDate}
+          sharePath={sharePath}
+          calendarEvent={createResultCalendarEvent(
+            "Selected end date",
+            endDate,
+            `End date from a ${Math.abs(result)}-day calendar comparison.`,
+            sharePath,
+            `date-comparison-${endDate}`,
+          )}
           note="This uses the pure calendar-date difference between the start and end dates. Negative values mean the end date is before the start date."
         />
       ) : null}
@@ -499,15 +543,25 @@ function DaysBetweenCalculator() {
   );
 }
 
-function BusinessDaysUntilCalculator() {
-  const [targetDate, setTargetDate] = useState("2026-12-31");
-  const [countryCode, setCountryCode] = useState<CountryCode>("au");
-  const [regionId, setRegionId] = useState(getDefaultRegionId("au"));
+function BusinessDaysUntilCalculator({
+  initialValues,
+}: {
+  initialValues: CalculatorInitialValues;
+}) {
+  const [targetDate, setTargetDate] = useState(initialValues.targetDate);
+  const [countryCode, setCountryCode] = useState<CountryCode>(initialValues.countryCode);
+  const [regionId, setRegionId] = useState(initialValues.regionId);
   const result = calculateBusinessDaysUntilForCountry(targetDate, countryCode, regionId);
+  const sharePath = buildCalculatorSharePath("business-days-until", {
+    ...initialValues,
+    targetDate,
+    countryCode,
+    regionId,
+  });
 
   function handleCountryChange(nextCountryCode: CountryCode) {
     setCountryCode(nextCountryCode);
-    setRegionId(getDefaultRegionId(nextCountryCode));
+    setRegionId(getDefaultCalculatorRegionId(nextCountryCode));
   }
 
   return (
@@ -527,6 +581,14 @@ function BusinessDaysUntilCalculator() {
           value={result.businessDays}
           label="business days remaining until the target date"
           liveTargetDateText={targetDate}
+          sharePath={sharePath}
+          calendarEvent={createResultCalendarEvent(
+            "Business-day target date",
+            targetDate,
+            `${Math.abs(result.businessDays)} business days from the selected starting point.`,
+            sharePath,
+            `business-day-target-${targetDate}`,
+          )}
           note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
         />
       ) : null}
@@ -534,16 +596,27 @@ function BusinessDaysUntilCalculator() {
   );
 }
 
-function BusinessDaysBetweenCalculator() {
-  const [startDate, setStartDate] = useState("2026-03-23");
-  const [endDate, setEndDate] = useState("2026-12-31");
-  const [countryCode, setCountryCode] = useState<CountryCode>("au");
-  const [regionId, setRegionId] = useState(getDefaultRegionId("au"));
+function BusinessDaysBetweenCalculator({
+  initialValues,
+}: {
+  initialValues: CalculatorInitialValues;
+}) {
+  const [startDate, setStartDate] = useState(initialValues.startDate);
+  const [endDate, setEndDate] = useState(initialValues.endDate);
+  const [countryCode, setCountryCode] = useState<CountryCode>(initialValues.countryCode);
+  const [regionId, setRegionId] = useState(initialValues.regionId);
   const result = calculateBusinessDaysBetweenForCountry(startDate, endDate, countryCode, regionId);
+  const sharePath = buildCalculatorSharePath("business-days-between", {
+    ...initialValues,
+    startDate,
+    endDate,
+    countryCode,
+    regionId,
+  });
 
   function handleCountryChange(nextCountryCode: CountryCode) {
     setCountryCode(nextCountryCode);
-    setRegionId(getDefaultRegionId(nextCountryCode));
+    setRegionId(getDefaultCalculatorRegionId(nextCountryCode));
   }
 
   return (
@@ -564,6 +637,14 @@ function BusinessDaysBetweenCalculator() {
           value={result.businessDays}
           label="business days between the selected dates"
           liveTargetDateText={endDate}
+          sharePath={sharePath}
+          calendarEvent={createResultCalendarEvent(
+            "Selected business-day end date",
+            endDate,
+            `${Math.abs(result.businessDays)} business days from the selected start date.`,
+            sharePath,
+            `business-day-comparison-${endDate}`,
+          )}
           note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
         />
       ) : null}
@@ -571,12 +652,25 @@ function BusinessDaysBetweenCalculator() {
   );
 }
 
-function AddOrSubtractDateCalculator() {
-  const [startDate, setStartDate] = useState("2026-03-24");
-  const [mode, setMode] = useState<"add" | "subtract">("add");
-  const [amount, setAmount] = useState(30);
-  const [unit, setUnit] = useState<"days" | "weeks" | "months" | "years">("days");
+function AddOrSubtractDateCalculator({
+  initialValues,
+}: {
+  initialValues: CalculatorInitialValues;
+}) {
+  const [startDate, setStartDate] = useState(initialValues.startDate);
+  const [mode, setMode] = useState<"add" | "subtract">(initialValues.mode);
+  const [amount, setAmount] = useState(initialValues.amount);
+  const [unit, setUnit] = useState<"days" | "weeks" | "months" | "years">(
+    initialValues.unit,
+  );
   const result = calculateAddOrSubtractDate(startDate, mode, amount, unit);
+  const sharePath = buildCalculatorSharePath("add-or-subtract-date", {
+    ...initialValues,
+    startDate,
+    mode,
+    amount,
+    unit,
+  });
 
   return (
     <>
@@ -618,6 +712,14 @@ function AddOrSubtractDateCalculator() {
           label={`${mode === "add" ? "added" : "subtracted"} ${amount} ${unit} from the selected date`}
           summaryLine={getAddSubtractSummaryLine(amount, unit)}
           liveTargetDateText={result.resultDate}
+          sharePath={sharePath}
+          calendarEvent={createResultCalendarEvent(
+            "Calculated date",
+            result.resultDate,
+            `${amount} ${unit} ${mode === "add" ? "after" : "before"} ${startDate}.`,
+            sharePath,
+            `calculated-date-${result.resultDate}`,
+          )}
           note={`${amount} ${unit} ${mode === "add" ? "from" : "before"} the selected date lands on ${result.resultLabel}. This calculator treats the change as a calendar-date operation, not a business-day calculation.`}
         />
       ) : null}
@@ -625,10 +727,19 @@ function AddOrSubtractDateCalculator() {
   );
 }
 
-function RetirementCountdownCalculator() {
-  const [dateOfBirth, setDateOfBirth] = useState("1990-04-01");
-  const [retirementAge, setRetirementAge] = useState(67);
+function RetirementCountdownCalculator({
+  initialValues,
+}: {
+  initialValues: CalculatorInitialValues;
+}) {
+  const [dateOfBirth, setDateOfBirth] = useState(initialValues.dateOfBirth);
+  const [retirementAge, setRetirementAge] = useState(initialValues.retirementAge);
   const result = calculateRetirementCountdown(dateOfBirth, retirementAge);
+  const sharePath = buildCalculatorSharePath("days-until-i-retire", {
+    ...initialValues,
+    dateOfBirth,
+    retirementAge,
+  });
 
   return (
     <>
@@ -651,6 +762,14 @@ function RetirementCountdownCalculator() {
           label="days remaining until retirement"
           summaryLine={`${result.yearsRemaining} years, ${result.monthsRemaining} months, ${result.extraDaysRemaining} days`}
           liveTargetDateText={result.retirementDate}
+          sharePath={sharePath}
+          calendarEvent={createResultCalendarEvent(
+            "Retirement target date",
+            result.retirementDate,
+            `Personal retirement target based on age ${retirementAge}.`,
+            sharePath,
+            `retirement-target-${result.retirementDate}`,
+          )}
           note={`Based on the retirement age you entered, your retirement date is ${result.retirementLabel}. This is a personal planning calculator and does not use any official retirement rules.`}
         />
       ) : null}
@@ -658,7 +777,10 @@ function RetirementCountdownCalculator() {
   );
 }
 
-export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewShellProps) {
+export function CalculatorPreviewShell({
+  activeCalculator,
+  initialValues,
+}: CalculatorPreviewShellProps) {
   const activeCalculatorPage = getCalculatorPage(activeCalculator);
 
   return (
@@ -706,11 +828,21 @@ export function CalculatorPreviewShell({ activeCalculator }: CalculatorPreviewSh
                       ? "Add or subtract date"
                       : "Days until I retire"}
             </h2>
-            {activeCalculator === "days-between" ? <DaysBetweenCalculator /> : null}
-            {activeCalculator === "business-days-between" ? <BusinessDaysBetweenCalculator /> : null}
-            {activeCalculator === "business-days-until" ? <BusinessDaysUntilCalculator /> : null}
-            {activeCalculator === "add-or-subtract-date" ? <AddOrSubtractDateCalculator /> : null}
-            {activeCalculator === "days-until-i-retire" ? <RetirementCountdownCalculator /> : null}
+            {activeCalculator === "days-between" ? (
+              <DaysBetweenCalculator initialValues={initialValues} />
+            ) : null}
+            {activeCalculator === "business-days-between" ? (
+              <BusinessDaysBetweenCalculator initialValues={initialValues} />
+            ) : null}
+            {activeCalculator === "business-days-until" ? (
+              <BusinessDaysUntilCalculator initialValues={initialValues} />
+            ) : null}
+            {activeCalculator === "add-or-subtract-date" ? (
+              <AddOrSubtractDateCalculator initialValues={initialValues} />
+            ) : null}
+            {activeCalculator === "days-until-i-retire" ? (
+              <RetirementCountdownCalculator initialValues={initialValues} />
+            ) : null}
           </div>
           <CalculatorEditorialSections page={activeCalculatorPage} />
           <CountdownLinkList

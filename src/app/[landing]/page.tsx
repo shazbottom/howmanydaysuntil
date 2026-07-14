@@ -134,6 +134,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
       countdownLabel={event.name}
       countdown={countdown}
       cardActionLinks={clusterButtons}
+      calendarPath={currentPath}
       supportingCopy={[]}
       relatedLinks={relatedEvents}
       showChristmasFlyby={event.slug === "christmas"}

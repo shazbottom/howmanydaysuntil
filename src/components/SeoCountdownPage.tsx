@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Brand } from "./Brand";
+import { CalendarExportMenu } from "./CalendarExportMenu";
 import { CalculatorNavButton } from "./CalculatorNavButton";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { CountdownLinkList, type CountdownLinkItem } from "./CountdownLinkList";
@@ -10,6 +11,15 @@ import { ThemeToggle } from "./ThemeToggle";
 import type { CountdownClusterLink } from "../lib/countdownClusters";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
+const SITE_URL = "https://daysuntil.is";
+
+function formatCalendarDate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
 
 export interface SeoCountdownPageProps {
   eyebrow: string;
@@ -22,6 +32,8 @@ export interface SeoCountdownPageProps {
   countdownPrimaryUnitLabel?: string;
   countdownDetailLine?: string;
   cardActionLinks?: CountdownClusterLink[];
+  calendarPath?: string;
+  calendarTitle?: string;
   supportingCopy: string[];
   relatedLinks: CountdownLinkItem[];
   extraSection?: ReactNode;
@@ -40,12 +52,21 @@ export function SeoCountdownPage({
   countdownPrimaryUnitLabel,
   countdownDetailLine,
   cardActionLinks = [],
+  calendarPath,
+  calendarTitle: calendarTitleOverride,
   supportingCopy,
   relatedLinks,
   extraSection,
   showChristmasFlyby = false,
   structuredData,
 }: SeoCountdownPageProps) {
+  const calendarYear = countdown?.targetDate.getFullYear();
+  const defaultCalendarTitle =
+    calendarYear && !countdownLabel.includes(String(calendarYear))
+      ? `${countdownLabel} ${calendarYear}`
+      : countdownLabel;
+  const calendarTitle = calendarTitleOverride ?? defaultCalendarTitle;
+
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       {structuredData ? <JsonLd data={structuredData} /> : null}
@@ -110,8 +131,19 @@ export function SeoCountdownPage({
               }
             />
           </div>
-          {cardActionLinks.length > 0 ? (
+          {cardActionLinks.length > 0 || (calendarPath && countdown) ? (
             <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
+              {calendarPath && countdown ? (
+                <CalendarExportMenu
+                  event={{
+                    title: calendarTitle,
+                    date: formatCalendarDate(countdown.targetDate),
+                    description: lead ?? `Live countdown to ${calendarTitle}.`,
+                    url: `${SITE_URL}${calendarPath}`,
+                    fileName: calendarPath.replace(/^\//, "").replaceAll("/", "-"),
+                  }}
+                />
+              ) : null}
               {cardActionLinks.map((link) => (
                 <Link
                   key={link.href}

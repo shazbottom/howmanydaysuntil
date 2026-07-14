@@ -1,6 +1,14 @@
 import type { CustomCountdown } from "./customCountdowns";
 import { createLocalDateFromIso } from "./customCountdowns";
 
+export interface AllDayCalendarEvent {
+  title: string;
+  date: string;
+  description?: string;
+  url: string;
+  fileName: string;
+}
+
 function padCalendarPart(value: number): string {
   return value.toString().padStart(2, "0");
 }
@@ -11,6 +19,10 @@ function formatCalendarDate(date: Date): string {
 
 function formatCalendarDateTime(date: Date): string {
   return `${formatCalendarDate(date)}T${padCalendarPart(date.getHours())}${padCalendarPart(date.getMinutes())}00`;
+}
+
+function formatUtcCalendarDateTime(date: Date): string {
+  return `${date.getUTCFullYear()}${padCalendarPart(date.getUTCMonth() + 1)}${padCalendarPart(date.getUTCDate())}T${padCalendarPart(date.getUTCHours())}${padCalendarPart(date.getUTCMinutes())}${padCalendarPart(date.getUTCSeconds())}Z`;
 }
 
 function addDays(date: Date, days: number): Date {
@@ -31,6 +43,107 @@ function escapeIcsText(value: string): string {
     .replace(/\r?\n/g, "\\n")
     .replace(/,/g, "\\,")
     .replace(/;/g, "\\;");
+}
+
+function getAllDayCalendarDates(event: AllDayCalendarEvent) {
+  const match = event.date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const startDate = new Date(Date.UTC(year, month - 1, day));
+
+  if (
+    startDate.getUTCFullYear() !== year ||
+    startDate.getUTCMonth() !== month - 1 ||
+    startDate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+
+  const endDate = new Date(startDate);
+  endDate.setUTCDate(endDate.getUTCDate() + 1);
+
+  return {
+    start: `${year}${padCalendarPart(month)}${padCalendarPart(day)}`,
+    end: `${endDate.getUTCFullYear()}${padCalendarPart(endDate.getUTCMonth() + 1)}${padCalendarPart(endDate.getUTCDate())}`,
+  };
+}
+
+function buildAllDayCalendarDescription(event: AllDayCalendarEvent) {
+  return [event.description, event.url].filter(Boolean).join("\n\n");
+}
+
+export function buildAllDayGoogleCalendarUrl(event: AllDayCalendarEvent): string | null {
+  const dates = getAllDayCalendarDates(event);
+
+  if (!dates) {
+    return null;
+  }
+
+  const url = new URL("https://calendar.google.com/calendar/render");
+  url.searchParams.set("action", "TEMPLATE");
+  url.searchParams.set("text", event.title);
+  url.searchParams.set("details", buildAllDayCalendarDescription(event));
+  url.searchParams.set("dates", `${dates.start}/${dates.end}`);
+
+  return url.toString();
+}
+
+export function buildAllDayIcsContent(event: AllDayCalendarEvent): string | null {
+  const dates = getAllDayCalendarDates(event);
+
+  if (!dates) {
+    return null;
+  }
+
+  const uidName = event.fileName.toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//DaysUntil//Countdown//EN",
+    "CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT",
+    `UID:${uidName}-${event.date}@daysuntil.is`,
+    `DTSTAMP:${formatUtcCalendarDateTime(new Date())}`,
+    `SUMMARY:${escapeIcsText(event.title)}`,
+    `DESCRIPTION:${escapeIcsText(buildAllDayCalendarDescription(event))}`,
+    `DTSTART;VALUE=DATE:${dates.start}`,
+    `DTEND;VALUE=DATE:${dates.end}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ];
+
+  return `${lines.join("\r\n")}\r\n`;
+}
+
+export function downloadAllDayIcsFile(event: AllDayCalendarEvent): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const content = buildAllDayIcsContent(event);
+
+  if (!content) {
+    return false;
+  }
+
+  const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
+  const objectUrl = window.URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+
+  anchor.href = objectUrl;
+  anchor.download = `${event.fileName.replace(/[^a-z0-9-]+/gi, "-").toLowerCase()}.ics`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  window.URL.revokeObjectURL(objectUrl);
+
+  return true;
 }
 
 export function hasTimedCustomCountdown(record: CustomCountdown): boolean {
@@ -113,7 +226,7 @@ export function buildIcsContent(record: CustomCountdown, countdownUrl: string): 
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${record.slug}@daysuntil.is`,
-    `DTSTAMP:${formatCalendarDateTime(new Date())}Z`,
+    `DTSTAMP:${formatUtcCalendarDateTime(new Date())}`,
     `SUMMARY:${escapeIcsText(record.title)}`,
     `DESCRIPTION:${escapeIcsText(buildCalendarDescription(record, countdownUrl))}`,
   ];

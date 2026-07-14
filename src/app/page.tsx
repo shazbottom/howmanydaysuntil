@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Brand } from "../components/Brand";
+import { CalendarExportMenu } from "../components/CalendarExportMenu";
 import { CalculatorNavButton } from "../components/CalculatorNavButton";
 import type { CountdownLinkItem } from "../components/CountdownLinkList";
 import { CountdownDisplay } from "../components/CountdownDisplay";
@@ -86,6 +87,13 @@ const MAJOR_EVENT_SLUGS = [
 
 const CHRISTMAS_FLYBY_FRAME = "/seasonal/1.svg";
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
+const SITE_URL = "https://daysuntil.is";
+
+function formatCalendarDate(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
+    date.getDate(),
+  ).padStart(2, "0")}`;
+}
 
 function isSameLocalDay(left: Date, right: Date): boolean {
   return (
@@ -512,6 +520,23 @@ export default function Home() {
               }
             />
           </div>
+          {resolvedState ? (
+            <div className="mt-5 flex justify-center">
+              <CalendarExportMenu
+                event={{
+                  title: resolvedState.label,
+                  date: formatCalendarDate(resolvedState.countdown.targetDate),
+                  description: `Live countdown to ${resolvedState.label}.`,
+                  url: resolvedState.selectedSlug
+                    ? `${SITE_URL}${getSeoLandingPath(resolvedState.selectedSlug)}`
+                    : SITE_URL,
+                  fileName:
+                    resolvedState.selectedSlug ??
+                    `countdown-${formatCalendarDate(resolvedState.countdown.targetDate)}`,
+                }}
+              />
+            </div>
+          ) : null}
           {selectedFactSet ? <SeoHubFactsSection factSet={selectedFactSet} /> : null}
         </section>
         <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />

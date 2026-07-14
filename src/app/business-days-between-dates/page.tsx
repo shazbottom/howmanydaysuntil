@@ -1,12 +1,25 @@
 import { JsonLd } from "../../components/JsonLd";
 import { CalculatorPreviewShell } from "../../components/calculators/CalculatorPreviewShell";
 import { getCalculatorMetadata, getCalculatorPage } from "../../lib/calculatorPages";
+import {
+  applyCalculatorShareRobots,
+  parseCalculatorSearchParams,
+  type CalculatorSearchPageProps,
+} from "../../lib/calculatorShare";
 import { createBreadcrumbJsonLd } from "../../lib/structuredData";
 
-export const metadata = getCalculatorMetadata("business-days-between");
+export async function generateMetadata({ searchParams }: CalculatorSearchPageProps) {
+  return applyCalculatorShareRobots(
+    getCalculatorMetadata("business-days-between"),
+    await searchParams,
+  );
+}
 
-export default function BusinessDaysBetweenDatesPage() {
+export default async function BusinessDaysBetweenDatesPage({
+  searchParams,
+}: CalculatorSearchPageProps) {
   const calculatorPage = getCalculatorPage("business-days-between");
+  const initialValues = parseCalculatorSearchParams(await searchParams);
 
   return (
     <>
@@ -17,7 +30,10 @@ export default function BusinessDaysBetweenDatesPage() {
           { name: "Business Days Between Dates", path: calculatorPage.path },
         ])}
       />
-      <CalculatorPreviewShell activeCalculator="business-days-between" />
+      <CalculatorPreviewShell
+        activeCalculator="business-days-between"
+        initialValues={initialValues}
+      />
     </>
   );
 }

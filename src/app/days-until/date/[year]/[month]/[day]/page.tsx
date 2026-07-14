@@ -125,6 +125,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       title={`How many days until ${longDate}?`}
       countdownLabel={longDate}
       countdown={resolvedCountdown.countdown}
+      calendarPath={currentPath}
       supportingCopy={[]}
       relatedLinks={getExactDateRelatedLinks(targetDate)}
       extraSection={
