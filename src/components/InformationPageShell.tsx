@@ -17,7 +17,7 @@ export function InformationPageShell({
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col">
-        <div className="flex items-center justify-between gap-4">
+        <div className="daysuntil-print-hide flex items-center justify-between gap-4">
           <Link
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white"

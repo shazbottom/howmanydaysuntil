@@ -43,3 +43,21 @@ body {
   animation: daysuntil-christmas-flyby 6.5s linear infinite;
   will-change: transform;
 }
+
+@media print {
+  .daysuntil-print-hide {
+    display: none !important;
+  }
+
+  .daysuntil-calendar-print {
+    break-inside: avoid;
+    border-color: #d7d7d7 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #171717 !important;
+  }
+}

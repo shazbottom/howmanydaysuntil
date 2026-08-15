@@ -51,5 +51,7 @@ test("generated embed code escapes attributes and applies the selected size", ()
   assert.match(code, /Paul &amp; &quot;friends&quot; countdown/);
   assert.match(code, /theme=dark/);
   assert.match(code, /accent=%23123456/);
+  assert.match(code, /Countdown by DaysUntil/);
+  assert.match(code, /rel="nofollow noopener"/);
   assert.equal(code.includes("<script"), false);
 });

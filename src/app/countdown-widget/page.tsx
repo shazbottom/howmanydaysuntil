@@ -5,12 +5,15 @@ import { JsonLd } from "../../components/JsonLd";
 import {
   formatWidgetDateInput,
   getDefaultCountdownWidgetConfig,
+  getCountdownWidgetTemplates,
 } from "../../lib/countdownWidget";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../../lib/structuredData";
 
 const title = "Free embeddable countdown widget";
 const description =
   "Build a responsive countdown widget for a website or blog. Choose a date, title, theme, colour, and size, then copy the iframe code.";
+
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: `${title} | DaysUntil`,
@@ -54,6 +57,7 @@ export default function CountdownWidgetPage() {
       <CountdownWidgetBuilder
         initialConfig={getDefaultCountdownWidgetConfig(now)}
         minimumDate={formatWidgetDateInput(now)}
+        templates={getCountdownWidgetTemplates(now)}
       />
 
       <h2>How to add the widget</h2>
@@ -87,10 +91,10 @@ export default function CountdownWidgetPage() {
 
       <h2>Attribution</h2>
       <p>
-        The small Powered by DaysUntil link is part of the free widget. It gives visitors a route
-        to build their own version and identifies the service responsible for the calculation.
-        Do not place the iframe where it obscures navigation or could be mistaken for an
-        advertisement.
+        The copied snippet includes a small, branded DaysUntil link beneath the iframe. The link is
+        marked nofollow and gives visitors a route to build their own version without treating the
+        widget as an SEO link. Do not place the widget where it obscures navigation or could be
+        mistaken for an advertisement.
       </p>
     </InformationPageShell>
   );

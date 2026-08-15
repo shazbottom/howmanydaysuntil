@@ -53,6 +53,7 @@ const POPULAR_COUNTDOWN_LINKS = [
 ];
 
 const PLANNING_TOOL_LINKS: CountdownLinkItem[] = [
+  { href: "/2026-countdown-calendar", label: "2026 countdown calendar" },
   { href: "/year-planner", label: "Plan the rest of the year" },
   { href: "/fridays-left-this-year", label: "Fridays left this year" },
   { href: "/weekends-left-this-year", label: "Weekends left this year" },

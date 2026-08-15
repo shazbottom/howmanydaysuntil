@@ -169,6 +169,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${SITE_URL}/2026-countdown-calendar`,
+      changeFrequency: "daily",
+      priority: 0.78,
+    },
+    {
       url: `${SITE_URL}/year-planner`,
       changeFrequency: "daily",
       priority: 0.76,

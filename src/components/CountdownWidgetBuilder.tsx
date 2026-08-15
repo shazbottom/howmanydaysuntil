@@ -7,6 +7,7 @@ import {
   countdownWidgetSizes,
   type CountdownWidgetConfig,
   type CountdownWidgetSize,
+  type CountdownWidgetTemplate,
   type CountdownWidgetTheme,
 } from "../lib/countdownWidget";
 
@@ -16,9 +17,11 @@ const fieldClassName =
 export function CountdownWidgetBuilder({
   initialConfig,
   minimumDate,
+  templates,
 }: {
   initialConfig: CountdownWidgetConfig;
   minimumDate: string;
+  templates: CountdownWidgetTemplate[];
 }) {
   const [title, setTitle] = useState(initialConfig.title);
   const [targetDate, setTargetDate] = useState(initialConfig.targetDate);
@@ -37,8 +40,51 @@ export function CountdownWidgetBuilder({
     window.setTimeout(() => setCopied(false), 1800);
   }
 
+  function applyTemplate(template: CountdownWidgetTemplate) {
+    setTitle(template.config.title);
+    setTargetDate(template.config.targetDate);
+    setTheme(template.config.theme);
+    setAccent(template.config.accent);
+    setSize(template.size);
+    setCopied(false);
+  }
+
   return (
-    <section className="my-10 overflow-hidden rounded-[2rem] border border-[#d9d2c3] bg-[linear-gradient(180deg,#fffdf8_0%,#f6f1e6_100%)] shadow-[0_18px_45px_rgba(76,62,35,0.1)] dark:border-[#403a33] dark:bg-[linear-gradient(180deg,#1f1c19_0%,#181614_100%)]">
+    <>
+      <section className="my-10">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8b642b] dark:text-[#e0b66f]">
+              Ready-made templates
+            </p>
+            <h2 className="!mt-2">Start with a useful design</h2>
+          </div>
+          <p className="hidden text-xs text-black/46 dark:text-white/48 sm:block">Edit every detail below</p>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {templates.map((template) => (
+            <button
+              key={template.id}
+              type="button"
+              onClick={() => applyTemplate(template)}
+              className="group rounded-[1.4rem] border border-black/7 bg-[#fdfcf9] p-5 text-left shadow-[0_8px_24px_rgba(35,30,21,0.045)] transition hover:-translate-y-0.5 hover:border-black/14 hover:shadow-[0_14px_30px_rgba(35,30,21,0.09)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black/10 dark:border-white/10 dark:bg-[#171817] dark:hover:border-white/20"
+            >
+              <span className="flex items-center gap-3">
+                <span
+                  className="h-3 w-3 rounded-full shadow-[0_0_0_4px_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_4px_rgba(255,255,255,0.06)]"
+                  style={{ backgroundColor: template.config.accent }}
+                />
+                <span className="font-semibold text-black dark:text-white">{template.label}</span>
+              </span>
+              <span className="mt-2 block text-xs leading-5 text-black/50 dark:text-white/52">
+                {template.description}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="my-10 overflow-hidden rounded-[2rem] border border-[#d9d2c3] bg-[linear-gradient(180deg,#fffdf8_0%,#f6f1e6_100%)] shadow-[0_18px_45px_rgba(76,62,35,0.1)] dark:border-[#403a33] dark:bg-[linear-gradient(180deg,#1f1c19_0%,#181614_100%)]">
       <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="border-b border-black/8 p-6 dark:border-white/10 lg:border-r lg:border-b-0 sm:p-8">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8b642b] dark:text-[#e0b66f]">
@@ -138,6 +184,7 @@ export function CountdownWidgetBuilder({
           </button>
         </div>
       </div>
-    </section>
+      </section>
+    </>
   );
 }
