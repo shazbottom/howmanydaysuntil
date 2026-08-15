@@ -13,6 +13,11 @@ export interface SeoHubOccurrenceTarget {
   date: Date;
 }
 
+export interface SeoHubRecurringDateRow {
+  dateLabel: string;
+  daysAway: number;
+}
+
 function getOccurrenceForYear(
   event: SeoHubEventDefinition,
   year: number,
@@ -123,4 +128,35 @@ export function getSeoHubOccurrenceRows(
     dateLabel: formatFullDate(row.date, "en-US"),
     dayOfWeek: new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(row.date),
   }));
+}
+
+export function getSeoHubRecurringDateRows(
+  event: SeoHubEventDefinition,
+  now: Date,
+  rowCount = 6,
+): SeoHubRecurringDateRow[] {
+  if (event.recurrence.recurrenceType !== "weekday-recurring") {
+    return [];
+  }
+
+  const weekdays = new Set(event.recurrence.weekdays);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const rows: SeoHubRecurringDateRow[] = [];
+  let daysAway = 0;
+
+  while (rows.length < rowCount) {
+    const candidate = new Date(today);
+    candidate.setDate(today.getDate() + daysAway);
+
+    if (weekdays.has(candidate.getDay())) {
+      rows.push({
+        dateLabel: formatFullDate(candidate, "en-US"),
+        daysAway,
+      });
+    }
+
+    daysAway += 1;
+  }
+
+  return rows;
 }

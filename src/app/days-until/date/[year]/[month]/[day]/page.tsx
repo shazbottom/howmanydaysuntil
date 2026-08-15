@@ -4,6 +4,7 @@ import { CountdownLinkList } from "../../../../../../components/CountdownLinkLis
 import { ExactDatePlanner } from "../../../../../../components/ExactDatePlanner";
 import { SeoCountdownPage } from "../../../../../../components/SeoCountdownPage";
 import { formatLongDate } from "../../../../../../lib/dateFormat";
+import { buildExactDateMetadata } from "../../../../../../lib/exactDateMetadata";
 import {
   getExactDateDetails,
   getExactDateFactSections,
@@ -11,7 +12,6 @@ import {
   getExactDateRelatedLinks,
   getExactDateRoutePath,
   getExactDateStaticParams,
-  isExactDateIndexable,
   isExactDateInRolloutRange,
 } from "../../../../../../lib/exactDatePages";
 import {
@@ -54,36 +54,7 @@ export async function generateMetadata({
     };
   }
 
-  const longDate = formatLongDate(targetDate, "en-GB");
-  const title = `How Many Days Until ${longDate}? (Live Countdown)`;
-  const description = `There are ${resolvedCountdown.countdown.daysRemaining} days until ${longDate}. See a live countdown including weeks, hours, and minutes remaining.`;
-  const imageUrl = `${getExactDateRoutePath(targetDate)}/opengraph-image`;
-  const indexable = isExactDateIndexable(targetDate);
-
-  return {
-    title,
-    description,
-    robots: {
-      index: indexable,
-      follow: indexable,
-    },
-    alternates: {
-      canonical: getExactDateRoutePath(targetDate),
-    },
-    openGraph: {
-      title,
-      description,
-      url: getExactDateRoutePath(targetDate),
-      type: "website",
-      images: [imageUrl],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
+  return buildExactDateMetadata(targetDate, resolvedCountdown.countdown);
 }
 
 export default async function ExactDatePage({ params }: ExactDatePageProps) {

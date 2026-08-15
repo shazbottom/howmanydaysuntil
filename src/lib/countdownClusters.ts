@@ -242,33 +242,35 @@ export function buildCountdownClusterMetadata(
   }
 
   const {
-    title,
     canonicalPath,
     count,
     event,
     targetDate,
-    clusterLabel,
   } = pageData;
 
   const targetYear = targetDate.getFullYear();
   const countNoun = getClusterCountNoun(pageData.definition.kind, count);
   const description = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} until ${event.name} ${targetYear}. Track the countdown to ${formatFullDate(targetDate, "en-US")}.`;
+  const queryNoun = getClusterDisplayLabel(pageData.definition.kind);
+  const resultTitle = `How Many ${queryNoun} Until ${event.name}? ${count.toLocaleString(
+    "en-GB",
+  )} ${countNoun} Left`;
 
   return {
-    title: `${title} | DaysUntil`,
+    title: resultTitle,
     description,
     alternates: {
       canonical: canonicalPath,
     },
     openGraph: {
-      title,
+      title: resultTitle,
       description,
       url: `https://daysuntil.is${canonicalPath}`,
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: resultTitle,
       description,
     },
   };
