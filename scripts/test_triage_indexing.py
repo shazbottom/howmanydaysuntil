@@ -29,6 +29,20 @@ class TriageTests(unittest.TestCase):
         self.assertEqual(report["status"], "blocked_missing_url_examples")
         self.assertEqual(report["reportedReasons"][0]["pages"], 101)
 
+    def test_assets_are_not_counted_as_missing_content(self):
+        for path in ["/favicon.ico", "/_next/static/media/old.woff2", "/days-until/date/2026/01/01/opengraph-image?version=1"]:
+            self.assertEqual(self.classify(path), "asset_not_content_page")
+        self.assertEqual(self.classify("/opengraph-image-guide"), "needs_inspection")
+
+    def test_issue_metadata_does_not_invent_a_page_total(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "export.zip"
+            with zipfile.ZipFile(path, "w") as archive:
+                archive.writestr("Metadata.csv", "Property,Value\nSitemap,All known pages\nIssue,Not found (404)\n")
+            urls, reasons = read_export(path)
+            self.assertEqual(urls, [])
+            self.assertEqual(reasons, [{"reason": "Not found (404)"}])
+
     def test_reads_issue_detail_url_column_and_deduplicates(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "export.zip"

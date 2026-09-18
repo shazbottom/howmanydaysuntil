@@ -35,6 +35,9 @@ def read_export(path):
         elif "Reason" in fields and "Pages" in fields:
             reasons.extend({"reason": row["Reason"], "pages": int(row["Pages"].replace(",", ""))}
                            for row in reader)
+        elif "Property" in fields and "Value" in fields:
+            reasons.extend({"reason": row["Value"]} for row in reader
+                           if row.get("Property", "").strip() == "Issue")
     return sorted(set(urls)), reasons
 
 
@@ -53,6 +56,8 @@ def classify(url, allowed, as_of, ceiling, sitemap_paths):
               "category": "needs_inspection", "action": "Inspect live status, canonical and indexing directives."}
     if parsed.scheme not in ("https", "http") or parsed.hostname not in ("daysuntil.is", "www.daysuntil.is"):
         return {**result, "category": "outside_property", "action": "Check the export/property; not a supported site URL."}
+    if path.startswith("/_next/static/") or path == "/favicon.ico" or re.search(r"/opengraph-image/?$", path):
+        return {**result, "category": "asset_not_content_page", "action": "Not an HTML landing page. Do not request page indexing; if reported as broken, check whether current pages still reference this asset."}
     if path.startswith(("/c/", "/embed/")) or path == "/create":
         return {**result, "category": "intentional_private_or_tool_exclusion", "action": "Keep personal records and embed variants out of the index."}
     match = re.fullmatch(r"/days-until/date/(\d{4})/(\d{2})/(\d{2})/?", path)

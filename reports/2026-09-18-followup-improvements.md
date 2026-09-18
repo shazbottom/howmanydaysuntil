@@ -2,6 +2,22 @@
 
 ## Scope
 
+### Follow-up status
+
+The user reports deploying the follow-up batch and season landing-page restoration. Git is clean except the old temporary export folders. Live deployment and Google indexing have not been independently verified. Earlier local-only/pending-export statements below describe the original audit stage and are superseded by this update.
+
+All three issue-detail exports have now been reviewed against local policy:
+
+- Noindex: 955 URLs. 899 deliberately excluded future dates, 30 expired dates, five country holiday duplicates, and 21 recovered date pages. All 21 are in the recovered65 cohort and current local sitemap; their reported crawls predate the recovery change.
+- Crawled, not indexed: 215 URLs. 58 assets (57 OpenGraph images and a favicon), 48 deliberately excluded date pages, eight expired dates, three legacy URLs, and 98 eligible page URLs (41 dates and 57 other page URL entries, including host variants). Recorded crawls run from March 19 to August 27. Some URLs earned clicks in the later performance window, so this list is not proof of their present index state.
+- Not found: 101 URLs. 94 expired date URLs, one versioned font asset, three seasonal legacy URLs, and three 2026 year URL variants. All 94 date targets were already past at their reported crawl. The year destination exists in the local build; historical year errors need current URL Inspection, not a speculative redirect.
+
+Restored all four root season pages with country/hemisphere choices using existing meteorological event data. Added canonical metadata, sitemap inclusion, and permanent fall-to-autumn alias redirects. Existing legacy season redirects now lead to useful pages rather than explicit notFound handlers. No domain normalization or expired-date policy changes were made.
+
+Priority manual checks: live-test the recovered dates 2029/04/30, 2028/08/20 and 2027/12/31; inspect days-until-2026 and the legacy season URLs. Only request indexing for eligible content pages, not image assets. No further blanket indexing expansion is justified by these exports.
+
+Audit tooling now reads the exported issue name and separates assets from content-page exclusions without assuming that broken assets are harmless. Remaining work is live verification and a complete post-deployment measurement window, not more speculative page expansion.
+
 User approved all four remaining recommendations: season controls, desktop planner layout, indexing investigation and outcome measurement. Work remains local until the user deploys this batch. The preceding batch was pushed as b196a90 on September 18; Vercel readiness was not independently verified.
 
 ## Season and layout changes
