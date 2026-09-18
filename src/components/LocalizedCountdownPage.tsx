@@ -7,6 +7,7 @@ import { JsonLd } from "./JsonLd";
 import { SeoHubFactsSection } from "./SeoHubFactsSection";
 import { ThemeToggle } from "./ThemeToggle";
 import { getCountdownClusterButtonsForEvent } from "../lib/countdownClusters";
+import { localizedSummerSelection, summerSelectionQuery } from "../lib/summerSelection";
 import type { LocalizedCountdownPageData } from "../lib/localizedCountdowns";
 import { getSeoHubFacts } from "../lib/seoHubFacts";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
@@ -21,7 +22,10 @@ export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
   const { country, event, countdown, targetDateLabel, todayLabel, occurrenceRows } = data;
   const isChristmas = event.slug === "christmas";
   const factSet = getSeoHubFacts(event.slug);
-  const clusterButtons = getCountdownClusterButtonsForEvent(event.slug);
+  const clusterButtons = getCountdownClusterButtonsForEvent(event.slug).map((link) => ({
+    ...link,
+    href: event.slug === "summer" ? `${link.href}${summerSelectionQuery(localizedSummerSelection(country.code))}` : link.href,
+  }));
   const currentPath = `/${country.code}/days-until/${event.slug}`;
   const structuredData = [
     createBreadcrumbJsonLd([

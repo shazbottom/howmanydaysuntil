@@ -21,6 +21,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/days-until/fall",
+        destination: "/days-until-autumn",
+        permanent: true,
+      },
+      {
+        source: "/days-until-fall",
+        destination: "/days-until-autumn",
+        permanent: true,
+      },
+      {
         source: "/days-until/:slug",
         destination: "/days-until-:slug",
         permanent: true,

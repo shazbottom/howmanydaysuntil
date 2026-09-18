@@ -17,12 +17,16 @@ import { getCountryHubPath, getCountryHubYearStaticParams } from "../lib/localiz
 import { getRegionId, regions } from "../lib/regions";
 import { getRegionHubPath, getRegionHubYearStaticParams } from "../lib/regionPages";
 import { getSeoLandingPath } from "../lib/seoLandingPages";
+import { seasonSlugs } from "../lib/seasonLandingPages";
 
 const SITE_URL = "https://daysuntil.is";
 
+// Exact dates expire daily; refresh the sitemap without requiring a deployment.
+export const revalidate = 3600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const hubPages: MetadataRoute.Sitemap = seoHubEvents
-    .filter((event) => event.indexable)
+    .filter((event) => event.indexable && event.category !== "season")
     .map((event) => ({
       url: `${SITE_URL}${getSeoLandingPath(event.slug)}`,
       changeFrequency: "daily",
@@ -214,6 +218,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.2,
     },
     ...hubPages,
+    ...seasonSlugs.map(season => ({
+      url: `${SITE_URL}/days-until-${season}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     ...datePages,
     ...localizedCountryPages,
     ...localizedCountryYearPages,

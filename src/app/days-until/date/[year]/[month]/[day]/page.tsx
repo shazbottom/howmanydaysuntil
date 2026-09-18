@@ -103,10 +103,14 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       cardActionLinks={[{ href: actions.business, label: "Business days" }]}
       supportingCopy={[]}
       relatedLinks={getExactDateRelatedLinks(targetDate)}
+      afterCardActions={
+        <DateCountdownEditor initialDate={formatActionDate(targetDate)} minimumDate={formatActionDate(new Date())} />
+      }
+      countdownAside={
+        <ExactDatePlanner data={planningData} businessDaysHref={actions.business} embedded />
+      }
       extraSection={
         <>
-          <DateCountdownEditor initialDate={formatActionDate(targetDate)} minimumDate={formatActionDate(new Date())} />
-          <ExactDatePlanner data={planningData} businessDaysHref={actions.business} />
           <section className="mt-12 w-full max-w-[31.9rem] px-5 text-left sm:max-w-[34rem]">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Date details

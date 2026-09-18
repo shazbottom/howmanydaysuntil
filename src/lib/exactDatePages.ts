@@ -69,8 +69,9 @@ function isLeapYear(year: number): boolean {
 }
 
 function getDayOfYear(date: Date): number {
-  const startOfYear = new Date(date.getFullYear(), 0, 1);
-  return Math.floor((startOfLocalDay(date).getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  const startOfYear = Date.UTC(date.getFullYear(), 0, 1);
+  const target = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  return (target - startOfYear) / (1000 * 60 * 60 * 24) + 1;
 }
 
 function getDaysInYear(date: Date): number {

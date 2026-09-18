@@ -46,8 +46,9 @@ export function startOfLocalDay(value: Date): Date {
 
 // Calendar-day math avoids off-by-one behavior for date-only countdowns.
 export function getCalendarDaysRemaining(targetDate: Date, now: Date): number {
-  const targetDay = startOfLocalDay(targetDate).getTime();
-  const currentDay = startOfLocalDay(now).getTime();
+  // Compare date labels, not local-midnight durations (DST days can be 23/25 hours).
+  const targetDay = Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const currentDay = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
 
   return Math.max(0, Math.floor((targetDay - currentDay) / MILLISECONDS_PER_DAY));
 }

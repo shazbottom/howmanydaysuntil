@@ -5,6 +5,8 @@ import { formatFullDate } from "./dateFormat";
 import { getSeoHubOccurrenceTargets } from "./seoHubPageContent";
 import { resolveSeoHubEventCountdown } from "./seoHubEventResolver";
 import { formatActionDate } from "./countdownActions";
+import { isExactDateInRolloutRange } from "./exactDatePages";
+import { LEGACY_SUMMER, formatSummerUtcDate, getSelectedSummerTargets, getSummerCountdown, parseSummerSelection, selectedSummerNote, summerSelectionLabel, summerSelectionQuery, utcCivilDate, type SummerSearchParams, type SummerSelection } from "./summerSelection";
 
 const DAYS_PER_WEEK = 7;
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -232,13 +234,17 @@ export function findCountdownClusterBySlug(
 export function buildCountdownClusterMetadata(
   slug: string,
   now: Date = new Date(),
+  searchParams: SummerSearchParams = {},
 ): Metadata {
-  const pageData = getCountdownClusterPageData(slug, now);
+  const selection = parseSummerSelection(searchParams);
+  const pageData = getCountdownClusterPageData(slug, now, selection);
 
   if (!pageData) {
     return {
-      title: "Countdown Not Found | DaysUntil",
-      description: "The requested countdown page could not be found.",
+      title: selection.method === "astronomical" ? "Astronomical summer dates unavailable | DaysUntil" : "Countdown Not Found | DaysUntil",
+      description: selection.method === "astronomical" ? "Maintained astronomical summer dates cover 2026-2035. Choose another season convention explicitly." : "The requested countdown page could not be found.",
+      robots: { index: false, follow: true },
+      alternates: { canonical: `/${slug}` },
     };
   }
 
@@ -249,9 +255,9 @@ export function buildCountdownClusterMetadata(
     targetDate,
   } = pageData;
 
-  const targetYear = targetDate.getFullYear();
+  const targetYear = pageData.isExplicitSummer ? targetDate.getUTCFullYear() : targetDate.getFullYear();
   const countNoun = getClusterCountNoun(pageData.definition.kind, count);
-  const description = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} until ${event.name} ${targetYear}. Track the countdown to ${formatFullDate(targetDate, "en-US")}.${pageData.seasonNote ? " Uses an approximate Northern Hemisphere season date." : ""}`;
+  const description = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} until ${event.name} ${targetYear}. Track the countdown to ${pageData.isExplicitSummer ? formatSummerUtcDate(targetDate) : formatFullDate(targetDate, "en-US")}.${event.slug === "summer" ? ` ${summerSelectionLabel(selection)}.` : ""}`;
   const queryNoun = getClusterDisplayLabel(pageData.definition.kind);
   const resultTitle = `How Many ${queryNoun} Until ${event.name}? ${count.toLocaleString(
     "en-GB",
@@ -260,6 +266,7 @@ export function buildCountdownClusterMetadata(
   return {
     title: resultTitle,
     description,
+    ...(event.slug === "summer" && Object.keys(searchParams).length ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical: canonicalPath,
     },
@@ -280,6 +287,7 @@ export function buildCountdownClusterMetadata(
 export function getCountdownClusterPageData(
   slug: string,
   now: Date = new Date(),
+  selection: SummerSelection = LEGACY_SUMMER,
 ) {
   const definition = findCountdownClusterBySlug(slug);
 
@@ -294,28 +302,35 @@ export function getCountdownClusterPageData(
   }
 
   const event = resolvedCountdown.event;
-  const targetDate = resolvedCountdown.targetDate;
-  const count = countClusterOccurrences(definition.kind, targetDate, now);
+  const isExplicitSummer = event.slug === "summer" && selection.method !== "legacy";
+  const selectedTargets = isExplicitSummer ? getSelectedSummerTargets(selection, now) : null;
+  if (selectedTargets && !selectedTargets.length) return null;
+  const targetDate = selectedTargets?.[0] ?? resolvedCountdown.targetDate;
+  const countingNow = isExplicitSummer ? utcCivilDate(now) : now;
+  const countingTarget = isExplicitSummer ? utcCivilDate(targetDate) : targetDate;
+  const dateLabel = (date: Date) => isExplicitSummer ? formatSummerUtcDate(date) : formatFullDate(date, "en-US");
+  const count = countClusterOccurrences(definition.kind, countingTarget, countingNow);
   const countNoun = getClusterCountNoun(definition.kind, count);
-  const clusterLabel = `${getClusterDisplayLabel(definition.kind)} until ${event.name}`;
+  const clusterLabel = `${getClusterDisplayLabel(definition.kind)} until ${isExplicitSummer ? summerSelectionLabel(selection) : event.name}`;
   const title = buildClusterTitle(definition, event);
   const canonicalPath = `/${definition.slug}`;
-  const lead = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} left until ${event.name} ${targetDate.getFullYear()}, which falls on ${formatFullDate(targetDate, "en-US")}.`;
-  const detailLine = `until ${formatFullDate(targetDate, "en-US")}`;
-  const yearRows: CountdownClusterYearRow[] = getSeoHubOccurrenceTargets(event, now, 5).map((row) => ({
+  const lead = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} left until ${event.name}, on ${dateLabel(targetDate)}${isExplicitSummer ? " (UTC)" : ""}.`;
+  const detailLine = `until ${dateLabel(targetDate)}${isExplicitSummer ? " (UTC)" : ""}`;
+  const occurrenceTargets = selectedTargets?.map((date) => ({ year: date.getUTCFullYear(), date })) ?? getSeoHubOccurrenceTargets(event, now, 5);
+  const yearRows: CountdownClusterYearRow[] = occurrenceTargets.map((row) => ({
     year: row.year,
-    dateLabel: formatFullDate(row.date, "en-US"),
-    count: countClusterOccurrences(definition.kind, row.date, now),
+    dateLabel: dateLabel(row.date),
+    count: countClusterOccurrences(definition.kind, isExplicitSummer ? utcCivilDate(row.date) : row.date, countingNow),
   }));
 
   const relatedLinks: CountdownClusterLink[] = [];
-  const remainingFridays: CountdownClusterLink[] = [];
+  const remainingFridays: Array<{ href: string | null; label: string }> = [];
   if (definition.kind === "fridays") {
-    const cursor = startOfLocalDay(now);
+    const cursor = startOfLocalDay(countingNow);
     cursor.setDate(cursor.getDate() + (FRIDAY_WEEKDAY - cursor.getDay() + 7) % 7);
-    while (cursor <= targetDate) {
+    while (cursor <= countingTarget) {
       remainingFridays.push({
-        href: `/days-until/date/${formatActionDate(cursor).replaceAll("-", "/")}`,
+        href: isExactDateInRolloutRange(cursor, now) ? `/days-until/date/${formatActionDate(cursor).replaceAll("-", "/")}` : null,
         label: formatFullDate(cursor, "en-US"),
       });
       cursor.setDate(cursor.getDate() + 7);
@@ -337,12 +352,20 @@ export function getCountdownClusterPageData(
 
   relatedLinks.push(...getSiblingClusterLinks(definition));
   cardActionLinks.push(...getSiblingClusterButtons(definition));
+  const query = event.slug === "summer" ? summerSelectionQuery(selection) : "";
+  if (query) {
+    for (const link of [...relatedLinks, ...cardActionLinks]) link.href += query;
+  }
 
   return {
     definition,
     event,
     targetDate,
-    countdown: resolvedCountdown.countdown,
+    actionDate: countingTarget,
+    selectedPath: `${canonicalPath}${query}`,
+    selection,
+    isExplicitSummer,
+    countdown: isExplicitSummer ? getSummerCountdown(targetDate, now) : resolvedCountdown.countdown,
     count,
     clusterLabel,
     title,
@@ -350,10 +373,10 @@ export function getCountdownClusterPageData(
     detailLine,
     canonicalPath,
     yearRows,
-    seasonNote: event.recurrenceType === "season-approximate"
+    seasonNote: isExplicitSummer ? selectedSummerNote(selection, targetDate) : event.recurrenceType === "season-approximate"
       ? `This countdown uses ${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(targetDate)} every year as an approximate Northern Hemisphere start of ${event.name.toLowerCase()}. It is not the exact astronomical instant, a meteorological season date, or a Southern Hemisphere countdown. Changing country does not change this convention.`
       : null,
-    baselineLabel: `All counts start from today, ${formatFullDate(now, "en-US")}, including today when eligible.`,
+    baselineLabel: `All counts start from today, ${dateLabel(now)}${isExplicitSummer ? " (UTC)" : ""}, including today when eligible.`,
     cardActionLinks,
     relatedLinks,
     remainingFridays,

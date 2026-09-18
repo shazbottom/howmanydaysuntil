@@ -1,7 +1,15 @@
 import Link from "next/link";
 import type { ExactDatePlanningData } from "../lib/datePlanning";
 
-export function ExactDatePlanner({ data, businessDaysHref }: { data: ExactDatePlanningData; businessDaysHref: string }) {
+export function ExactDatePlanner({
+  data,
+  businessDaysHref,
+  embedded = false,
+}: {
+  data: ExactDatePlanningData;
+  businessDaysHref: string;
+  embedded?: boolean;
+}) {
   const metrics = [
     { label: "Calendar days", value: data.calendarDaysRemaining },
     { label: "Weekdays", value: data.weekdaysRemaining },
@@ -10,7 +18,7 @@ export function ExactDatePlanner({ data, businessDaysHref }: { data: ExactDatePl
   ];
 
   return (
-    <section className="mt-12 w-full max-w-[31.9rem] overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:max-w-[34rem]">
+    <section className={`${embedded ? "" : "mt-12 "}w-full max-w-[31.9rem] overflow-hidden rounded-[2rem] bg-[#fdfcf9] text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:max-w-[34rem]`}>
       <div className="border-b border-black/7 px-6 py-6 dark:border-white/9 sm:px-8">
         <p className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
           Date planner

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { CountdownResult } from "../lib/countdown";
-import { getCountdown } from "../lib/countdown";
+import { alignCountdownTimeZone, getCountdownInTimeZone } from "../lib/countdownTimeZone";
 
 export interface CountdownDisplayProps {
   label: string;
@@ -14,6 +14,7 @@ export interface CountdownDisplayProps {
   primaryValue?: number | string;
   primaryUnitLabel?: string;
   detailLine?: string;
+  timeZone?: string;
 }
 
 interface LiveTimeParts {
@@ -64,11 +65,12 @@ function getLiveTimeParts(countdown: CountdownResult): LiveTimeParts {
   };
 }
 
-function formatTargetDateLabel(date: Date): string {
+function formatTargetDateLabel(date: Date, timeZone?: string): string {
   return new Intl.DateTimeFormat("en-GB", {
     weekday: "long",
     day: "numeric",
     month: "short",
+    timeZone,
   }).format(date);
 }
 
@@ -93,11 +95,14 @@ export function CountdownDisplay({
   primaryValue,
   primaryUnitLabel,
   detailLine,
+  timeZone,
 }: CountdownDisplayProps) {
-  const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(countdown);
+  const [liveCountdown, setLiveCountdown] = useState<CountdownResult | null>(() =>
+    alignCountdownTimeZone(countdown, timeZone),
+  );
   useEffect(() => {
-    setLiveCountdown(countdown);
-  }, [countdown]);
+    setLiveCountdown(alignCountdownTimeZone(countdown, timeZone));
+  }, [countdown, timeZone]);
 
   useEffect(() => {
     if (!countdown) {
@@ -106,16 +111,16 @@ export function CountdownDisplay({
 
     const intervalId = window.setInterval(() => {
       try {
-        setLiveCountdown(getCountdown(countdown.targetDate));
+        setLiveCountdown(getCountdownInTimeZone(countdown.targetDate, new Date(), timeZone));
       } catch {
-        setLiveCountdown(getCountdown(countdown.targetDate, countdown.targetDate));
+        setLiveCountdown(getCountdownInTimeZone(countdown.targetDate, countdown.targetDate, timeZone));
       }
     }, 1000);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [countdown]);
+  }, [countdown, timeZone]);
 
   if (!liveCountdown) {
     return (
@@ -164,8 +169,10 @@ export function CountdownDisplay({
     { value: liveTime.minutes, compactValue: liveTime.compactMinutes, label: "min" },
     { value: liveTime.seconds, compactValue: liveTime.compactSeconds, label: "sec" },
   ];
-  const targetDateLabel = formatTargetDateLabel(liveCountdown.targetDate);
-  const targetYear = liveCountdown.targetDate.getFullYear();
+  const targetDateLabel = formatTargetDateLabel(liveCountdown.targetDate, timeZone);
+  const targetYear = timeZone
+    ? new Intl.DateTimeFormat("en-GB", { year: "numeric", timeZone }).format(liveCountdown.targetDate)
+    : liveCountdown.targetDate.getFullYear();
   const weeksSummary = formatWeeksSummary(
     liveCountdown.weeksRemaining.weeks,
     liveCountdown.weeksRemaining.days,

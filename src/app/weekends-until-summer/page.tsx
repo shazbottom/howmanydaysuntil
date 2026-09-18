@@ -2,13 +2,14 @@ import {
   CountdownClusterPage,
   generateCountdownClusterMetadata,
 } from "../../components/CountdownClusterPage";
+import type { SummerSearchParams } from "../../lib/summerSelection";
 
 export const revalidate = 3600;
 
-export function generateMetadata() {
-  return generateCountdownClusterMetadata("weekends-until-summer");
+export async function generateMetadata({ searchParams }: { searchParams: Promise<SummerSearchParams> }) {
+  return generateCountdownClusterMetadata("weekends-until-summer", await searchParams);
 }
 
-export default function WeekendsUntilSummerPage() {
-  return <CountdownClusterPage slug="weekends-until-summer" />;
+export default async function WeekendsUntilSummerPage({ searchParams }: { searchParams: Promise<SummerSearchParams> }) {
+  return <CountdownClusterPage slug="weekends-until-summer" searchParams={await searchParams} />;
 }

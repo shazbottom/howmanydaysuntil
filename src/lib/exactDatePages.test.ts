@@ -4,9 +4,16 @@ import { getCountdown } from "./countdown";
 import { indexableExactDateKeys } from "../data/indexableExactDates";
 import {
   getExactDateDetails,
+  getExactDateFactSections,
   getExactDateStaticParams,
   isExactDateIndexable,
 } from "./exactDatePages";
+
+test("day-of-year facts do not lose a day after daylight saving starts", () => {
+  const target = new Date(2026, 6, 1);
+  const facts = getExactDateFactSections(target, getCountdown(target, new Date(2026, 0, 1)));
+  assert.ok(facts.flatMap(section => section.lines).some(line => line.startsWith("It is day 182 of 365")));
+});
 
 function buildDetailsForDate(targetDateText: string, nowText: string) {
   const targetDate = new Date(`${targetDateText}T00:00:00`);

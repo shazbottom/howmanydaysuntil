@@ -1,5 +1,8 @@
-import { notFound } from "next/navigation";
+import { SeasonLandingPage } from "../../components/SeasonLandingPage";
+import { getSeasonLandingMetadata } from "../../lib/seasonLandingPages";
+
+export const metadata = getSeasonLandingMetadata("autumn");
 
 export default function DaysUntilAutumnPage() {
-  notFound();
+  return <SeasonLandingPage season="autumn" />;
 }

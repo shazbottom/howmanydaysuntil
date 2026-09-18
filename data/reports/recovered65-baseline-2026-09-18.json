@@ -1,0 +1,501 @@
+{
+  "schemaVersion": 1,
+  "cohortId": "recovered65-2026-09-18",
+  "cohortSource": "src/lib/exactDateMetadata.test.ts: recoveredClickedDates (frozen 2026-09-18)",
+  "pushReportedDate": "2026-09-18",
+  "pushCommit": "b196a90",
+  "pushVerified": true,
+  "liveDeploymentVerified": false,
+  "baselineExport": "daysuntil.is-Performance-on-Search-2026-09-18.zip",
+  "dates": [
+    "2026-09-30",
+    "2026-10-21",
+    "2026-12-15",
+    "2027-01-21",
+    "2027-03-03",
+    "2027-03-08",
+    "2027-05-01",
+    "2027-05-30",
+    "2027-06-15",
+    "2027-07-27",
+    "2027-07-29",
+    "2027-08-19",
+    "2027-09-01",
+    "2027-09-02",
+    "2027-09-07",
+    "2027-09-08",
+    "2027-09-15",
+    "2027-09-17",
+    "2027-09-26",
+    "2027-10-18",
+    "2027-12-04",
+    "2027-12-31",
+    "2028-01-10",
+    "2028-01-31",
+    "2028-02-05",
+    "2028-02-10",
+    "2028-03-01",
+    "2028-03-15",
+    "2028-04-04",
+    "2028-04-06",
+    "2028-04-15",
+    "2028-05-31",
+    "2028-06-09",
+    "2028-07-05",
+    "2028-08-01",
+    "2028-08-03",
+    "2028-08-08",
+    "2028-08-20",
+    "2028-08-24",
+    "2028-09-14",
+    "2028-09-25",
+    "2028-10-21",
+    "2028-11-20",
+    "2029-01-01",
+    "2029-01-16",
+    "2029-02-21",
+    "2029-03-28",
+    "2029-04-30",
+    "2029-05-05",
+    "2029-05-23",
+    "2029-05-30",
+    "2029-06-05",
+    "2029-06-09",
+    "2029-06-21",
+    "2029-08-09",
+    "2029-08-21",
+    "2029-09-23",
+    "2029-09-25",
+    "2029-10-08",
+    "2029-10-16",
+    "2029-12-05",
+    "2030-02-04",
+    "2030-03-09",
+    "2030-03-31",
+    "2030-11-29"
+  ],
+  "baseline": {
+    "window": {
+      "start": "2026-08-19",
+      "end": "2026-09-15",
+      "days": 28,
+      "spanDays": 28
+    },
+    "filters": [
+      [
+        "Date",
+        "Last 28 days"
+      ],
+      [
+        "Search type",
+        "Web"
+      ]
+    ],
+    "pageExportRowCount": 870,
+    "cohortObserved": {
+      "clicks": 71,
+      "impressions": 11184,
+      "ctrPercent": 0.6348354792560801,
+      "weightedPositionApprox": 8.457157546494994
+    },
+    "chartPropertyTotals": {
+      "clicks": 122,
+      "impressions": 119352,
+      "ctrPercent": 0.10221864736242375,
+      "weightedPositionApprox": 11.335937395267779
+    },
+    "missingCohortDates": [],
+    "perDate": {
+      "2026-09-30": {
+        "clicks": 1,
+        "impressions": 58,
+        "ctrPercent": 1.7241379310344827,
+        "weightedPositionApprox": 12.09
+      },
+      "2026-10-21": {
+        "clicks": 1,
+        "impressions": 823,
+        "ctrPercent": 0.12150668286755771,
+        "weightedPositionApprox": 10.120000000000001
+      },
+      "2026-12-15": {
+        "clicks": 1,
+        "impressions": 335,
+        "ctrPercent": 0.2985074626865672,
+        "weightedPositionApprox": 10.07
+      },
+      "2027-01-21": {
+        "clicks": 1,
+        "impressions": 297,
+        "ctrPercent": 0.33670033670033667,
+        "weightedPositionApprox": 9.82
+      },
+      "2027-03-03": {
+        "clicks": 1,
+        "impressions": 287,
+        "ctrPercent": 0.34843205574912894,
+        "weightedPositionApprox": 9.45
+      },
+      "2027-03-08": {
+        "clicks": 1,
+        "impressions": 430,
+        "ctrPercent": 0.23255813953488372,
+        "weightedPositionApprox": 9.6
+      },
+      "2027-05-01": {
+        "clicks": 1,
+        "impressions": 54,
+        "ctrPercent": 1.8518518518518516,
+        "weightedPositionApprox": 11.09
+      },
+      "2027-05-30": {
+        "clicks": 1,
+        "impressions": 171,
+        "ctrPercent": 0.5847953216374269,
+        "weightedPositionApprox": 10.51
+      },
+      "2027-06-15": {
+        "clicks": 1,
+        "impressions": 624,
+        "ctrPercent": 0.16025641025641024,
+        "weightedPositionApprox": 9.74
+      },
+      "2027-07-27": {
+        "clicks": 1,
+        "impressions": 56,
+        "ctrPercent": 1.7857142857142856,
+        "weightedPositionApprox": 10.820000000000002
+      },
+      "2027-07-29": {
+        "clicks": 1,
+        "impressions": 47,
+        "ctrPercent": 2.127659574468085,
+        "weightedPositionApprox": 9.47
+      },
+      "2027-08-19": {
+        "clicks": 1,
+        "impressions": 146,
+        "ctrPercent": 0.684931506849315,
+        "weightedPositionApprox": 10.1
+      },
+      "2027-09-01": {
+        "clicks": 1,
+        "impressions": 471,
+        "ctrPercent": 0.21231422505307856,
+        "weightedPositionApprox": 9.64
+      },
+      "2027-09-02": {
+        "clicks": 1,
+        "impressions": 485,
+        "ctrPercent": 0.2061855670103093,
+        "weightedPositionApprox": 8.02
+      },
+      "2027-09-07": {
+        "clicks": 2,
+        "impressions": 291,
+        "ctrPercent": 0.6872852233676976,
+        "weightedPositionApprox": 8.86
+      },
+      "2027-09-08": {
+        "clicks": 1,
+        "impressions": 320,
+        "ctrPercent": 0.3125,
+        "weightedPositionApprox": 7.970000000000001
+      },
+      "2027-09-15": {
+        "clicks": 1,
+        "impressions": 202,
+        "ctrPercent": 0.49504950495049505,
+        "weightedPositionApprox": 8.4
+      },
+      "2027-09-17": {
+        "clicks": 1,
+        "impressions": 202,
+        "ctrPercent": 0.49504950495049505,
+        "weightedPositionApprox": 6.64
+      },
+      "2027-09-26": {
+        "clicks": 1,
+        "impressions": 128,
+        "ctrPercent": 0.78125,
+        "weightedPositionApprox": 8.29
+      },
+      "2027-10-18": {
+        "clicks": 1,
+        "impressions": 136,
+        "ctrPercent": 0.7352941176470588,
+        "weightedPositionApprox": 6.76
+      },
+      "2027-12-04": {
+        "clicks": 1,
+        "impressions": 248,
+        "ctrPercent": 0.4032258064516129,
+        "weightedPositionApprox": 7.5
+      },
+      "2027-12-31": {
+        "clicks": 1,
+        "impressions": 488,
+        "ctrPercent": 0.20491803278688525,
+        "weightedPositionApprox": 9.05
+      },
+      "2028-01-10": {
+        "clicks": 1,
+        "impressions": 167,
+        "ctrPercent": 0.5988023952095809,
+        "weightedPositionApprox": 7.47
+      },
+      "2028-01-31": {
+        "clicks": 1,
+        "impressions": 401,
+        "ctrPercent": 0.24937655860349126,
+        "weightedPositionApprox": 6.9
+      },
+      "2028-02-05": {
+        "clicks": 1,
+        "impressions": 164,
+        "ctrPercent": 0.6097560975609756,
+        "weightedPositionApprox": 6.98
+      },
+      "2028-02-10": {
+        "clicks": 1,
+        "impressions": 129,
+        "ctrPercent": 0.7751937984496124,
+        "weightedPositionApprox": 6.93
+      },
+      "2028-03-01": {
+        "clicks": 1,
+        "impressions": 361,
+        "ctrPercent": 0.2770083102493075,
+        "weightedPositionApprox": 9.53
+      },
+      "2028-03-15": {
+        "clicks": 1,
+        "impressions": 144,
+        "ctrPercent": 0.6944444444444444,
+        "weightedPositionApprox": 7.970000000000001
+      },
+      "2028-04-04": {
+        "clicks": 1,
+        "impressions": 97,
+        "ctrPercent": 1.0309278350515463,
+        "weightedPositionApprox": 6.71
+      },
+      "2028-04-06": {
+        "clicks": 1,
+        "impressions": 126,
+        "ctrPercent": 0.7936507936507936,
+        "weightedPositionApprox": 7.02
+      },
+      "2028-04-15": {
+        "clicks": 1,
+        "impressions": 148,
+        "ctrPercent": 0.6756756756756757,
+        "weightedPositionApprox": 7.76
+      },
+      "2028-05-31": {
+        "clicks": 1,
+        "impressions": 342,
+        "ctrPercent": 0.29239766081871343,
+        "weightedPositionApprox": 7.539999999999999
+      },
+      "2028-06-09": {
+        "clicks": 1,
+        "impressions": 266,
+        "ctrPercent": 0.37593984962406013,
+        "weightedPositionApprox": 6.12
+      },
+      "2028-07-05": {
+        "clicks": 1,
+        "impressions": 100,
+        "ctrPercent": 1,
+        "weightedPositionApprox": 7.22
+      },
+      "2028-08-01": {
+        "clicks": 1,
+        "impressions": 309,
+        "ctrPercent": 0.3236245954692557,
+        "weightedPositionApprox": 9
+      },
+      "2028-08-03": {
+        "clicks": 1,
+        "impressions": 91,
+        "ctrPercent": 1.098901098901099,
+        "weightedPositionApprox": 7.99
+      },
+      "2028-08-08": {
+        "clicks": 1,
+        "impressions": 169,
+        "ctrPercent": 0.591715976331361,
+        "weightedPositionApprox": 6.91
+      },
+      "2028-08-20": {
+        "clicks": 3,
+        "impressions": 151,
+        "ctrPercent": 1.9867549668874174,
+        "weightedPositionApprox": 6.77
+      },
+      "2028-08-24": {
+        "clicks": 1,
+        "impressions": 80,
+        "ctrPercent": 1.25,
+        "weightedPositionApprox": 7.19
+      },
+      "2028-09-14": {
+        "clicks": 1,
+        "impressions": 27,
+        "ctrPercent": 3.7037037037037033,
+        "weightedPositionApprox": 6.740000000000001
+      },
+      "2028-09-25": {
+        "clicks": 1,
+        "impressions": 57,
+        "ctrPercent": 1.7543859649122806,
+        "weightedPositionApprox": 9.21
+      },
+      "2028-10-21": {
+        "clicks": 1,
+        "impressions": 78,
+        "ctrPercent": 1.282051282051282,
+        "weightedPositionApprox": 6.45
+      },
+      "2028-11-20": {
+        "clicks": 1,
+        "impressions": 89,
+        "ctrPercent": 1.1235955056179776,
+        "weightedPositionApprox": 6.07
+      },
+      "2029-01-01": {
+        "clicks": 1,
+        "impressions": 203,
+        "ctrPercent": 0.49261083743842365,
+        "weightedPositionApprox": 10.599999999999998
+      },
+      "2029-01-16": {
+        "clicks": 1,
+        "impressions": 51,
+        "ctrPercent": 1.9607843137254901,
+        "weightedPositionApprox": 6.06
+      },
+      "2029-02-21": {
+        "clicks": 1,
+        "impressions": 25,
+        "ctrPercent": 4,
+        "weightedPositionApprox": 7.04
+      },
+      "2029-03-28": {
+        "clicks": 1,
+        "impressions": 55,
+        "ctrPercent": 1.8181818181818181,
+        "weightedPositionApprox": 6.38
+      },
+      "2029-04-30": {
+        "clicks": 4,
+        "impressions": 158,
+        "ctrPercent": 2.5316455696202533,
+        "weightedPositionApprox": 6.6
+      },
+      "2029-05-05": {
+        "clicks": 1,
+        "impressions": 66,
+        "ctrPercent": 1.5151515151515151,
+        "weightedPositionApprox": 8.3
+      },
+      "2029-05-23": {
+        "clicks": 1,
+        "impressions": 72,
+        "ctrPercent": 1.3888888888888888,
+        "weightedPositionApprox": 6.22
+      },
+      "2029-05-30": {
+        "clicks": 1,
+        "impressions": 94,
+        "ctrPercent": 1.0638297872340425,
+        "weightedPositionApprox": 7.76
+      },
+      "2029-06-05": {
+        "clicks": 1,
+        "impressions": 81,
+        "ctrPercent": 1.2345679012345678,
+        "weightedPositionApprox": 6.5600000000000005
+      },
+      "2029-06-09": {
+        "clicks": 1,
+        "impressions": 55,
+        "ctrPercent": 1.8181818181818181,
+        "weightedPositionApprox": 6.329999999999999
+      },
+      "2029-06-21": {
+        "clicks": 1,
+        "impressions": 65,
+        "ctrPercent": 1.5384615384615385,
+        "weightedPositionApprox": 6.92
+      },
+      "2029-08-09": {
+        "clicks": 1,
+        "impressions": 41,
+        "ctrPercent": 2.4390243902439024,
+        "weightedPositionApprox": 6.56
+      },
+      "2029-08-21": {
+        "clicks": 1,
+        "impressions": 46,
+        "ctrPercent": 2.1739130434782608,
+        "weightedPositionApprox": 7.5
+      },
+      "2029-09-23": {
+        "clicks": 1,
+        "impressions": 34,
+        "ctrPercent": 2.941176470588235,
+        "weightedPositionApprox": 8.12
+      },
+      "2029-09-25": {
+        "clicks": 1,
+        "impressions": 37,
+        "ctrPercent": 2.7027027027027026,
+        "weightedPositionApprox": 5.84
+      },
+      "2029-10-08": {
+        "clicks": 1,
+        "impressions": 19,
+        "ctrPercent": 5.263157894736842,
+        "weightedPositionApprox": 6.32
+      },
+      "2029-10-16": {
+        "clicks": 1,
+        "impressions": 49,
+        "ctrPercent": 2.0408163265306123,
+        "weightedPositionApprox": 5.589999999999999
+      },
+      "2029-12-05": {
+        "clicks": 1,
+        "impressions": 48,
+        "ctrPercent": 2.083333333333333,
+        "weightedPositionApprox": 6.169999999999999
+      },
+      "2030-02-04": {
+        "clicks": 1,
+        "impressions": 30,
+        "ctrPercent": 3.3333333333333335,
+        "weightedPositionApprox": 5.429999999999999
+      },
+      "2030-03-09": {
+        "clicks": 1,
+        "impressions": 37,
+        "ctrPercent": 2.7027027027027026,
+        "weightedPositionApprox": 7.320000000000001
+      },
+      "2030-03-31": {
+        "clicks": 1,
+        "impressions": 99,
+        "ctrPercent": 1.0101010101010102,
+        "weightedPositionApprox": 8.62
+      },
+      "2030-11-29": {
+        "clicks": 1,
+        "impressions": 24,
+        "ctrPercent": 4.166666666666666,
+        "weightedPositionApprox": 5.25
+      }
+    }
+  }
+}

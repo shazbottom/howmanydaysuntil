@@ -8,15 +8,27 @@ import {
   getCountdownClusterPageData,
 } from "../lib/countdownClusters";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
+import { SummerSeasonControls } from "./SummerSeasonControls";
+import { parseSummerSelection, summerSelectionLabel, type SummerSearchParams } from "../lib/summerSelection";
+import { SUMMER_SOLSTICE_CHECKED, SUMMER_SOLSTICE_SOURCE } from "../data/summerSolstices";
 
-export function generateCountdownClusterMetadata(slug: string) {
-  return buildCountdownClusterMetadata(slug);
+export function generateCountdownClusterMetadata(slug: string, searchParams: SummerSearchParams = {}) {
+  return buildCountdownClusterMetadata(slug, new Date(), searchParams);
 }
 
-export function CountdownClusterPage({ slug }: { slug: string }) {
-  const pageData = getCountdownClusterPageData(slug);
+export function CountdownClusterPage({ slug, searchParams = {} }: { slug: string; searchParams?: SummerSearchParams }) {
+  const selection = parseSummerSelection(searchParams);
+  const pageData = getCountdownClusterPageData(slug, new Date(), selection);
+  const isSummer = slug === "fridays-until-summer" || slug === "weekends-until-summer";
 
   if (!pageData) {
+    if (isSummer && selection.method === "astronomical") return (
+      <main className="mx-auto max-w-2xl p-6">
+        <h1 className="text-3xl font-semibold">Astronomical summer dates unavailable</h1>
+        <p className="mt-4">Our sourced solstice table covers 2026-2035. No approximate date has been substituted. Choose meteorological summer or explicitly return to the original convention.</p>
+        <SummerSeasonControls selection={selection} path={`/${slug}`} />
+      </main>
+    );
     notFound();
   }
 
@@ -39,7 +51,14 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
     definition.kind === "fridays"
       ? `${count === 1 ? "Friday" : "Fridays"} remaining`
       : `${count === 1 ? "Weekend" : "Weekends"} remaining`;
-  const actions = getCountdownActions(pageData.targetDate, event.name);
+  const actions = getCountdownActions(pageData.actionDate, isSummer ? summerSelectionLabel(selection) : event.name);
+  const calendarEvent = pageData.isExplicitSummer ? {
+    title: summerSelectionLabel(selection),
+    date: pageData.targetDate.toISOString().slice(0, 10),
+    description: `${pageData.seasonNote} Calendar export is an all-day marker for the selected UTC date, not a timed solstice appointment.`,
+    url: `https://daysuntil.is${pageData.selectedPath}`,
+    fileName: `${slug}-${selection.method}-${selection.hemisphere}`,
+  } : undefined;
   const structuredData = [
     createBreadcrumbJsonLd([
       { name: "Home", path: "/" },
@@ -63,20 +82,32 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
       countdownPrimaryValue={count}
       countdownPrimaryUnitLabel={unitLabel}
       countdownDetailLine={detailLine}
+      countdownTimeZone={pageData.isExplicitSummer ? "UTC" : undefined}
+      countdownControls={isSummer ? <SummerSeasonControls key={pageData.selectedPath} selection={selection} path={canonicalPath} /> : undefined}
+      actionDateOverride={pageData.actionDate}
+      calendarEventOverride={calendarEvent}
       cardActionLinks={cardActionLinks}
-      calendarPath={canonicalPath}
+      calendarPath={pageData.selectedPath}
       supportingCopy={pageData.seasonNote ? [pageData.seasonNote] : []}
       relatedLinks={relatedLinks}
       structuredData={structuredData}
       showChristmasFlyby={event.slug === "christmas"}
       extraSection={
         <>
+          {isSummer ? <section className="mt-5 w-full max-w-[34rem] text-left text-sm leading-6 text-black/75 dark:text-white/80">
+            {selection.method === "astronomical" ? <>
+              <p><a className="underline" href={SUMMER_SOLSTICE_SOURCE}>Solstice and Equinox Table Courtesy of Fred Espenak, www.Astropixels.com</a>.</p>
+              <p>Source checked {SUMMER_SOLSTICE_CHECKED}. Published GMT times are represented as UTC to minute precision. Table stops at 2035; fewer future rows appear near that limit.</p>
+              <p>Calendar, save and date-planning actions use the selected UTC calendar date. Calendar exports are all-day markers, not timed solstice appointments.</p>
+            </> : <p><a className="underline" href="https://www.ncei.noaa.gov/news/meteorological-versus-astronomical-seasons">NOAA: season definitions</a>; <a className="underline" href="https://www.bom.gov.au/news-and-media/solstices-equinoxes-and-the-seasons">Bureau of Meteorology: Australian summer months</a>. The original option is a fixed approximate date, not sourced year-specific astronomy.</p>}
+            {selection.method === "legacy" && Object.keys(searchParams).length && searchParams.method !== "legacy" ? <p>Unrecognized or incomplete season settings. Showing the explicitly labelled original convention; choose both a definition and hemisphere above.</p> : null}
+          </section> : null}
           {pageData.remainingFridays.length ? (
             <details className="mt-8 w-full max-w-[34rem] rounded-2xl border border-black/10 p-5 text-left dark:border-white/15">
               <summary className="cursor-pointer text-sm font-semibold">View all {count} remaining Fridays</summary>
               <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                {pageData.remainingFridays.map((friday) => <li key={friday.href}>
-                  <Link className="underline underline-offset-4" href={friday.href}>{friday.label}</Link>
+                {pageData.remainingFridays.map((friday) => <li key={friday.label}>
+                  {friday.href ? <Link className="underline underline-offset-4" href={friday.href}>{friday.label}</Link> : <span>{friday.label}</span>}
                 </li>)}
               </ul>
             </details>
