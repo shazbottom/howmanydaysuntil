@@ -6,6 +6,7 @@ import { Brand } from "../Brand";
 import { CalendarExportMenu } from "../CalendarExportMenu";
 import { CalculatorNavButton } from "../CalculatorNavButton";
 import { CopyResultLinkButton } from "../CopyResultLinkButton";
+import { BusinessDayExplanation } from "./BusinessDayExplanation";
 import { CountdownLinkList, type CountdownLinkItem } from "../CountdownLinkList";
 import { ThemeToggle } from "../ThemeToggle";
 import { countries, type CountryCode } from "../../lib/countries";
@@ -592,6 +593,7 @@ function BusinessDaysUntilCalculator({
           note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
         />
       ) : null}
+      {result ? <BusinessDayExplanation end={targetDate} countryCode={countryCode} regionId={regionId} /> : null}
     </>
   );
 }
@@ -648,6 +650,7 @@ function BusinessDaysBetweenCalculator({
           note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
         />
       ) : null}
+      {result ? <BusinessDayExplanation start={startDate} end={endDate} countryCode={countryCode} regionId={regionId} /> : null}
     </>
   );
 }

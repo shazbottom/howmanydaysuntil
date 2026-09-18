@@ -6,6 +6,7 @@ import {
   formatWidgetDateInput,
   getDefaultCountdownWidgetConfig,
   getCountdownWidgetTemplates,
+  parseCountdownWidgetConfig,
 } from "../../lib/countdownWidget";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../../lib/structuredData";
 
@@ -32,8 +33,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CountdownWidgetPage() {
+export default async function CountdownWidgetPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const now = new Date();
+  const params = await searchParams;
+  const config = params.date ? parseCountdownWidgetConfig(params, now) : getDefaultCountdownWidgetConfig(now);
   const structuredData = [
     createBreadcrumbJsonLd([
       { name: "Home", path: "/" },
@@ -55,7 +58,7 @@ export default function CountdownWidgetPage() {
     >
       <JsonLd data={structuredData} />
       <CountdownWidgetBuilder
-        initialConfig={getDefaultCountdownWidgetConfig(now)}
+        initialConfig={config}
         minimumDate={formatWidgetDateInput(now)}
         templates={getCountdownWidgetTemplates(now)}
       />

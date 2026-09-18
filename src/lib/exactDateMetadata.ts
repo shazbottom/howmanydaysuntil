@@ -22,7 +22,7 @@ export function buildExactDateMetadata(
     description,
     robots: {
       index: indexable,
-      follow: indexable,
+      follow: true,
     },
     alternates: {
       canonical: canonicalPath,

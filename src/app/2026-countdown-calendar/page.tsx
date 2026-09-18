@@ -59,6 +59,13 @@ export default function CountdownCalendar2026Page() {
       intro="A practical, printable view of the year's major dates, with live counts for the time still available."
     >
       <JsonLd data={structuredData} />
+      <p>
+        This is the fixed 2026 calendar. Days remaining exclude today; Friday counts include
+        today if it is Friday, and weekend counts include an ongoing Sunday.
+        {now.getFullYear() > 2026 ? " All dates in this edition have passed." : ""}
+        {" "}<Link href="/fridays-left-this-year">View this year&apos;s Fridays</Link>{" or "}
+        <Link href="/weekends-left-this-year">this year&apos;s weekends</Link> for a rolling planner.
+      </p>
 
       <section className="daysuntil-calendar-print my-10 overflow-hidden rounded-[2rem] border border-[#ded6c7] bg-[linear-gradient(145deg,#fffdf7_0%,#f3ecdd_100%)] p-6 shadow-[0_22px_55px_rgba(59,48,29,0.1)] dark:border-[#403a33] dark:bg-[linear-gradient(145deg,#211e1a_0%,#171614_100%)] sm:p-8">
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">

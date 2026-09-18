@@ -202,7 +202,7 @@ export function getCountdownCalendarEvents(
         slug: source.slug,
         name: source.name,
         category: source.category,
-        note: source.note,
+        note: source.note.replaceAll("2026", String(year)),
         date,
         dateLabel: new Intl.DateTimeFormat("en-US", {
           weekday: "long",
@@ -290,5 +290,20 @@ export function buildCountdownCalendarIcs(year = COUNTDOWN_CALENDAR_YEAR) {
   }
 
   lines.push("END:VCALENDAR");
-  return `${lines.join("\r\n")}\r\n`;
+  // RFC 5545 folds content lines at 75 octets, without splitting UTF-8 characters.
+  const fold = (line: string) => {
+    let result = "";
+    let bytes = 0;
+    for (const char of line) {
+      const length = new TextEncoder().encode(char).length;
+      if (bytes + length > 75) {
+        result += "\r\n ";
+        bytes = 1;
+      }
+      result += char;
+      bytes += length;
+    }
+    return result;
+  };
+  return `${lines.map(fold).join("\r\n")}\r\n`;
 }

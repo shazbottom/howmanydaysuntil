@@ -21,6 +21,8 @@ import {
 } from "../../../../../../lib/exactDateCountdown";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../../../../../../lib/structuredData";
 import { getExactDatePlanningData } from "../../../../../../lib/datePlanning";
+import { formatActionDate, getCountdownActions } from "../../../../../../lib/countdownActions";
+import { DateCountdownEditor } from "../../../../../../components/DateCountdownEditor";
 
 interface ExactDatePageProps {
   params: Promise<ExactDateParams>;
@@ -72,6 +74,7 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
   }
 
   const longDate = formatLongDate(targetDate, "en-GB");
+  const actions = getCountdownActions(targetDate, longDate);
   const nearbyLinks = getExactDateNearbyLinks(targetDate);
   const dateDetails = getExactDateDetails(targetDate, resolvedCountdown.countdown);
   const factSections = getExactDateFactSections(targetDate, resolvedCountdown.countdown);
@@ -97,11 +100,13 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
       countdownLabel={longDate}
       countdown={resolvedCountdown.countdown}
       calendarPath={currentPath}
+      cardActionLinks={[{ href: actions.business, label: "Business days" }]}
       supportingCopy={[]}
       relatedLinks={getExactDateRelatedLinks(targetDate)}
       extraSection={
         <>
-          <ExactDatePlanner data={planningData} />
+          <DateCountdownEditor initialDate={formatActionDate(targetDate)} minimumDate={formatActionDate(new Date())} />
+          <ExactDatePlanner data={planningData} businessDaysHref={actions.business} />
           <section className="mt-12 w-full max-w-[31.9rem] px-5 text-left sm:max-w-[34rem]">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               Date details
@@ -133,10 +138,10 @@ export default async function ExactDatePage({ params }: ExactDatePageProps) {
             title="Use this date"
             description="Compare the target with another date, switch to a regional working-day count, or use it in an embedded countdown."
             links={[
-              { href: "/days-between-dates", label: "Compare with another date" },
-              { href: "/business-days-until", label: "Count business days until this date" },
-              { href: "/add-or-subtract-date", label: "Add or subtract time from this date" },
-              { href: "/countdown-widget", label: "Create an embeddable countdown" },
+              { href: actions.compare, label: "Compare with another date" },
+              { href: actions.business, label: "Count business days until this date" },
+              { href: actions.adjust, label: "Add or subtract time from this date" },
+              { href: actions.widget, label: "Create an embeddable countdown" },
               { href: "/calendar-days-vs-business-days", label: "Understand the different day counts" },
             ]}
             centered

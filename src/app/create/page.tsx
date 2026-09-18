@@ -4,6 +4,7 @@ import { Brand } from "../../components/Brand";
 import { CountrySelectorDropdown } from "../../components/CountrySelectorDropdown";
 import { CreateCountdownForm } from "../../components/CreateCountdownForm";
 import { ThemeToggle } from "../../components/ThemeToggle";
+import { parseCountdownPrefill } from "../../lib/countdownActions";
 
 export const metadata: Metadata = {
   title: "Create your own countdown | DaysUntil",
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CreatePage() {
+export default async function CreatePage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const initialValues = parseCountdownPrefill(await searchParams);
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-5xl flex-col items-center">
@@ -48,7 +50,7 @@ export default function CreatePage() {
             milestones without adding any extra noise.
           </p>
           <div className="mt-12">
-            <CreateCountdownForm />
+            <CreateCountdownForm initialValues={initialValues} />
           </div>
         </section>
       </div>

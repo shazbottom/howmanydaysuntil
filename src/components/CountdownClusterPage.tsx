@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { getCountdownActions } from "../lib/countdownActions";
 import { CountdownLinkList } from "./CountdownLinkList";
 import { SeoCountdownPage } from "./SeoCountdownPage";
 import {
@@ -37,6 +39,7 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
     definition.kind === "fridays"
       ? `${count === 1 ? "Friday" : "Fridays"} remaining`
       : `${count === 1 ? "Weekend" : "Weekends"} remaining`;
+  const actions = getCountdownActions(pageData.targetDate, event.name);
   const structuredData = [
     createBreadcrumbJsonLd([
       { name: "Home", path: "/" },
@@ -52,7 +55,7 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
 
   return (
     <SeoCountdownPage
-      eyebrow="Seasonal content cluster"
+      eyebrow={definition.kind === "fridays" ? "Friday countdown" : "Weekend countdown"}
       title={title}
       lead={lead}
       countdownLabel={clusterLabel}
@@ -62,16 +65,29 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
       countdownDetailLine={detailLine}
       cardActionLinks={cardActionLinks}
       calendarPath={canonicalPath}
-      supportingCopy={[]}
+      supportingCopy={pageData.seasonNote ? [pageData.seasonNote] : []}
       relatedLinks={relatedLinks}
       structuredData={structuredData}
       showChristmasFlyby={event.slug === "christmas"}
       extraSection={
         <>
+          {pageData.remainingFridays.length ? (
+            <details className="mt-8 w-full max-w-[34rem] rounded-2xl border border-black/10 p-5 text-left dark:border-white/15">
+              <summary className="cursor-pointer text-sm font-semibold">View all {count} remaining Fridays</summary>
+              <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                {pageData.remainingFridays.map((friday) => <li key={friday.href}>
+                  <Link className="underline underline-offset-4" href={friday.href}>{friday.label}</Link>
+                </li>)}
+              </ul>
+            </details>
+          ) : null}
           <section className="mt-12 w-full max-w-[31.9rem] rounded-[2rem] bg-[#fdfcf9] px-6 py-7 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:max-w-[34rem] sm:px-8">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
-              Next 5 years
+              {yearRows.length === 1 ? "Target date" : `Next ${yearRows.length} occurrences`}
             </h2>
+            <p className="mt-3 text-sm leading-6 text-black/70 dark:text-white/75">
+              {pageData.baselineLabel}
+            </p>
             <div className="mt-5 overflow-hidden rounded-[1.15rem] border border-black/6 dark:border-white/10">
               <div className="grid grid-cols-[minmax(0,0.55fr)_minmax(0,1.45fr)_minmax(0,0.8fr)] bg-[#f3f2ee] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-black/48 dark:bg-[#1d1f1e] dark:text-white/50">
                 <span>Year</span>
@@ -108,8 +124,8 @@ export function CountdownClusterPage({ slug }: { slug: string }) {
             title="Planning tools"
             description={`Use the ${event.name} count in a wider calendar or working-day plan.`}
             links={[
-              { href: "/days-between-dates", label: `Compare ${event.name} with another date` },
-              { href: "/business-days-until", label: `Count business days until ${event.name}` },
+              { href: actions.compare, label: `Compare ${event.name} with another date` },
+              { href: actions.business, label: `Count business days until ${event.name}` },
               { href: "/year-planner", label: "Plan the rest of the year" },
               { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
             ]}

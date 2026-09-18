@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import { useRef } from "react";
 
 export interface EventInputProps {
@@ -12,6 +10,7 @@ export interface EventInputProps {
   placeholder?: string;
   fieldLabel?: string;
   submitButtonLabel?: string;
+  errorId?: string;
   variant?: "default" | "preview" | "compact";
 }
 
@@ -50,12 +49,19 @@ export function EventInput({
   placeholder = "Christmas",
   fieldLabel,
   submitButtonLabel,
+  errorId,
   variant = "default",
 }: EventInputProps) {
   const valueSizeClasses = getValueSizeClasses(value || placeholder);
   const isPreviewVariant = variant === "preview";
   const isCompactVariant = variant === "compact";
   const dateInputRef = useRef<HTMLInputElement | null>(null);
+  const inputAccessibility = {
+    "aria-invalid": errorId ? true : undefined,
+    "aria-describedby": errorId,
+    enterKeyHint: "go" as const,
+  };
+  const submitClasses = "mt-3 inline-flex min-h-11 items-center justify-center rounded-[0.95rem] bg-[#315da8] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be] dark:hover:bg-[#4167ab]";
 
   if (isPreviewVariant) {
     return (
@@ -71,11 +77,11 @@ export function EventInput({
         </label>
         <div className="flex flex-col items-center text-center">
           <div className="w-full max-w-[38rem] sm:max-w-[44rem]">
-            <div className="mx-auto max-w-[11ch] text-[clamp(2rem,10vw,5rem)] font-semibold leading-[0.94] tracking-[-0.08em] text-black dark:text-white sm:max-w-none sm:text-[clamp(2.45rem,5.8vw,5rem)]">
-              <div>How many days until</div>
-            </div>
+            <h1 className="mx-auto text-[clamp(1.75rem,8vw,3rem)] font-semibold leading-tight tracking-[-0.06em] text-black dark:text-white sm:text-[clamp(2.45rem,5.8vw,5rem)]">
+              How many days until
+            </h1>
             {fieldLabel ? (
-              <p className="mt-7 text-sm font-medium text-black/52 dark:text-white/54">
+              <p className="mt-3 text-sm font-medium text-black/70 dark:text-white/75 sm:mt-7">
                 {fieldLabel}
               </p>
             ) : null}
@@ -84,10 +90,11 @@ export function EventInput({
               <input
                 id="event-input"
                 name="event-input"
+                {...inputAccessibility}
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
-                className="block h-[3.7rem] min-w-0 flex-1 bg-transparent px-4 text-center text-[41px] font-semibold text-black outline-none transition placeholder:text-[15px] placeholder:font-medium placeholder:text-black/38 dark:text-white dark:placeholder:text-white/34"
+                className="block h-[3.2rem] min-w-0 flex-1 bg-transparent px-4 text-center text-[28px] font-semibold text-black outline-none transition placeholder:text-[15px] placeholder:font-medium placeholder:text-black/65 dark:text-white dark:placeholder:text-white/65 sm:h-[3.7rem] sm:text-[41px]"
               />
               {onDatePick ? (
                 <>
@@ -128,7 +135,10 @@ export function EventInput({
                   <input
                     ref={dateInputRef}
                     type="date"
-                    className="sr-only"
+                    aria-label="Choose target date"
+                    aria-invalid={errorId ? true : undefined}
+                    aria-describedby={errorId}
+                    className="sr-only focus:not-sr-only focus:absolute focus:z-20 focus:rounded-lg focus:bg-white focus:p-3 focus:text-black"
                     onChange={(event) => {
                       const nextValue = event.target.value;
 
@@ -145,8 +155,8 @@ export function EventInput({
             </div>
           </div>
         </div>
-        <button type="submit" className="sr-only">
-          Calculate
+        <button type="submit" className={submitClasses}>
+          {submitButtonLabel ?? "Calculate"}
         </button>
       </form>
     );
@@ -170,6 +180,7 @@ export function EventInput({
               <input
                 id="event-input"
                 name="event-input"
+                {...inputAccessibility}
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
@@ -214,7 +225,10 @@ export function EventInput({
                   <input
                     ref={dateInputRef}
                     type="date"
-                    className="sr-only"
+                    aria-label="Choose target date"
+                    aria-invalid={errorId ? true : undefined}
+                    aria-describedby={errorId}
+                    className="sr-only focus:not-sr-only focus:absolute focus:z-20 focus:rounded-lg focus:bg-white focus:p-3 focus:text-black"
                     onChange={(event) => {
                       const nextValue = event.target.value;
 
@@ -239,7 +253,7 @@ export function EventInput({
           ) : null}
         </div>
         {!submitButtonLabel ? (
-          <button type="submit" className="sr-only">
+          <button type="submit" className={submitClasses}>
             Calculate
           </button>
         ) : null}
@@ -273,6 +287,7 @@ export function EventInput({
               <input
                 id="event-input"
                 name="event-input"
+                {...inputAccessibility}
                 value={value}
                 onChange={(event) => onValueChange(event.target.value)}
                 placeholder={placeholder}
@@ -285,8 +300,8 @@ export function EventInput({
           </div>
         </div>
       </div>
-      <button type="submit" className="sr-only">
-        Calculate
+      <button type="submit" className={submitClasses}>
+        {submitButtonLabel ?? "Calculate"}
       </button>
     </form>
   );

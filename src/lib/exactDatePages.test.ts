@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { getCountdown } from "./countdown";
+import { indexableExactDateKeys } from "../data/indexableExactDates";
 import {
   getExactDateDetails,
   getExactDateStaticParams,
@@ -66,5 +67,24 @@ test("static exact-date params exclude arbitrary future dates", () => {
 
   assert.equal(routeKeys.has("2026-12-17"), true);
   assert.equal(routeKeys.has("2026-12-19"), false);
-  assert.equal(params.length < 150, true);
+  const expectedKeys = indexableExactDateKeys.filter((key) => key >= "2026-07-13");
+  assert.deepEqual([...routeKeys].sort(), [...expectedKeys].sort());
+  assert.equal(params.length, routeKeys.size);
+});
+
+test("recovery preserves date expiry and the rollout ceiling", () => {
+  const now = new Date("2026-09-30T12:00:00");
+  assert.equal(isExactDateIndexable(new Date("2026-09-30T00:00:00"), now), true);
+  assert.equal(isExactDateIndexable(new Date("2026-09-30T00:00:00"), new Date("2026-10-01T00:00:00")), false);
+  assert.equal(isExactDateIndexable(new Date("2031-01-01T00:00:00"), now), false);
+  const params = getExactDateStaticParams(new Date("2031-01-01T00:00:00"));
+  assert.deepEqual(params, []);
+});
+
+test("curated date keys remain unique and valid", () => {
+  assert.equal(new Set(indexableExactDateKeys).size, indexableExactDateKeys.length);
+  for (const key of indexableExactDateKeys) {
+    const date = new Date(`${key}T00:00:00Z`);
+    assert.equal(date.toISOString().slice(0, 10), key);
+  }
 });

@@ -8,6 +8,10 @@ export interface SeoHubOccurrenceRow {
   dayOfWeek: string;
 }
 
+export function getOccurrenceHeading(rowCount: number): string {
+  return rowCount === 1 ? "Target date" : `Next ${rowCount} occurrences`;
+}
+
 export interface SeoHubOccurrenceTarget {
   year: number;
   date: Date;

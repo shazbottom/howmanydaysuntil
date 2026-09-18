@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackAction } from "../lib/actionAnalytics";
 import {
   buildCountdownWidgetEmbedCode,
   buildCountdownWidgetPath,
@@ -29,15 +30,23 @@ export function CountdownWidgetBuilder({
   const [accent, setAccent] = useState(initialConfig.accent);
   const [size, setSize] = useState<CountdownWidgetSize>("standard");
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState("");
   const config: CountdownWidgetConfig = { title, targetDate, theme, accent };
   const previewPath = buildCountdownWidgetPath(config);
   const embedCode = buildCountdownWidgetEmbedCode(config, size);
   const dimensions = countdownWidgetSizes[size];
 
   async function copyEmbedCode() {
-    await navigator.clipboard.writeText(embedCode);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+    setCopyError("");
+    try {
+      await navigator.clipboard.writeText(embedCode);
+      setCopied(true);
+      trackAction("widget_copy");
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+      setCopyError("Clipboard access is unavailable. Select the embed code above and copy it manually.");
+    }
   }
 
   function applyTemplate(template: CountdownWidgetTemplate) {
@@ -58,6 +67,7 @@ export function CountdownWidgetBuilder({
               Ready-made templates
             </p>
             <h2 className="!mt-2">Start with a useful design</h2>
+            <p className="mt-2 text-sm text-black/65 dark:text-white/70">Personal-event templates use example dates. Replace them with your own date before sharing.</p>
           </div>
           <p className="hidden text-xs text-black/46 dark:text-white/48 sm:block">Edit every detail below</p>
         </div>
@@ -182,6 +192,7 @@ export function CountdownWidgetBuilder({
           >
             {copied ? "Copied" : "Copy embed code"}
           </button>
+          <p role="status" className="mt-2 text-sm">{copyError || (copied ? "Embed code copied." : "")}</p>
         </div>
       </div>
       </section>

@@ -1,6 +1,7 @@
 import { getCountryByCode, type CountryCode } from "./countries";
-import { getCountryReferenceData, type CountryPublicHolidayRow } from "./countryData";
-import { getRegionReferenceData } from "./regionData";
+import { getCountryReferenceData, getCountryHolidayAttribution, type ReferenceAttribution, type CountryPublicHolidayRow } from "./countryData";
+import { getRegionReferenceData, getRegionAttributions } from "./regionData";
+import { getRegionById } from "./regions";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -142,6 +143,29 @@ function getIncludedPublicHolidaysBetween(
 
       return holidayDate.getTime() > startDate.getTime() && holidayDate.getTime() <= endDate.getTime();
     });
+}
+
+export interface BusinessDayCoverage {
+  year: number;
+  level: "region" | "country" | "missing";
+  fallback: boolean;
+  jurisdiction: string;
+  attribution: ReferenceAttribution | null;
+  undatedHolidays: string[];
+}
+
+export function getBusinessDayCoverage(countryCode: CountryCode, regionId: string | undefined, year: number): BusinessDayCoverage {
+  const regional = regionId ? getRegionReferenceData(regionId, year)?.publicHolidays ?? [] : [];
+  const holidays = regional.length ? regional : getCountryReferenceData(countryCode, year);
+  return {
+    year,
+    level: regional.length ? "region" : holidays.length ? "country" : "missing",
+    fallback: Boolean(regionId) && !regional.length,
+    jurisdiction: regional.length ? getRegionById(regionId!)!.name : getCountryByCode(countryCode)!.name,
+    attribution: regional.length ? getRegionAttributions(regionId!)?.publicHolidays ?? null
+      : holidays.length ? getCountryHolidayAttribution(countryCode) : null,
+    undatedHolidays: holidays.filter((holiday) => !holiday.date).map((holiday) => holiday.name),
+  };
 }
 
 export interface BusinessDayCalculationResult {

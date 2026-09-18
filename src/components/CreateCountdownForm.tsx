@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CountdownDisplay } from "./CountdownDisplay";
 import { buildCustomCountdownPreview } from "../lib/customCountdownPreview";
 import { saveCountdownReference } from "../lib/myCountdowns";
+import { trackAction } from "../lib/actionAnalytics";
 
 interface FormErrors {
   title?: string;
@@ -14,10 +15,10 @@ interface FormErrors {
   form?: string;
 }
 
-export function CreateCountdownForm() {
+export function CreateCountdownForm({ initialValues = { title: "", targetDate: "" } }: { initialValues?: { title: string; targetDate: string } }) {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [targetDate, setTargetDate] = useState("");
+  const [title, setTitle] = useState(initialValues.title);
+  const [targetDate, setTargetDate] = useState(initialValues.targetDate);
   const [timezone, setTimezone] = useState("");
   const [note, setNote] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
@@ -69,10 +70,12 @@ export function CreateCountdownForm() {
               return;
             }
 
-            saveCountdownReference({
-              slug: payload.slug,
-              title: payload.title,
-            });
+            try {
+              saveCountdownReference({ slug: payload.slug, title: payload.title });
+            } catch {
+              // The online countdown exists even if this browser blocks local storage.
+            }
+            trackAction("countdown_saved");
             router.push(payload.path);
             return;
           } catch {
@@ -87,6 +90,8 @@ export function CreateCountdownForm() {
           </p>
           <p className="mt-3 max-w-xl text-sm text-black/56 dark:text-white/58 sm:text-[15px]">
             Give it a title, choose a date, and share the finished countdown with one clean link.
+            The countdown is stored online and anyone with its link can view it. Your My countdowns
+            list is saved only in this browser. Check the time and timezone before saving.
           </p>
         </div>
         <div className="mt-6 grid gap-5">

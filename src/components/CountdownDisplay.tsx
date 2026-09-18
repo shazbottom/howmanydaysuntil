@@ -126,13 +126,13 @@ export function CountdownDisplay({
         <div className={`${headerColorClassName} px-6 py-5 text-left text-white sm:px-8`}>
           <div className="flex items-end justify-between gap-6">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white">
                 Target date
               </p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">-</p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white">
                 Year
               </p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">-</p>
@@ -145,7 +145,7 @@ export function CountdownDisplay({
           <div
             className={
               fullHeightWhenEmpty
-                ? "flex min-h-[21.5rem] flex-col items-center justify-center sm:min-h-[23.6rem]"
+                ? "flex min-h-24 flex-col items-center justify-center sm:min-h-[23.6rem]"
                 : ""
             }
           >
@@ -187,25 +187,25 @@ export function CountdownDisplay({
       <div className={`${headerColorClassName} px-6 py-5 text-white sm:px-8`}>
         <div className="flex items-end justify-between gap-6">
           <div className="text-left">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white">
               Target date
             </p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{targetDateLabel}</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/70">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white">
               Year
             </p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{targetYear}</p>
           </div>
         </div>
       </div>
-      <div className="px-5 py-[2.84rem] sm:px-8 sm:py-[3.31rem]">
+      <div className="px-5 py-5 sm:px-8 sm:py-[3.31rem]">
         <p
           className={
             emphasizeLabel
               ? "text-[clamp(1.55rem,7vw,2.25rem)] font-semibold leading-tight tracking-[-0.04em] text-black dark:text-white"
-              : "text-xs uppercase tracking-[0.24em] text-black/42 dark:text-white/44"
+              : "text-xs uppercase tracking-[0.12em] text-black/70 dark:text-white/75"
           }
         >
           {label}
@@ -215,23 +215,23 @@ export function CountdownDisplay({
             {description}
           </p>
         ) : null}
-        <div className="mt-7 border-b border-black/[0.05] pb-8 dark:border-white/8">
+        <div className="mt-3 border-b border-black/[0.05] pb-4 dark:border-white/8 sm:mt-7 sm:pb-8">
           <p
             suppressHydrationWarning
             className="text-[clamp(4.35rem,22vw,5.5rem)] font-semibold leading-none tracking-[-0.08em] text-black dark:text-white sm:text-[7.3rem]"
           >
             {displayPrimaryValue}
           </p>
-          <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.34em] text-black/42 dark:text-white/42">
+          <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-black/70 dark:text-white/75 sm:mt-4">
             {displayPrimaryUnitLabel}
           </p>
           {displayDetailLine ? (
-            <p className="mt-5 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/56 dark:text-white/58 sm:text-[1rem]">
+            <p className="mt-2 font-mono text-sm font-medium tabular-nums tracking-[-0.01em] text-black/70 dark:text-white/75 sm:mt-5 sm:text-[1rem]">
               {displayDetailLine}
             </p>
           ) : null}
         </div>
-        <div className="mt-6 flex justify-center">
+        <div className="mt-3 flex justify-center sm:mt-6">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:grid-cols-3 sm:gap-10">
             {timeBlocks.map((timeBlock) => (
               <div
@@ -249,7 +249,7 @@ export function CountdownDisplay({
                     {timeBlock.value}
                   </span>
                 </p>
-                <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-black/22 dark:text-white/28 sm:text-[10px]">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-black/70 dark:text-white/75 sm:mt-3">
                   {timeBlock.label}
                 </p>
               </div>

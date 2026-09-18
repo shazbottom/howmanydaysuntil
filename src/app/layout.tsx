@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/react';
+import { SiteAnalytics } from '../components/SiteAnalytics';
 import { THEME_STORAGE_KEY } from "../lib/theme";
 import { SiteFooter } from "../components/SiteFooter";
 
@@ -79,7 +79,7 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
       >
         {children}
         <SiteFooter />
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );

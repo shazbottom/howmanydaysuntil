@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { trackAction } from "../lib/actionAnalytics";
 import {
   buildAllDayGoogleCalendarUrl,
   downloadAllDayIcsFile,
@@ -60,7 +61,7 @@ export function CalendarExportMenu({ event }: { event: AllDayCalendarEvent }) {
               href={googleCalendarUrl}
               target="_blank"
               rel="noreferrer"
-              onClick={() => setIsOpen(false)}
+              onClick={() => { trackAction("calendar_google"); setIsOpen(false); }}
               className="block px-4 py-3 text-left text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"
             >
               Google Calendar
@@ -69,6 +70,7 @@ export function CalendarExportMenu({ event }: { event: AllDayCalendarEvent }) {
               type="button"
               onClick={() => {
                 downloadAllDayIcsFile(event);
+                trackAction("calendar_download");
                 setIsOpen(false);
               }}
               className="block w-full px-4 py-3 text-left text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"

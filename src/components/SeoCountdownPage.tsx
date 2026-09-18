@@ -9,6 +9,8 @@ import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { CountdownClusterLink } from "../lib/countdownClusters";
+import { getCountdownActions } from "../lib/countdownActions";
+import { CountdownActionLink } from "./CountdownActionLink";
 
 const CHRISTMAS_HEADER_COLOR_CLASS_NAME = "bg-[#E40A2D] dark:bg-[#b20d2c]";
 const SITE_URL = "https://daysuntil.is";
@@ -68,17 +70,17 @@ export function SeoCountdownPage({
   const calendarTitle = calendarTitleOverride ?? defaultCalendarTitle;
 
   return (
-    <main className="min-h-screen bg-background px-6 py-10 text-foreground">
+    <main className="min-h-screen bg-background px-4 py-4 text-foreground sm:px-6 sm:py-10">
       {structuredData ? <JsonLd data={structuredData} /> : null}
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
-        <div className="flex w-full items-center justify-between gap-4">
+        <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
           <Link
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white"
           >
-            <Brand variant="horizontal" height={55} className="h-[55px] w-auto" />
+            <Brand variant="horizontal" height={55} className="h-10 w-auto sm:h-[55px]" />
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             <CountrySelectorDropdown />
             <CalculatorNavButton />
             <ThemeToggle />
@@ -90,11 +92,11 @@ export function SeoCountdownPage({
             </Link>
           </div>
         </div>
-        <section className="mt-20 flex w-full flex-1 flex-col items-center text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-black/42 dark:text-white/44">
+        <section className="mt-6 flex w-full flex-1 flex-col items-center text-center sm:mt-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-black/70 dark:text-white/75">
             {eyebrow}
           </p>
-          <h1 className="mt-4 max-w-3xl text-5xl font-semibold tracking-tight sm:text-7xl">
+          <h1 className="mt-2 max-w-3xl text-3xl font-semibold tracking-tight sm:mt-4 sm:text-6xl">
             {title}
           </h1>
           {lead ? (
@@ -102,17 +104,17 @@ export function SeoCountdownPage({
               {lead}
             </p>
           ) : null}
-          <div className="relative mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
+          <div className="relative mt-5 w-full max-w-[31.9rem] sm:mt-8 sm:max-w-[34rem]">
             {showChristmasFlyby ? (
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-[4.75rem] overflow-hidden"
+                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-7 overflow-hidden sm:h-[4.75rem]"
               >
                 <div className="daysuntil-christmas-flyby absolute left-0 top-0">
                   <img
                     src="/seasonal/1.svg"
                     alt=""
-                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] dark:invert sm:w-[17.5rem]"
+                    className="h-auto w-[8rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] dark:invert sm:w-[17.5rem]"
                   />
                 </div>
               </div>
@@ -131,8 +133,16 @@ export function SeoCountdownPage({
               }
             />
           </div>
-          {cardActionLinks.length > 0 || (calendarPath && countdown) ? (
+          {cardActionLinks.length > 0 || countdown ? (
             <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
+              {countdown ? (
+                <CountdownActionLink
+                  href={getCountdownActions(countdown.targetDate, countdownLabel).save}
+                  className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]"
+                >
+                  Save this countdown
+                </CountdownActionLink>
+              ) : null}
               {calendarPath && countdown ? (
                 <CalendarExportMenu
                   event={{
@@ -145,13 +155,13 @@ export function SeoCountdownPage({
                 />
               ) : null}
               {cardActionLinks.map((link) => (
-                <Link
+                <CountdownActionLink
                   key={link.href}
                   href={link.href}
                   className="rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-[13px] font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#169c76]/20 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:shadow-[0_1px_2px_rgba(0,0,0,0.18)] dark:hover:bg-[#232625] dark:focus-visible:ring-[#4ab494]/28 dark:focus-visible:ring-offset-[#0d0d0d] sm:px-5 sm:py-3 sm:text-sm"
                 >
                   {link.label}
-                </Link>
+                </CountdownActionLink>
               ))}
             </div>
           ) : null}

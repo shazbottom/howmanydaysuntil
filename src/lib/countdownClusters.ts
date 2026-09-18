@@ -4,6 +4,7 @@ import { startOfLocalDay } from "./countdown";
 import { formatFullDate } from "./dateFormat";
 import { getSeoHubOccurrenceTargets } from "./seoHubPageContent";
 import { resolveSeoHubEventCountdown } from "./seoHubEventResolver";
+import { formatActionDate } from "./countdownActions";
 
 const DAYS_PER_WEEK = 7;
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -81,7 +82,7 @@ function countWeekdayOccurrencesUntil(targetDate: Date, now: Date, weekday: numb
     return 0;
   }
 
-  const daysBetween = Math.floor(
+  const daysBetween = Math.round(
     (endDate.getTime() - firstOccurrence.getTime()) / MILLISECONDS_PER_DAY,
   );
 
@@ -115,7 +116,7 @@ function countWeekendsUntil(targetDate: Date, now: Date): number {
     return currentWeekendCount;
   }
 
-  const daysBetween = Math.floor(
+  const daysBetween = Math.round(
     (endDate.getTime() - firstSaturday.getTime()) / MILLISECONDS_PER_DAY,
   );
 
@@ -250,7 +251,7 @@ export function buildCountdownClusterMetadata(
 
   const targetYear = targetDate.getFullYear();
   const countNoun = getClusterCountNoun(pageData.definition.kind, count);
-  const description = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} until ${event.name} ${targetYear}. Track the countdown to ${formatFullDate(targetDate, "en-US")}.`;
+  const description = `There are ${count.toLocaleString("en-GB")} ${countNoun.toLowerCase()} until ${event.name} ${targetYear}. Track the countdown to ${formatFullDate(targetDate, "en-US")}.${pageData.seasonNote ? " Uses an approximate Northern Hemisphere season date." : ""}`;
   const queryNoun = getClusterDisplayLabel(pageData.definition.kind);
   const resultTitle = `How Many ${queryNoun} Until ${event.name}? ${count.toLocaleString(
     "en-GB",
@@ -304,10 +305,22 @@ export function getCountdownClusterPageData(
   const yearRows: CountdownClusterYearRow[] = getSeoHubOccurrenceTargets(event, now, 5).map((row) => ({
     year: row.year,
     dateLabel: formatFullDate(row.date, "en-US"),
-    count: countClusterOccurrences(definition.kind, row.date, new Date(row.year, 0, 1)),
+    count: countClusterOccurrences(definition.kind, row.date, now),
   }));
 
   const relatedLinks: CountdownClusterLink[] = [];
+  const remainingFridays: CountdownClusterLink[] = [];
+  if (definition.kind === "fridays") {
+    const cursor = startOfLocalDay(now);
+    cursor.setDate(cursor.getDate() + (FRIDAY_WEEKDAY - cursor.getDay() + 7) % 7);
+    while (cursor <= targetDate) {
+      remainingFridays.push({
+        href: `/days-until/date/${formatActionDate(cursor).replaceAll("-", "/")}`,
+        label: formatFullDate(cursor, "en-US"),
+      });
+      cursor.setDate(cursor.getDate() + 7);
+    }
+  }
   const cardActionLinks: CountdownClusterLink[] = [];
   const eventRootPath = getEventRootPath(event.slug);
 
@@ -337,8 +350,13 @@ export function getCountdownClusterPageData(
     detailLine,
     canonicalPath,
     yearRows,
+    seasonNote: event.recurrenceType === "season-approximate"
+      ? `This countdown uses ${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(targetDate)} every year as an approximate Northern Hemisphere start of ${event.name.toLowerCase()}. It is not the exact astronomical instant, a meteorological season date, or a Southern Hemisphere countdown. Changing country does not change this convention.`
+      : null,
+    baselineLabel: `All counts start from today, ${formatFullDate(now, "en-US")}, including today when eligible.`,
     cardActionLinks,
     relatedLinks,
+    remainingFridays,
     howItWorks:
       definition.kind === "fridays"
         ? `This page counts each Friday from today through ${event.name}. If the target date itself falls on a Friday, that final Friday is included in the total.`

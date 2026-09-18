@@ -16,6 +16,8 @@ import { SeoHubFactsSection } from "../components/SeoHubFactsSection";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { events } from "../data/events";
 import { getCountdown, startOfLocalDay, type CountdownResult } from "../lib/countdown";
+import { getCountdownActions } from "../lib/countdownActions";
+import { trackAction } from "../lib/actionAnalytics";
 import { formatShortDate } from "../lib/dateFormat";
 import { resolveEventDate } from "../lib/eventCountdown";
 import { getNextEasterDate } from "../lib/easterDate";
@@ -39,7 +41,6 @@ const QUICK_EVENT_CHIPS: EventChip[] = [
   { slug: "valentines-day", label: "Valentine's Day" },
   { slug: "thanksgiving", label: "Thanksgiving" },
   { slug: "black-friday", label: "Black Friday" },
-  { slug: "world-cup-final", label: "World Cup Final" },
   { slug: "easter", label: "Easter" },
 ];
 
@@ -389,6 +390,7 @@ export default function Home() {
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
+    if (result.state) trackAction("calculation");
 
     setQuery(nextQuery);
     setResolvedState(result.state);
@@ -397,6 +399,7 @@ export default function Home() {
 
   function submitMilestone(label: string, targetDate: Date) {
     const result = buildStateFromTargetDate(label, targetDate);
+    if (result.state) trackAction("calculation");
 
     setQuery(label);
     setResolvedState(result.state);
@@ -404,21 +407,9 @@ export default function Home() {
   }
 
   function submitQuickChip(event: EventChip) {
-    if (event.slug === "world-cup-final") {
-      const result = buildStateFromTargetDate(
-        event.label,
-        new Date(2026, 6, 19),
-        event.slug,
-      );
-
-      setQuery(event.label);
-      setResolvedState(result.state);
-      setError(result.error);
-      return;
-    }
-
     if (event.slug === "easter") {
       const result = buildStateFromTargetDate(event.label, getNextEasterDate(), event.slug);
+      if (result.state) trackAction("calculation");
 
       setQuery(event.label);
       setResolvedState(result.state);
@@ -430,7 +421,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-6 sm:py-10">
+    <main className="min-h-screen bg-background px-4 py-4 text-foreground sm:px-6 sm:py-10">
       <JsonLd data={[createWebsiteJsonLd(), createOrganizationJsonLd()]} />
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
         <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-between">
@@ -438,7 +429,7 @@ export default function Home() {
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white"
           >
-            <Brand variant="horizontal" height={55} className="h-[55px] w-auto" />
+            <Brand variant="horizontal" height={55} className="h-10 w-auto sm:h-[55px]" />
           </Link>
           <div className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end sm:gap-3">
             <CountrySelectorDropdown />
@@ -448,11 +439,14 @@ export default function Home() {
           </div>
         </div>
         <section className="mt-4 flex w-full flex-1 flex-col items-center text-center sm:mt-6">
-          <HomepageEditorialSection />
           <div className="w-full max-w-[46rem]">
             <EventInput
               value={query}
-              onValueChange={setQuery}
+              onValueChange={(value) => {
+                setQuery(value);
+                setError(null);
+              }}
+              errorId={error ? "homepage-query-error" : undefined}
               onSubmit={() => submitQuery(query)}
               onDatePick={(nextDate) => {
                 setQuery(nextDate);
@@ -463,6 +457,66 @@ export default function Home() {
               variant="preview"
             />
           </div>
+          <p role="status" aria-atomic="true" className="sr-only">
+            {resolvedState
+              ? `${resolvedState.label}: ${resolvedState.countdown.daysRemaining} days remaining.`
+              : ""}
+          </p>
+          {error ? (
+            <p id="homepage-query-error" role="alert" className="mt-3 text-sm text-red-700 dark:text-red-300">
+              {error}
+            </p>
+          ) : null}
+          <div className="relative mt-6 w-full max-w-[31.9rem] sm:mt-12 sm:max-w-[34rem]">
+            {showChristmasFlyby ? (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-7 overflow-hidden sm:h-[4.75rem]"
+              >
+                <div className="daysuntil-christmas-flyby absolute left-0 top-0">
+                  <img
+                    src={CHRISTMAS_FLYBY_FRAME}
+                    alt=""
+                    className="h-auto w-[8rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] dark:invert sm:w-[17.5rem]"
+                  />
+                </div>
+              </div>
+            ) : null}
+            <CountdownDisplay
+              label={resolvedState?.label ?? "Countdown"}
+              countdown={resolvedState?.countdown ?? null}
+              fullHeightWhenEmpty
+              headerColorClassName={
+                showChristmasFlyby
+                  ? CHRISTMAS_HEADER_COLOR_CLASS_NAME
+                  : "bg-[#6495ED] dark:bg-[#4b74be]"
+              }
+            />
+          </div>
+          {resolvedState ? (
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <Link
+                href={getCountdownActions(resolvedState.countdown.targetDate, resolvedState.label).save}
+                onClick={() => trackAction("tool_followthrough")}
+                className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]"
+              >
+                Save this countdown
+              </Link>
+              <CalendarExportMenu
+                event={{
+                  title: resolvedState.label,
+                  date: formatCalendarDate(resolvedState.countdown.targetDate),
+                  description: `Live countdown to ${resolvedState.label}.`,
+                  url: resolvedState.selectedSlug
+                    ? `${SITE_URL}${getSeoLandingPath(resolvedState.selectedSlug)}`
+                    : SITE_URL,
+                  fileName:
+                    resolvedState.selectedSlug ??
+                    `countdown-${formatCalendarDate(resolvedState.countdown.targetDate)}`,
+                }}
+              />
+            </div>
+          ) : null}
           <div className="mt-5 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
             {MILESTONE_BUTTONS.map((milestone) => {
               const isSelected = resolvedState?.label === milestone.label;
@@ -494,50 +548,7 @@ export default function Home() {
               variant="preview"
             />
           </div>
-          {error ? <p className="mt-5 text-sm text-red-600">{error}</p> : null}
-          <div className="relative mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
-            {showChristmasFlyby ? (
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-[4.8rem] z-10 h-[4.75rem] overflow-hidden"
-              >
-                <div className="daysuntil-christmas-flyby absolute left-0 top-0">
-                  <img
-                    src={CHRISTMAS_FLYBY_FRAME}
-                    alt=""
-                    className="h-auto w-[15.5rem] drop-shadow-[0_1px_1px_rgba(255,255,255,0.18)] dark:invert sm:w-[17.5rem]"
-                  />
-                </div>
-              </div>
-            ) : null}
-            <CountdownDisplay
-              label={resolvedState?.label ?? "Countdown"}
-              countdown={resolvedState?.countdown ?? null}
-              fullHeightWhenEmpty
-              headerColorClassName={
-                showChristmasFlyby
-                  ? CHRISTMAS_HEADER_COLOR_CLASS_NAME
-                  : "bg-[#6495ED] dark:bg-[#4b74be]"
-              }
-            />
-          </div>
-          {resolvedState ? (
-            <div className="mt-5 flex justify-center">
-              <CalendarExportMenu
-                event={{
-                  title: resolvedState.label,
-                  date: formatCalendarDate(resolvedState.countdown.targetDate),
-                  description: `Live countdown to ${resolvedState.label}.`,
-                  url: resolvedState.selectedSlug
-                    ? `${SITE_URL}${getSeoLandingPath(resolvedState.selectedSlug)}`
-                    : SITE_URL,
-                  fileName:
-                    resolvedState.selectedSlug ??
-                    `countdown-${formatCalendarDate(resolvedState.countdown.targetDate)}`,
-                }}
-              />
-            </div>
-          ) : null}
+          <HomepageEditorialSection />
           {selectedFactSet ? <SeoHubFactsSection factSet={selectedFactSet} /> : null}
         </section>
         <HomepageChipLinks title="Popular countdowns" links={POPULAR_COUNTDOWN_LINKS} emphasis="primary" />

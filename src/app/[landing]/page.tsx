@@ -4,10 +4,12 @@ import { CountdownLinkList } from "../../components/CountdownLinkList";
 import { SeoHubFactsSection } from "../../components/SeoHubFactsSection";
 import { SeoCountdownPage } from "../../components/SeoCountdownPage";
 import { getCountdownClusterButtonsForEvent } from "../../lib/countdownClusters";
+import { getCountdownActions } from "../../lib/countdownActions";
 import { getSeoHubFacts } from "../../lib/seoHubFacts";
 import {
   getSeoHubOccurrenceRows,
   getSeoHubRecurringDateRows,
+  getOccurrenceHeading,
 } from "../../lib/seoHubPageContent";
 import {
   buildSeoHubLandingMetadata,
@@ -83,6 +85,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
   }
 
   const { countdown, targetDate } = resolvedCountdown;
+  const actions = getCountdownActions(targetDate, event.name);
   const relatedEvents = getSeoHubRelatedLinks(event);
   const currentPath = getSeoLandingPath(event.slug);
   const occurrenceRows = getSeoHubOccurrenceRows(event, new Date());
@@ -128,7 +131,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
           {occurrenceRows.length > 0 ? (
             <section className="mt-12 w-full max-w-[31.9rem] rounded-[2rem] bg-[#fdfcf9] px-6 py-7 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:max-w-[34rem] sm:px-8">
               <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
-                Next 5 years
+                {getOccurrenceHeading(occurrenceRows.length)}
               </h2>
               <div className="mt-5 overflow-hidden rounded-[1.15rem] border border-black/6 dark:border-white/10">
                 <div className="grid grid-cols-[minmax(0,0.7fr)_minmax(0,1.45fr)] bg-[#f3f2ee] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-black/48 dark:bg-[#1d1f1e] dark:text-white/50">
@@ -187,10 +190,10 @@ export default async function LandingPage({ params }: LandingPageProps) {
             title="Planning tools"
             description={`Turn the ${event.name} countdown into a practical plan or add a live version to another website.`}
             links={[
-              { href: "/business-days-until", label: `Count business days until ${event.name}` },
-              { href: "/days-between-dates", label: "Compare this date with another date" },
-              { href: "/add-or-subtract-date", label: `Plan before or after ${event.name}` },
-              { href: "/countdown-widget", label: "Add a countdown to your website" },
+              { href: actions.business, label: `Count business days until ${event.name}` },
+              { href: actions.compare, label: "Compare this date with another date" },
+              { href: actions.adjust, label: `Plan before or after ${event.name}` },
+              { href: actions.widget, label: "Add a countdown to your website" },
               { href: "/calendar-days-vs-business-days", label: "Calendar days vs business days" },
             ]}
             centered

@@ -6,6 +6,18 @@ import {
   getCountdownCalendarEvents,
 } from "./countdownCalendar";
 
+test("calendar remains honest after rollover and exported lines are folded", () => {
+  const expired = getCountdownCalendarData(new Date(2027, 0, 1), 2026);
+  assert.equal(expired.daysRemaining, 0);
+  assert.equal(expired.fridaysRemaining, 0);
+  assert.equal(expired.weekendsRemaining, 0);
+  assert.equal(expired.nextEvent, null);
+  assert.ok(getCountdownCalendarEvents(2027).every(event => !event.note.includes("2026")));
+  for (const line of buildCountdownCalendarIcs(2027).split("\r\n")) {
+    assert.ok(Buffer.byteLength(line) <= 75);
+  }
+});
+
 test("2026 calendar resolves movable and relative dates", () => {
   const events = getCountdownCalendarEvents(2026, new Date(2026, 7, 15));
   const bySlug = new Map(events.map((event) => [event.slug, event]));

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ExactDatePlanningData } from "../lib/datePlanning";
 
-export function ExactDatePlanner({ data }: { data: ExactDatePlanningData }) {
+export function ExactDatePlanner({ data, businessDaysHref }: { data: ExactDatePlanningData; businessDaysHref: string }) {
   const metrics = [
     { label: "Calendar days", value: data.calendarDaysRemaining },
     { label: "Weekdays", value: data.weekdaysRemaining },
@@ -18,6 +18,7 @@ export function ExactDatePlanner({ data }: { data: ExactDatePlanningData }) {
         <h2 className="mt-2 text-2xl font-semibold tracking-tight">{data.monthLabel}</h2>
         <p className="mt-2 text-sm leading-6 text-black/54 dark:text-white/57">
           A calendar view and practical breakdown of the days between today and the target date.
+          Counts exclude today and include the target date. Weekdays do not exclude public holidays.
         </p>
       </div>
 
@@ -30,7 +31,7 @@ export function ExactDatePlanner({ data }: { data: ExactDatePlanningData }) {
             } ${index < 2 ? "border-b border-black/7 dark:border-white/9" : ""}`}
           >
             <p className="font-mono text-2xl font-semibold tabular-nums">{metric.value}</p>
-            <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-black/40 dark:text-white/43">
+            <p className="mt-2 text-xs font-semibold tracking-wide text-black/65 dark:text-white/70">
               {metric.label}
             </p>
           </div>
@@ -38,7 +39,7 @@ export function ExactDatePlanner({ data }: { data: ExactDatePlanningData }) {
       </div>
 
       <div className="px-5 py-6 sm:px-7">
-        <div className="grid grid-cols-7 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-black/38 dark:text-white/40">
+        <div className="grid grid-cols-7 text-center text-xs font-semibold text-black/65 dark:text-white/70">
           {data.weekdayHeaders.map((weekday) => (
             <span key={weekday} className="py-2">
               {weekday}
@@ -72,7 +73,7 @@ export function ExactDatePlanner({ data }: { data: ExactDatePlanningData }) {
             Day {data.dayOfYear} of {data.daysInYear}
           </span>
           <Link
-            href="/business-days-until"
+            href={businessDaysHref}
             className="font-semibold text-black/68 underline underline-offset-4 hover:text-black dark:text-white/70 dark:hover:text-white"
           >
             Calculate regional business days
