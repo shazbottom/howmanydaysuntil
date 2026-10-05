@@ -1,12 +1,35 @@
-export function formatActionDate(date: Date) {
+import { getCountryByCode, type CountryCode } from "./countries";
+import { getRegionById } from "./regions";
+
+export interface CountdownActionContext {
+  countryCode?: CountryCode;
+  regionId?: string;
+  timeZone?: string;
+}
+
+export function formatActionDate(date: Date, timeZone?: string) {
+  if (timeZone) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone, year: "numeric", month: "2-digit", day: "2-digit",
+    }).formatToParts(date);
+    const part = (type: string) => parts.find((value) => value.type === type)?.value;
+    return `${part("year")}-${part("month")}-${part("day")}`;
+  }
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-export function getCountdownActions(date: Date, title: string) {
-  const target = formatActionDate(date);
+export function getCountdownActions(date: Date, title: string, context: CountdownActionContext = {}) {
+  const target = formatActionDate(date, context.timeZone);
   const personal = new URLSearchParams({ date: target, title }).toString();
+  const business = new URLSearchParams({ target });
+  const country = getCountryByCode(context.countryCode ?? "");
+  if (country) {
+    business.set("country", country.code);
+    const region = context.regionId ? getRegionById(context.regionId) : null;
+    if (region?.countryCode === country.code) business.set("region", region.id);
+  }
   return {
-    business: `/business-days-until?target=${target}`,
+    business: `/business-days-until?${business.toString()}`,
     compare: `/days-between-dates?end=${target}`,
     adjust: `/add-or-subtract-date?start=${target}`,
     widget: `/countdown-widget?${personal}`,

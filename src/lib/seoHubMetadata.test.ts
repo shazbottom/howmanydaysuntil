@@ -29,6 +29,9 @@ test("annual event metadata retains the target year", () => {
   const metadata = buildSeoHubLandingMetadata(event, targetDate, getCountdown(targetDate, now));
 
   assert.equal(metadata.title, "How Many Days Until Christmas 2026? | Live Countdown");
+  assert.match(String(metadata.description), /December 25, 2026/);
+  assert.match(String(metadata.description), /business-day estimates/);
+  assert.equal(metadata.alternates?.canonical, "/days-until-christmas");
 });
 
 test("recurring date rows return the next six Fridays", () => {

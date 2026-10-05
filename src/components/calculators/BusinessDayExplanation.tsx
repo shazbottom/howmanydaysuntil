@@ -1,15 +1,15 @@
 import { getBusinessDayExplanation } from "../../lib/businessDayExplanation";
 import type { CountryCode } from "../../lib/countries";
 
-export function BusinessDayExplanation({ end, start, countryCode, regionId }: { end: string; start?: string; countryCode: CountryCode; regionId?: string }) {
-  const audit = getBusinessDayExplanation(end, countryCode, regionId, start);
+export function BusinessDayExplanation({ end, start, countryCode, regionId, now }: { end: string; start?: string; countryCode: CountryCode; regionId?: string; now?: Date }) {
+  const audit = getBusinessDayExplanation(end, countryCode, regionId, start, now);
   if (!audit) return null;
   const holidays = audit.result.includedHolidays;
   return (
     <section className="mt-6 rounded-2xl border border-black/10 p-5 text-sm leading-6 text-black/75 dark:border-white/15 dark:text-white/80">
       <h3 className="font-semibold text-black dark:text-white">How this result is calculated</h3>
-      <p className="mt-2">Selected jurisdiction: {audit.jurisdiction}.</p>
-      <p>{audit.startDate} (excluded) to {audit.endDate} (included if a working day). Saturdays and Sundays are excluded.</p>
+      <p className="mt-2">Using {audit.jurisdiction} holiday calendar.</p>
+      <p>{audit.startDate} (excluded) to {audit.endDate} (included if a working day). Counts Monday to Friday; Saturdays and Sundays are excluded.</p>
       {audit.todayTimeZone ? <p>Today is determined using {audit.todayTimeZone}.</p> : null}
       <p>{audit.weekdays} weekdays minus {holidays.length} weekday public holidays = {audit.result.businessDays} business days.</p>
       {audit.reversed ? <p>The dates were entered in reverse order. This breakdown uses chronological order; the displayed result is negative.</p> : null}
@@ -33,7 +33,7 @@ export function BusinessDayExplanation({ end, start, countryCode, regionId }: { 
           </> : null}
         </li>)}
       </ul>
-      <p className="mt-4">Employer closures and individual work schedules are not included. Confirm important deadlines with the responsible organisation.</p>
+      <p className="mt-4">Employer closures, personal leave and individual work schedules are not included. Confirm important deadlines with the responsible organisation.</p>
     </section>
   );
 }

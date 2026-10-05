@@ -41,7 +41,7 @@ test("calculator query values restore valid dates and regional selections", () =
   assert.equal(values.unit, "weeks");
 });
 
-test("invalid query values fall back to constrained defaults", () => {
+test("invalid dates stay empty while other query values fall back to constrained defaults", () => {
   const values = parseCalculatorSearchParams(
     {
       start: "2026-02-30",
@@ -52,7 +52,7 @@ test("invalid query values fall back to constrained defaults", () => {
     now,
   );
 
-  assert.equal(values.startDate, "2026-07-14");
+  assert.equal(values.startDate, "");
   assert.equal(values.countryCode, "au");
   assert.equal(values.retirementAge, 67);
   assert.equal(values.amount, 30);
@@ -78,4 +78,22 @@ test("share paths contain only the active calculator inputs", () => {
 test("recognized calculator parameters mark a URL as a shared result", () => {
   assert.equal(hasCalculatorShareParams({ start: "2026-08-01" }), true);
   assert.equal(hasCalculatorShareParams({ unrelated: "value" }), false);
+});
+
+test("malformed shared dates cannot silently become a different target", () => {
+  const values = parseCalculatorSearchParams({ target: "2027-02-30", country: "us", region: "us-ca" }, now);
+  assert.equal(values.targetDate, "");
+  assert.equal(values.hasExplicitHolidayCalendar, true);
+  const omitted = parseCalculatorSearchParams({ country: "us", region: "us-ca" }, now);
+  assert.equal(omitted.targetDate, "2026-12-31");
+});
+
+test("only a valid country and matching region confirm a holiday calendar", () => {
+  assert.equal(parseCalculatorSearchParams({}, now).hasExplicitHolidayCalendar, false);
+  assert.equal(parseCalculatorSearchParams({ country: "us" }, now).hasExplicitHolidayCalendar, false);
+  assert.equal(parseCalculatorSearchParams({ country: "us", region: "au-nsw" }, now).hasExplicitHolidayCalendar, false);
+  assert.equal(parseCalculatorSearchParams({ country: "us", region: "us-ca" }, now).hasExplicitHolidayCalendar, true);
+  const restored = parseCalculatorSearchParams({ target: "2027-01-01", country: "us", region: "us-ca" }, now);
+  assert.equal(restored.targetDate, "2027-01-01");
+  assert.equal(restored.referenceNow, now.toISOString());
 });

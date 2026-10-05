@@ -5,6 +5,8 @@ import { CountdownDisplay } from "./CountdownDisplay";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
+import { CountdownActionLink } from "./CountdownActionLink";
+import { getCountdownActions } from "../lib/countdownActions";
 import type { LocalizedRegionCountdownPageData } from "../lib/localizedCountdowns";
 import { createBreadcrumbJsonLd, createWebPageJsonLd } from "../lib/structuredData";
 
@@ -15,6 +17,9 @@ export interface RegionalCountdownPageProps {
 export function RegionalCountdownPage({ data }: RegionalCountdownPageProps) {
   const { country, region, event, countdown, targetDateLabel, todayLabel, occurrenceRows } = data;
   const currentPath = `/${country.code}/${region.slug}/days-until/${event.slug}`;
+  const actions = getCountdownActions(data.targetDate, event.displayName, {
+    countryCode: country.code, regionId: region.id, timeZone: region.timezone,
+  });
   const structuredData = [
     createBreadcrumbJsonLd([
       { name: "Home", path: "/" },
@@ -62,6 +67,10 @@ export function RegionalCountdownPage({ data }: RegionalCountdownPageProps) {
           </p>
           <div className="mt-12 w-full max-w-[31.9rem] sm:max-w-[34rem]">
             <CountdownDisplay label={event.displayName} countdown={countdown} />
+          </div>
+          <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
+            <CountdownActionLink href={actions.save} className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]">Save this countdown</CountdownActionLink>
+            <CountdownActionLink href={actions.business} context={{ surface: "countdown", tool: "business-days-until" }} className="inline-flex min-h-11 items-center justify-center rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black transition hover:bg-[#eceae4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#169c76] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]">Compare business days before this date</CountdownActionLink>
           </div>
           <div className="mt-10 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">

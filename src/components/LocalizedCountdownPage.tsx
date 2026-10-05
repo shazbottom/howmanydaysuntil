@@ -6,6 +6,8 @@ import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { SeoHubFactsSection } from "./SeoHubFactsSection";
 import { ThemeToggle } from "./ThemeToggle";
+import { CountdownActionLink } from "./CountdownActionLink";
+import { getCountdownActions } from "../lib/countdownActions";
 import { getCountdownClusterButtonsForEvent } from "../lib/countdownClusters";
 import { localizedSummerSelection, summerSelectionQuery } from "../lib/summerSelection";
 import type { LocalizedCountdownPageData } from "../lib/localizedCountdowns";
@@ -27,6 +29,9 @@ export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
     href: event.slug === "summer" ? `${link.href}${summerSelectionQuery(localizedSummerSelection(country.code))}` : link.href,
   }));
   const currentPath = `/${country.code}/days-until/${event.slug}`;
+  const actions = getCountdownActions(data.targetDate, event.displayName, {
+    countryCode: country.code, timeZone: country.timezone,
+  });
   const structuredData = [
     createBreadcrumbJsonLd([
       { name: "Home", path: "/" },
@@ -96,6 +101,10 @@ export function LocalizedCountdownPage({ data }: LocalizedCountdownPageProps) {
                 isChristmas ? CHRISTMAS_HEADER_COLOR_CLASS_NAME : undefined
               }
             />
+          </div>
+          <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
+            <CountdownActionLink href={actions.save} className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]">Save this countdown</CountdownActionLink>
+            <CountdownActionLink href={actions.business} context={{ surface: "countdown", tool: "business-days-until" }} className="inline-flex min-h-11 items-center justify-center rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black transition hover:bg-[#eceae4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#169c76] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]">Compare business days before this date</CountdownActionLink>
           </div>
           {clusterButtons.length > 0 ? (
             <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">

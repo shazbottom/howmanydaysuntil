@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { trackAction } from "../../lib/actionAnalytics";
 import { Brand } from "../Brand";
 import { CalendarExportMenu } from "../CalendarExportMenu";
 import { CalculatorNavButton } from "../CalculatorNavButton";
@@ -9,14 +10,14 @@ import { CopyResultLinkButton } from "../CopyResultLinkButton";
 import { BusinessDayExplanation } from "./BusinessDayExplanation";
 import { CountdownLinkList, type CountdownLinkItem } from "../CountdownLinkList";
 import { ThemeToggle } from "../ThemeToggle";
-import { countries, type CountryCode } from "../../lib/countries";
+import { countries, getCountryByCode, type CountryCode } from "../../lib/countries";
 import {
   calculatorPages,
   getCalculatorPage,
   type CalculatorKind,
   type CalculatorPageContent,
 } from "../../lib/calculatorPages";
-import { getRegionsForCountry } from "../../lib/regions";
+import { getRegionById, getRegionsForCountry } from "../../lib/regions";
 import {
   calculateAddOrSubtractDate,
   calculateBusinessDaysBetweenForCountry,
@@ -112,21 +113,22 @@ const calculatorNextSteps: Record<
 
 function CalculatorLinkRow({ activeCalculator }: { activeCalculator: CalculatorKind }) {
   return (
-    <div className="mt-8 flex flex-wrap justify-center gap-3">
+    <nav aria-label="Other date calculators" className="mt-8 flex flex-wrap justify-center gap-3">
       {calculatorPages.map((calculatorLink) => (
         <Link
           key={calculatorLink.path}
           href={calculatorLink.path}
+          aria-current={calculatorLink.kind === activeCalculator ? "page" : undefined}
           className={
             calculatorLink.kind === activeCalculator
-              ? "rounded-[1.05rem] border border-black/8 bg-[#eceae4] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] dark:border-white/10 dark:bg-[#232625] dark:text-white"
-              : "rounded-[1.05rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]"
+              ? "min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6495ED] rounded-[1.05rem] border border-black/8 bg-[#eceae4] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] dark:border-white/10 dark:bg-[#232625] dark:text-white"
+              : "min-h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6495ED] rounded-[1.05rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black shadow-[0_1px_2px_rgba(16,24,40,0.05)] transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:bg-[#eceae4] active:scale-[0.985] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]"
           }
         >
           {calculatorLink.title.replace(" Calculator | DaysUntil", "")}
         </Link>
       ))}
-    </div>
+    </nav>
   );
 }
 
@@ -185,6 +187,7 @@ function CalculatorEditorialSections({ page }: { page: CalculatorPageContent }) 
 
 function ResultCard({
   title,
+  tool,
   label,
   value,
   note,
@@ -198,6 +201,7 @@ function ResultCard({
   calendarEvent,
 }: {
   title: string;
+  tool: CalculatorKind;
   label: string;
   value: number;
   note: string;
@@ -321,7 +325,7 @@ function ResultCard({
             </p>
           ) : null}
         </div>
-        <div className="mt-6 flex justify-center">
+        {resolvedDetailBlocks.length ? <div className="mt-6 flex justify-center">
           <div
             className={`flex flex-wrap justify-center gap-x-4 gap-y-5 min-[380px]:gap-x-6 sm:grid sm:gap-10 ${
               resolvedDetailBlocks.length === 4 ? "sm:grid-cols-4" : "sm:grid-cols-3"
@@ -341,11 +345,11 @@ function ResultCard({
               </div>
             ))}
           </div>
-        </div>
+        </div> : null}
         <p className="mt-6 text-sm leading-6 text-black/54 dark:text-white/56">{note}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3 border-t border-black/7 pt-6 dark:border-white/9">
-          <CopyResultLinkButton path={sharePath} />
-          {calendarEvent ? <CalendarExportMenu event={calendarEvent} /> : null}
+          <CopyResultLinkButton path={sharePath} tool={tool} />
+          {calendarEvent ? <CalendarExportMenu event={calendarEvent} context={{ surface: "calculator", tool }} /> : null}
         </div>
       </div>
     </section>
@@ -503,6 +507,30 @@ function RegionField({
   );
 }
 
+function HolidayCalendarNotice({ countryCode, regionId, confirmed, onConfirm }: {
+  countryCode: CountryCode;
+  regionId: string;
+  confirmed: boolean;
+  onConfirm: () => void;
+}) {
+  const country = getCountryByCode(countryCode)!;
+  const region = getRegionById(regionId);
+  const jurisdiction = region?.countryCode === countryCode ? `${region.name}, ${country.name}` : country.name;
+
+  return (
+    <div className="mt-4 text-sm leading-6 text-black/65 dark:text-white/68">
+      <p>{confirmed ? "Using" : "Example calendar:"} {jurisdiction} holiday calendar.
+        {confirmed ? " Check the country and region above for your calculation." : " Choose the country and region for your calculation, then confirm below."}
+      </p>
+      {!confirmed ? <button
+        type="button"
+        onClick={onConfirm}
+        className="mt-3 min-h-11 rounded-[1.05rem] border border-black/8 bg-[#f3f2ee] px-5 py-3 font-medium text-black hover:bg-[#eceae4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6495ED] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white dark:hover:bg-[#232625]"
+      >Use this holiday calendar</button> : null}
+    </div>
+  );
+}
+
 function DaysBetweenCalculator({ initialValues }: { initialValues: CalculatorInitialValues }) {
   const [startDate, setStartDate] = useState(initialValues.startDate);
   const [endDate, setEndDate] = useState(initialValues.endDate);
@@ -526,6 +554,7 @@ function DaysBetweenCalculator({ initialValues }: { initialValues: CalculatorIni
       {result !== null ? (
         <ResultCard
           title="Days between dates"
+          tool="days-between"
           value={result}
           label="calendar days between the selected dates"
           liveTargetDateText={endDate}
@@ -552,7 +581,22 @@ function BusinessDaysUntilCalculator({
   const [targetDate, setTargetDate] = useState(initialValues.targetDate);
   const [countryCode, setCountryCode] = useState<CountryCode>(initialValues.countryCode);
   const [regionId, setRegionId] = useState(initialValues.regionId);
-  const result = calculateBusinessDaysUntilForCountry(targetDate, countryCode, regionId);
+  const [calendarConfirmed, setCalendarConfirmed] = useState(initialValues.hasExplicitHolidayCalendar ?? false);
+  const [referenceNow, setReferenceNow] = useState(() => new Date(
+    initialValues.referenceNow ?? `${initialValues.startDate}T12:00:00Z`,
+  ));
+
+  useEffect(() => {
+    // The first render uses the server snapshot; updates begin after hydration.
+    const refreshClock = () => setReferenceNow(new Date());
+    const initialRefresh = window.setTimeout(refreshClock, 0);
+    const interval = window.setInterval(refreshClock, 60_000);
+    return () => {
+      window.clearTimeout(initialRefresh);
+      window.clearInterval(interval);
+    };
+  }, []);
+  const result = calculateBusinessDaysUntilForCountry(targetDate, countryCode, regionId, referenceNow);
   const sharePath = buildCalculatorSharePath("business-days-until", {
     ...initialValues,
     targetDate,
@@ -561,6 +605,7 @@ function BusinessDaysUntilCalculator({
   });
 
   function handleCountryChange(nextCountryCode: CountryCode) {
+    setCalendarConfirmed(false);
     setCountryCode(nextCountryCode);
     setRegionId(getDefaultCalculatorRegionId(nextCountryCode));
   }
@@ -573,15 +618,29 @@ function BusinessDaysUntilCalculator({
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
         <CountryField value={countryCode} onChange={handleCountryChange} />
-        <RegionField countryCode={countryCode} value={regionId} onChange={setRegionId} />
-        <DateField label="Target date" value={targetDate} onChange={setTargetDate} />
+        <RegionField countryCode={countryCode} value={regionId} onChange={(nextRegionId) => {
+          setRegionId(nextRegionId);
+          setCalendarConfirmed(false);
+        }} />
+        <DateField label="Target date" value={targetDate} onChange={(nextTargetDate) => {
+          setTargetDate(nextTargetDate);
+          setReferenceNow(new Date());
+        }} />
       </div>
-      {result !== null ? (
+      <HolidayCalendarNotice countryCode={countryCode} regionId={regionId} confirmed={calendarConfirmed} onConfirm={() => {
+        setReferenceNow(new Date());
+        setCalendarConfirmed(true);
+        if (result !== null) trackAction("calculation", { surface: "calculator", tool: "business-days-until" });
+      }} />
+      {calendarConfirmed && result === null ? <p role="status" className="mt-4 text-sm text-black/65 dark:text-white/68">Enter a valid target date to calculate business days.</p> : null}
+      {calendarConfirmed && result !== null ? (
         <ResultCard
           title="Business days until"
+          tool="business-days-until"
           value={result.businessDays}
           label="business days remaining until the target date"
-          liveTargetDateText={targetDate}
+          summaryLine=""
+          detailBlocks={[]}
           sharePath={sharePath}
           calendarEvent={createResultCalendarEvent(
             "Business-day target date",
@@ -590,10 +649,10 @@ function BusinessDaysUntilCalculator({
             sharePath,
             `business-day-target-${targetDate}`,
           )}
-          note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
+          note="Counts Monday to Friday, excluding published public holidays in the maintained calendar. Employer closures, personal leave and individual work schedules are not included. Holiday coverage and any fallback are listed below."
         />
       ) : null}
-      {result ? <BusinessDayExplanation end={targetDate} countryCode={countryCode} regionId={regionId} /> : null}
+      {calendarConfirmed && result ? <BusinessDayExplanation end={targetDate} countryCode={countryCode} regionId={regionId} now={referenceNow} /> : null}
     </>
   );
 }
@@ -607,6 +666,7 @@ function BusinessDaysBetweenCalculator({
   const [endDate, setEndDate] = useState(initialValues.endDate);
   const [countryCode, setCountryCode] = useState<CountryCode>(initialValues.countryCode);
   const [regionId, setRegionId] = useState(initialValues.regionId);
+  const [calendarConfirmed, setCalendarConfirmed] = useState(initialValues.hasExplicitHolidayCalendar ?? false);
   const result = calculateBusinessDaysBetweenForCountry(startDate, endDate, countryCode, regionId);
   const sharePath = buildCalculatorSharePath("business-days-between", {
     ...initialValues,
@@ -617,6 +677,7 @@ function BusinessDaysBetweenCalculator({
   });
 
   function handleCountryChange(nextCountryCode: CountryCode) {
+    setCalendarConfirmed(false);
     setCountryCode(nextCountryCode);
     setRegionId(getDefaultCalculatorRegionId(nextCountryCode));
   }
@@ -629,16 +690,26 @@ function BusinessDaysBetweenCalculator({
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-4">
         <CountryField value={countryCode} onChange={handleCountryChange} />
-        <RegionField countryCode={countryCode} value={regionId} onChange={setRegionId} />
+        <RegionField countryCode={countryCode} value={regionId} onChange={(nextRegionId) => {
+          setRegionId(nextRegionId);
+          setCalendarConfirmed(false);
+        }} />
         <DateField label="Start date" value={startDate} onChange={setStartDate} />
         <DateField label="End date" value={endDate} onChange={setEndDate} />
       </div>
-      {result !== null ? (
+      <HolidayCalendarNotice countryCode={countryCode} regionId={regionId} confirmed={calendarConfirmed} onConfirm={() => {
+        setCalendarConfirmed(true);
+        if (result !== null) trackAction("calculation", { surface: "calculator", tool: "business-days-between" });
+      }} />
+      {calendarConfirmed && result === null ? <p role="status" className="mt-4 text-sm text-black/65 dark:text-white/68">Enter valid start and end dates to calculate business days.</p> : null}
+      {calendarConfirmed && result !== null ? (
         <ResultCard
           title="Business days between"
+          tool="business-days-between"
           value={result.businessDays}
           label="business days between the selected dates"
-          liveTargetDateText={endDate}
+          summaryLine=""
+          detailBlocks={[]}
           sharePath={sharePath}
           calendarEvent={createResultCalendarEvent(
             "Selected business-day end date",
@@ -647,10 +718,10 @@ function BusinessDaysBetweenCalculator({
             sharePath,
             `business-day-comparison-${endDate}`,
           )}
-          note="This excludes weekends and uses region or state public holidays where available, with a country-level fallback where regional data is not available."
+          note="Counts Monday to Friday, excluding published public holidays in the maintained calendar. Employer closures, personal leave and individual work schedules are not included. Holiday coverage and any fallback are listed below."
         />
       ) : null}
-      {result ? <BusinessDayExplanation start={startDate} end={endDate} countryCode={countryCode} regionId={regionId} /> : null}
+      {calendarConfirmed && result ? <BusinessDayExplanation start={startDate} end={endDate} countryCode={countryCode} regionId={regionId} /> : null}
     </>
   );
 }
@@ -683,7 +754,7 @@ function AddOrSubtractDateCalculator({
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
         <DateField label="Start date" value={startDate} onChange={setStartDate} />
-        <SelectField
+        <SelectField<"add" | "subtract">
           label="Add/Subtract"
           value={mode}
           onChange={setMode}
@@ -693,7 +764,7 @@ function AddOrSubtractDateCalculator({
           ]}
         />
         <NumberField label="Amount" value={amount} onChange={setAmount} />
-        <SelectField
+        <SelectField<"days" | "weeks" | "months" | "years">
           label="Unit"
           value={unit}
           onChange={setUnit}
@@ -708,6 +779,7 @@ function AddOrSubtractDateCalculator({
       {result !== null ? (
         <ResultCard
           title="Add or subtract date"
+          tool="add-or-subtract-date"
           value={Math.abs(result.dayDifference)}
           mainDisplay={formatResultDate(result.resultDate)}
           outputLabel="Resulting date"
@@ -758,6 +830,7 @@ function RetirementCountdownCalculator({
       {result !== null ? (
         <ResultCard
           title="Days until I retire"
+          tool="days-until-i-retire"
           value={Math.max(result.daysRemaining, 0)}
           mainDisplay={formatResultDate(result.retirementDate)}
           outputLabel="Retirement date"
@@ -785,11 +858,14 @@ export function CalculatorPreviewShell({
   initialValues,
 }: CalculatorPreviewShellProps) {
   const activeCalculatorPage = getCalculatorPage(activeCalculator);
+  const heading = activeCalculator === "business-days-until"
+    ? "Business days until a date"
+    : activeCalculatorPage.title.replace(" Calculator | DaysUntil", "");
 
   return (
     <main className="min-h-screen bg-background px-6 py-10 text-foreground">
       <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center">
-        <div className="flex w-full items-center justify-between gap-4">
+        <div className="flex w-full flex-wrap items-center justify-between gap-4">
           <Link
             href="/"
             className="text-sm tracking-[0.24em] text-black/50 transition hover:text-black dark:text-white/72 dark:hover:text-white"
@@ -807,18 +883,16 @@ export function CalculatorPreviewShell({
             </Link>
           </div>
         </div>
-        <section className="mt-20 flex w-full flex-1 flex-col items-center text-center">
+        <section className="mt-10 flex w-full flex-1 flex-col items-center text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-black/42 dark:text-white/44">
             Calculators
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-6xl">
-            Date calculators
+            {heading}
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-6 text-black/55 dark:text-white/58 sm:text-base">
-            Date calculators for working out calendar-day differences, business-day counts, and
-            date adjustments using the same clean format as the rest of the site.
+            {activeCalculatorPage.summary}
           </p>
-          <CalculatorLinkRow activeCalculator={activeCalculator} />
           <div className="mt-10 w-full max-w-3xl rounded-[2rem] bg-[#fdfcf9] px-6 py-8 text-left ring-1 ring-black/6 dark:bg-[#171717] dark:ring-white/10 sm:px-8">
             <h2 className="text-sm uppercase tracking-[0.24em] text-black/45 dark:text-white/46">
               {activeCalculator === "days-between"
@@ -847,6 +921,7 @@ export function CalculatorPreviewShell({
               <RetirementCountdownCalculator initialValues={initialValues} />
             ) : null}
           </div>
+          <CalculatorLinkRow activeCalculator={activeCalculator} />
           <CalculatorEditorialSections page={activeCalculatorPage} />
           <CountdownLinkList
             title="Continue planning"

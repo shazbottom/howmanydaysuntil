@@ -10,6 +10,8 @@ export interface CalculatorSearchPageProps {
 }
 
 export interface CalculatorInitialValues {
+  hasExplicitHolidayCalendar?: boolean;
+  referenceNow?: string;
   startDate: string;
   endDate: string;
   targetDate: string;
@@ -82,6 +84,8 @@ export function getDefaultCalculatorValues(now: Date = new Date()): CalculatorIn
   const today = formatDateInput(now);
 
   return {
+    hasExplicitHolidayCalendar: false,
+    referenceNow: now.toISOString(),
     startDate: today,
     endDate: `${now.getFullYear()}-12-31`,
     targetDate: `${now.getFullYear()}-12-31`,
@@ -115,9 +119,11 @@ export function parseCalculatorSearchParams(
   const requestedUnit = getSingleParam(searchParams.unit);
 
   return {
-    startDate: isValidDateInput(start) ? start! : defaults.startDate,
-    endDate: isValidDateInput(end) ? end! : defaults.endDate,
-    targetDate: isValidDateInput(target) ? target! : defaults.targetDate,
+    hasExplicitHolidayCalendar: Boolean(getCountryByCode(requestedCountry ?? "") && availableRegions.some((candidate) => candidate.id === requestedRegion)),
+    referenceNow: defaults.referenceNow,
+    startDate: start === undefined ? defaults.startDate : isValidDateInput(start) ? start! : "",
+    endDate: end === undefined ? defaults.endDate : isValidDateInput(end) ? end! : "",
+    targetDate: target === undefined ? defaults.targetDate : isValidDateInput(target) ? target! : "",
     countryCode: country,
     regionId: region,
     mode: requestedMode === "subtract" ? "subtract" : "add",

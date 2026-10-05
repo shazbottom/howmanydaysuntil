@@ -5,6 +5,7 @@ import { CountryHubDateInput } from "./CountryHubDateInput";
 import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
+import { CountdownActionLink } from "./CountdownActionLink";
 import type { CountryDefinition } from "../lib/countries";
 import type { RegionDefinition } from "../lib/regions";
 import type { RegionReferenceAttributions, RegionYearData } from "../lib/regionData";
@@ -321,6 +322,7 @@ export function RegionHubPage({
               Try your own date
             </h2>
             <CountryHubDateInput countryCode={country.code} />
+            <CountdownActionLink href={`/business-days-until?${new URLSearchParams({ country: country.code, region: region.id }).toString()}`} context={{ surface: "countdown", tool: "business-days-until" }} className="mt-4 inline-flex min-h-11 items-center justify-center rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black transition hover:bg-[#eceae4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#169c76] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]">Plan business days in {region.name}</CountdownActionLink>
           </div>
           <div
             id="public-holidays"

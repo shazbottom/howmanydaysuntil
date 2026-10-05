@@ -81,14 +81,14 @@ function countWeekdaysExclusiveStart(startDate: Date, endDate: Date): number {
   return count;
 }
 
-function getTodayInTimeZone(timeZone: string): Date {
+function getTodayInTimeZone(timeZone: string, now = new Date()): Date {
   const formatter = new Intl.DateTimeFormat("en-CA", {
     timeZone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
-  const parts = formatter.formatToParts(new Date());
+  const parts = formatter.formatToParts(now);
   const year = Number(parts.find((part) => part.type === "year")?.value);
   const month = Number(parts.find((part) => part.type === "month")?.value);
   const day = Number(parts.find((part) => part.type === "day")?.value);
@@ -265,10 +265,17 @@ export function calculateBusinessDaysBetweenForCountry(
   };
 }
 
+export function getBusinessDayTimeZone(countryCode: CountryCode, regionId?: string): string {
+  const country = getCountryByCode(countryCode)!;
+  const region = regionId ? getRegionById(regionId) : null;
+  return region?.countryCode === countryCode ? region.timezone : country.timezone;
+}
+
 export function calculateBusinessDaysUntilForCountry(
   targetDateText: string,
   countryCode: CountryCode,
   regionId?: string,
+  now = new Date(),
 ): BusinessDayCalculationResult | null {
   const country = getCountryByCode(countryCode);
   const targetDate = parseDateOnly(targetDateText);
@@ -277,7 +284,7 @@ export function calculateBusinessDaysUntilForCountry(
     return null;
   }
 
-  const today = getTodayInTimeZone(country.timezone);
+  const today = getTodayInTimeZone(getBusinessDayTimeZone(countryCode, regionId), now);
 
   if (targetDate.getTime() < today.getTime()) {
     return {

@@ -55,8 +55,8 @@ export function buildSeoHubLandingMetadata(
   const eventLabel = getEventLabel(event, targetDate);
   const title = `How Many Days Until ${eventLabel}? | Live Countdown`;
   const description = isRecurringEvent(event)
-    ? `${getTimingSentence(event, countdown)} See the exact live countdown to ${event.name}, including hours, minutes and seconds.`
-    : `There are ${countdown.daysRemaining} days until ${eventLabel}. See the exact live countdown in weeks, days, hours, minutes and seconds.`;
+    ? `${getTimingSentence(event, countdown)} See the next date and live countdown, then compare business days using a selected holiday calendar.`
+    : `${countdown.daysRemaining} days until ${eventLabel}, on ${formatFullDate(targetDate, "en-US")}. See the live countdown and compare business-day estimates.`;
   const canonicalPath = getSeoLandingPath(event.slug);
   const ogImageUrl = `/days-until/${event.slug}/opengraph-image`;
 

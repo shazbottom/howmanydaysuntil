@@ -9,7 +9,7 @@ import { CountrySelectorDropdown } from "./CountrySelectorDropdown";
 import { JsonLd } from "./JsonLd";
 import { ThemeToggle } from "./ThemeToggle";
 import type { CountdownClusterLink } from "../lib/countdownClusters";
-import { getCountdownActions } from "../lib/countdownActions";
+import { getCountdownActions, type CountdownActionContext } from "../lib/countdownActions";
 import { CountdownActionLink } from "./CountdownActionLink";
 import type { AllDayCalendarEvent } from "../lib/calendarEvent";
 
@@ -40,6 +40,7 @@ export interface SeoCountdownPageProps {
   calendarTitle?: string;
   calendarEventOverride?: AllDayCalendarEvent;
   actionDateOverride?: Date;
+  actionContext?: CountdownActionContext;
   supportingCopy: string[];
   relatedLinks: CountdownLinkItem[];
   extraSection?: ReactNode;
@@ -66,6 +67,7 @@ export function SeoCountdownPage({
   calendarTitle: calendarTitleOverride,
   calendarEventOverride,
   actionDateOverride,
+  actionContext,
   supportingCopy,
   relatedLinks,
   extraSection,
@@ -76,6 +78,7 @@ export function SeoCountdownPage({
   structuredData,
 }: SeoCountdownPageProps) {
   const actionDate = actionDateOverride ?? countdown?.targetDate;
+  const actions = actionDate ? getCountdownActions(actionDate, countdownLabel, actionContext) : null;
   const calendarYear = actionDate?.getFullYear();
   const defaultCalendarTitle =
     calendarYear && !countdownLabel.includes(String(calendarYear))
@@ -167,9 +170,9 @@ export function SeoCountdownPage({
               </div>
               {cardActionLinks.length > 0 || countdown || calendarEvent ? (
                 <div className="mt-6 flex w-full max-w-[34rem] flex-wrap justify-center gap-2 sm:gap-3">
-                  {countdown ? (
+                  {countdown && actions ? (
                     <CountdownActionLink
-                      href={getCountdownActions(actionDate ?? countdown.targetDate, countdownLabel).save}
+                      href={actions.save}
                       className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]"
                     >
                       Save this countdown
@@ -178,7 +181,16 @@ export function SeoCountdownPage({
                   {calendarEvent ? (
                     <CalendarExportMenu event={calendarEvent} />
                   ) : null}
-                  {cardActionLinks.map((link) => (
+                  {actions ? (
+                    <CountdownActionLink
+                      href={actions.business}
+                      context={{ surface: "countdown", tool: "business-days-until" }}
+                      className="inline-flex min-h-11 items-center justify-center rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black transition hover:bg-[#eceae4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#169c76] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88 dark:hover:bg-[#232625]"
+                    >
+                      Compare business days before this date
+                    </CountdownActionLink>
+                  ) : null}
+                  {cardActionLinks.filter((link) => link.href !== actions?.business).map((link) => (
                     <CountdownActionLink
                       key={link.href}
                       href={link.href}

@@ -48,7 +48,8 @@ test("planner layout is mobile-first and preserves card widths at the desktop br
   assert.match(html, /max-w-4xl xl:max-w-\[70rem\]/);
   assert.match(html, /sm:max-w-\[34rem\]/);
   assert.doesNotMatch(html, /\bflex-1\b/);
-  assertOrdered(html, ['aria-label="Countdown display"', "Save this countdown", "Add to calendar", ">Business days<", "Edit date here", "Date planner"]);
+  assertOrdered(html, ['aria-label="Countdown display"', "Save this countdown", "Add to calendar", "Compare business days before this date", "Edit date here", "Date planner"]);
+  assert.equal(html.split("Compare business days before this date").length - 1, 1);
 });
 
 test("unrelated pages keep a single column and do not reserve empty sidebar space", () => {

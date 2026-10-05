@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { trackAction } from "../lib/actionAnalytics";
+import { trackAction, type ActionContext } from "../lib/actionAnalytics";
 
-export function CountdownActionLink({ href, className, children }: { href: string; className?: string; children: ReactNode }) {
-  return <Link href={href} className={className} onClick={() => trackAction("tool_followthrough")}>{children}</Link>;
+export function CountdownActionLink({ href, className, children, context }: { href: string; className?: string; children: ReactNode; context?: ActionContext }) {
+  return <Link href={href} className={className} onClick={() => trackAction("tool_followthrough", context)}>{children}</Link>;
 }

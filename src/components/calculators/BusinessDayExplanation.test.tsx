@@ -5,7 +5,7 @@ import { BusinessDayExplanation } from "./BusinessDayExplanation";
 
 test("business-day explanation renders deductions, endpoints and source attribution", () => {
   const html = renderToStaticMarkup(<BusinessDayExplanation start="2026-12-24" end="2026-12-28" countryCode="au" regionId="au-nsw" />);
-  for (const text of ["2026-12-24 (excluded)", "included if a working day", "Christmas Day", "Boxing Day additional", "New South Wales", "Last checked:", "href="]) {
+  for (const text of ["2026-12-24 (excluded)", "included if a working day", "Christmas Day", "Boxing Day additional", "Using New South Wales, Australia holiday calendar.", "Monday to Friday", "personal leave", "Last checked:", "href="]) {
     assert.ok(html.includes(text), text);
   }
 });

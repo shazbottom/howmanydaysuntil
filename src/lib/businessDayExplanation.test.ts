@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { getBusinessDayExplanation } from "./businessDayExplanation";
+import { calculateBusinessDaysUntilForCountry, getBusinessDayTimeZone } from "./dateCalculators";
 
 test("regional deductions reconcile with weekdays and exclude the start", () => {
   const audit = getBusinessDayExplanation("2026-12-28", "au", "au-nsw", "2026-12-24")!;
@@ -39,4 +40,14 @@ test("until explanation uses the calculator country timezone and handles invalid
   assert.equal(audit.todayTimeZone, "Australia/Sydney");
   assert.equal(getBusinessDayExplanation("invalid", "au"), null);
   assert.equal(getBusinessDayExplanation("2026-12-25", "au", undefined, "2026-12-25")!.result.businessDays, 0);
+});
+
+test("regional today reconciles the estimate and audit across midnight and DST", () => {
+  for (const now of [new Date("2026-03-09T05:30:00Z"), new Date("2026-11-02T05:30:00Z")]) {
+    const audit = getBusinessDayExplanation("2026-12-31", "us", "us-ca", undefined, now)!;
+    assert.equal(audit.todayTimeZone, "America/Los_Angeles");
+    assert.equal(audit.startDate, now.getUTCMonth() === 2 ? "2026-03-08" : "2026-11-01");
+    assert.equal(calculateBusinessDaysUntilForCountry("2026-12-31", "us", "us-ca", now)!.businessDays, audit.result.businessDays);
+  }
+  assert.equal(getBusinessDayTimeZone("us", "au-nsw"), "America/New_York");
 });

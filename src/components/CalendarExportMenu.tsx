@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { trackAction } from "../lib/actionAnalytics";
+import { trackAction, type ActionContext } from "../lib/actionAnalytics";
 import {
   buildAllDayGoogleCalendarUrl,
   downloadAllDayIcsFile,
   type AllDayCalendarEvent,
 } from "../lib/calendarEvent";
 
-export function CalendarExportMenu({ event }: { event: AllDayCalendarEvent }) {
+export function CalendarExportMenu({ event, context }: { event: AllDayCalendarEvent; context?: ActionContext }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const googleCalendarUrl = buildAllDayGoogleCalendarUrl(event);
@@ -61,7 +61,7 @@ export function CalendarExportMenu({ event }: { event: AllDayCalendarEvent }) {
               href={googleCalendarUrl}
               target="_blank"
               rel="noreferrer"
-              onClick={() => { trackAction("calendar_google"); setIsOpen(false); }}
+              onClick={() => { trackAction("calendar_google", context); setIsOpen(false); }}
               className="block px-4 py-3 text-left text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"
             >
               Google Calendar
@@ -70,7 +70,7 @@ export function CalendarExportMenu({ event }: { event: AllDayCalendarEvent }) {
               type="button"
               onClick={() => {
                 downloadAllDayIcsFile(event);
-                trackAction("calendar_download");
+                trackAction("calendar_download", context);
                 setIsOpen(false);
               }}
               className="block w-full px-4 py-3 text-left text-sm text-black/74 transition hover:bg-[#f6f6f6] hover:text-black dark:text-white/74 dark:hover:bg-white/6 dark:hover:text-white"

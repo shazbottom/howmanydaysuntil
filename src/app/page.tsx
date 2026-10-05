@@ -361,12 +361,13 @@ function HomepageEditorialSection() {
       </h2>
       <div className="mt-4 space-y-4 text-sm leading-6 text-black/62 dark:text-white/64 sm:text-base">
         <p>
-          Track major annual events, exact future dates, and recurring milestones like next month
-          or next year in one place.
+          Count down to your next trip, holiday, or milestone. See the date, then compare how many
+          calendar days and business days remain to prepare.
         </p>
         <p>
-          The site also includes calculators for date differences, business-day planning, and
-          personal countdowns such as retirement.
+          Choose a published holiday calendar for a business-day estimate, copy a calculation link
+          to revisit it, or add your target date to your calendar. Employer schedules and personal
+          leave can differ.
         </p>
       </div>
     </section>
@@ -390,7 +391,7 @@ export default function Home() {
 
   function submitQuery(nextQuery: string) {
     const result = buildStateFromQuery(nextQuery);
-    if (result.state) trackAction("calculation");
+    if (result.state) trackAction("calculation", { surface: "home" });
 
     setQuery(nextQuery);
     setResolvedState(result.state);
@@ -399,7 +400,7 @@ export default function Home() {
 
   function submitMilestone(label: string, targetDate: Date) {
     const result = buildStateFromTargetDate(label, targetDate);
-    if (result.state) trackAction("calculation");
+    if (result.state) trackAction("calculation", { surface: "home" });
 
     setQuery(label);
     setResolvedState(result.state);
@@ -409,7 +410,7 @@ export default function Home() {
   function submitQuickChip(event: EventChip) {
     if (event.slug === "easter") {
       const result = buildStateFromTargetDate(event.label, getNextEasterDate(), event.slug);
-      if (result.state) trackAction("calculation");
+      if (result.state) trackAction("calculation", { surface: "home" });
 
       setQuery(event.label);
       setResolvedState(result.state);
@@ -496,9 +497,16 @@ export default function Home() {
           {resolvedState ? (
             <div className="mt-4 flex flex-wrap justify-center gap-3">
               <Link
-                href={getCountdownActions(resolvedState.countdown.targetDate, resolvedState.label).save}
-                onClick={() => trackAction("tool_followthrough")}
+                href={getCountdownActions(resolvedState.countdown.targetDate, resolvedState.label).business}
+                onClick={() => trackAction("tool_followthrough", { surface: "home", tool: "business-days-until" })}
                 className="inline-flex min-h-11 items-center rounded-[0.95rem] bg-[#315da8] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#274b88] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:bg-[#4b74be]"
+              >
+                Compare business days
+              </Link>
+              <Link
+                href={getCountdownActions(resolvedState.countdown.targetDate, resolvedState.label).save}
+                onClick={() => trackAction("tool_followthrough", { surface: "home" })}
+                className="inline-flex min-h-11 items-center rounded-[0.95rem] border border-black/6 bg-[#f3f2ee] px-4 py-2.5 text-sm font-medium text-black hover:bg-[#eceae4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315da8] dark:border-white/10 dark:bg-[#1d1f1e] dark:text-white/88"
               >
                 Save this countdown
               </Link>
