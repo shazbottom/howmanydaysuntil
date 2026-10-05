@@ -1,0 +1,54 @@
+# Project-local only. Models, credentials and approvals inherit from the session.
+# max_threads is the supported legacy alias for the concurrency limit.
+[agents]
+max_threads = 3
+
+# Explicit registrations support the installed terminal CLI (0.116.0).
+# Each file also has the standalone fields used by newer Codex runtimes.
+[agents.du_orchestrator]
+description = "Route daysuntil.is work to relevant specialists and enforce independent verification."
+config_file = "agents/du_orchestrator.toml"
+
+[agents.du_software_architect]
+description = "Design minimal changes to Next.js boundaries, dependencies and date/data flows."
+config_file = "agents/du_software_architect.toml"
+
+[agents.du_senior_developer]
+description = "Implement cross-cutting fixes and difficult debugging with minimum necessary changes."
+config_file = "agents/du_senior_developer.toml"
+
+[agents.du_frontend_developer]
+description = "Implement React UI, accessibility, responsive behavior and hydration-safe interactions."
+config_file = "agents/du_frontend_developer.toml"
+
+[agents.du_backend_architect]
+description = "Design and implement APIs, Redis persistence, caching and backend reliability."
+config_file = "agents/du_backend_architect.toml"
+
+[agents.du_code_reviewer]
+description = "Independently review correctness, security, TypeScript, SEO and accessibility regressions."
+config_file = "agents/du_code_reviewer.toml"
+
+[agents.du_ux_architect]
+description = "Specify information hierarchy, interactions and accessible responsive user journeys."
+config_file = "agents/du_ux_architect.toml"
+
+[agents.du_ui_designer]
+description = "Specify focused visual changes consistent with the existing DaysUntil design."
+config_file = "agents/du_ui_designer.toml"
+
+[agents.du_seo_specialist]
+description = "Assess search intent, canonical/indexing policy, content quality and measured organic growth."
+config_file = "agents/du_seo_specialist.toml"
+
+[agents.du_performance_specialist]
+description = "Measure and improve Core Web Vitals, rendering, bundles and cache behavior."
+config_file = "agents/du_performance_specialist.toml"
+
+[agents.du_evidence_collector]
+description = "Run relevant checks and collect reproducible test, browser and route evidence."
+config_file = "agents/du_evidence_collector.toml"
+
+[agents.du_reality_checker]
+description = "Independently verify acceptance criteria and challenge unsupported completion claims."
+config_file = "agents/du_reality_checker.toml"
